@@ -55,6 +55,12 @@ app.put('/lists/:id', async(req, res) => {
     res.redirect(`/lists/${id}`);
 });
 
+app.delete('/lists/:id', async (req, res) => {
+    const { id } = req.params;
+    await List.findByIdAndDelete(id);
+    res.redirect('/lists');
+})
+
 app.get('/lists/:id/edit', async (req, res) => {
     const list = await List.findById(req.params.id);
     res.render('lists/edit', { list });

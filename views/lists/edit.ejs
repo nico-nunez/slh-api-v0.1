@@ -16,5 +16,8 @@
         <button type="submit">Edit List</button>
         <a href="/lists/<%= list._id %> ">Back</a>
     </form>
+    <form action="/lists/<%= list._id %>?_method=DELETE" method="POST">
+        <button type="submit">Delete List</button>
+    </form>
 </body>
 </html>
