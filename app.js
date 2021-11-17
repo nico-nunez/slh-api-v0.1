@@ -19,6 +19,7 @@ db.once("open", () => {
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
+app.use(express.urlencoded());
 
 
 app.get('/', (req, res) => {
@@ -28,6 +29,16 @@ app.get('/', (req, res) => {
 app.get('/lists', async (req, res) => {
     const lists = await List.find({})
     res.render('lists/index', {lists});
+});
+app.post('/lists', async (req, res) => {
+    const { list } = req.body;
+    const newList = new List({title: list.title});
+    await newList.save();
+    res.redirect(`lists/${newList._id}`);
+})
+
+app.get('/lists/new', (req, res) => {
+    res.render('lists/new');
 });
 
 app.get('/lists/:id', async (req, res) => {
