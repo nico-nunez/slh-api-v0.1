@@ -1,7 +1,8 @@
 const express = require('express')
 const app = express();
-const mongoose = require('mongoose');
 const path = require('path');
+const mongoose = require('mongoose');
+const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override');
 
 // --------- Models -----------
@@ -18,6 +19,7 @@ db.once("open", () => {
     console.log("Mongo Connection Open...");
 });
 
+app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
 app.use(express.urlencoded({extended: true}));
@@ -65,6 +67,7 @@ app.get('/lists/:id/edit', async (req, res) => {
     const list = await List.findById(req.params.id);
     res.render('lists/edit', { list });
 })
+
 
 
 const port = process.env.PORT || 8080
