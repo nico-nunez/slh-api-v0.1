@@ -1,10 +1,7 @@
-const express = require('express')
-const app = express();
 const mongoose = require('mongoose');
-const path = require('path');
 
 // --------- Models -----------
-const List = require('./models/list');
+const List = require('../models/list');
 
 // -------------- Mongoose -----------
 const mongoDBUrl = process.env.MONGODB_URL || 'mongodb://localhost:27017/grab-bag';
@@ -17,16 +14,12 @@ db.once("open", () => {
     console.log("Mongo Connection Open...");
 });
 
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'))
+const seedDB = async () => {
+    await List.deleteMany({});
+    for (let i=0; i<10; i++){
+        const list = new List({title: `My list ${i}`});
+        await list.save();
+    }   
+}
 
-
-app.get('/', (req, res) => {
-    res.render('index');
-});
-
-
-const port = process.env.PORT || 8080
-app.listen(port, () => {
-    console.log(`Server running on ${port}`);
-})
+seedDB();
