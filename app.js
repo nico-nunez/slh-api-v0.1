@@ -47,9 +47,9 @@ app.get('/lists/new', (req, res) => {
 });
 
 app.get('/lists/:id', async (req, res) => {
-    const list = await List.findById(req.params.id)
-    res.render('lists/show', {list})
-})
+    const list = await List.findById(req.params.id);
+    res.render('lists/show', {list});
+});
 
 app.put('/lists/:id', async(req, res) => {
     const { id } = req.params;
@@ -61,12 +61,24 @@ app.delete('/lists/:id', async (req, res) => {
     const { id } = req.params;
     await List.findByIdAndDelete(id);
     res.redirect('/lists');
-})
+});
 
 app.get('/lists/:id/edit', async (req, res) => {
     const list = await List.findById(req.params.id);
     res.render('lists/edit', { list });
-})
+});
+
+app.get('/lists/:id/items/:item_id/edit', async(req, res) => {
+    res.send('Edit Item!!!');
+});
+
+app.put('/lists/:id/items/:item_id', async(req, res) => {
+    res.send('Item Updated!!!!');
+});
+
+app.delete('/lists/:id/items/:item_id', async(req, res) => {
+    res.send('Item Deleted!!!');
+});
 
 
 

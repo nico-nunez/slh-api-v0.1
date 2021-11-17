@@ -1,14 +1,49 @@
-<% layout('layouts/boilerplate') %> 
+<% layout('layouts/boilerplate') %>
 
-<h1>Edit List</h1>
-<form action="/lists/<%= list._id %>?_method=PUT" method="POST">
-    <div>
-        <label for="title">Title: </label>
-        <input type="text" name="list[title]" id="title" value="<%= list.title %>">
-    </div>
-    <button type="submit">Edit List</button>
-    <a href="/lists/<%= list._id %> ">Back</a>
-</form>
-<form action="/lists/<%= list._id %>?_method=DELETE" method="POST">
-    <button type="submit">Delete List</button>
-</form>
+<div class="row">
+	<h1 class="text-center">Edit List</h1>
+	<div class="col-lg-5 col-md-6 ms-auto me-auto">
+		<form action="/lists/<%= list._id %>?_method=PUT" method="POST">
+			<label class="form-label" for="title">Title</label>
+			<input
+				class="form-control mb-3"
+				type="text"
+				name="list[title]"
+				id="title"
+				value="<%= list.title %>"
+			/>
+			<div>
+				<p class="mb-1">Items</p>
+				<div class="card mb-3">
+					<div class="card-body">
+						<% for (const [i, item] of list.items.entries()) { %>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <p class="card-text mb-0">
+                                <%= item.description %>
+                            </p>
+                            <div class="d-flex">
+                                    <a href="/lists/<%= list._id %>/items/<%= item._id %>/edit" class="btn">
+                                        <img
+                                            src="https://img.icons8.com/ios-glyphs/50/000000/edit.png"
+                                            height="16"
+                                        />
+                                    </a>
+                            </div>
+                        </div>
+						
+						<% } %>
+						<div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-primary">
+                                Update
+                            </button>
+							<a href="/lists/<%= list._id %>" class="btn btn-secondary"
+								>Cancel</a
+							>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
