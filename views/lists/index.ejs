@@ -1,9 +1,24 @@
-<% layout('layouts/boilerplate') %> 
+<% layout('layouts/boilerplate') %>
 
 <h1>All Lists</h1>
-<ul>
-    <% for (let list of lists) { %> 
-        <li><a href="/lists/<%= list._id %> "><%= list.title %> </a></li>
-    <% } %> 
-</ul>
+<div class="col-md-10 offset-md-1">
+    <div class="row">
+        <% for (const list of lists) { %>
+            <div class="col-md-5 ms-auto">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h4 class="card-title"><%= list.title %></h4>
+                        <% for (const [i, item] of list.items.entries()) { %> 
+                        <% if (i > 2) break %>
+                        <p class="card-text">- <%= item.description %></p>
+                        <% } %>
+                        <p class="card-text">...more</p>
+                        <a href="/lists/<%= list._id %>" class="btn btn-primary">View</a>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+    </div>
+</div>
+
 <a href="/lists/new">New List</a>

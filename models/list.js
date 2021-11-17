@@ -11,7 +11,9 @@ const itemSchema = new Schema({
         type: String,
         required: true
     },
-    images: [imageSchema]
+    link: String,
+    purchased: Boolean
+    // images: [imageSchema]
 })
   
 //   imageSchema.virtual('thumbnail').get(function() {

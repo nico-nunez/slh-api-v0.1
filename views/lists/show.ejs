@@ -1,6 +1,18 @@
 <% layout('layouts/boilerplate') %> 
 
-<h1>List Show Page</h1>
-<h2><%= list.title %> </h2>
-<a href="/lists">Back</a>
-<a href="/lists/<%= list._id %>/edit ">Edit</a>
+<h1><%= list.title %></h1>
+<div>
+    <div class="col-md-4 offset-md-4">
+		<div class="card mb-3">
+			<div class="card-body">
+				<% for (const [i, item] of list.items.entries()) { %> 
+				<p class="card-text">- <%= item.description %></p>
+				<% } %>
+				<a href="/lists/<%= list._id %>" class="btn btn-primary me-2">Add Item</a>
+                <a href="/lists/<%= list._id %>/edit" class="btn btn-secondary">Edit</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<a href="/lists" class="btn btn-danger">All Lists</a>
