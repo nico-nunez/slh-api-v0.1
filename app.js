@@ -25,6 +25,16 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
+app.get('/lists', async (req, res) => {
+    const lists = await List.find({})
+    res.render('lists/index', {lists});
+});
+
+app.get('/lists/:id', async (req, res) => {
+    const list = await List.findById(req.params.id)
+    res.render('lists/show', {list})
+})
+
 
 const port = process.env.PORT || 8080
 app.listen(port, () => {
