@@ -1,0 +1,15 @@
+@import url("https://fonts.googleapis.com/css2?family=Petemoss&display=swap");
+body{ 
+    font-family: 'Petemoss', cursive;
+    font-size: 32px;
+    background-image: url('../assets/showPageBG2.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    letter-spacing: 2px;
+}
+
+p {
+    text-align: center;
+    font-size: 72px;
+    font-weight: bold;
+}
