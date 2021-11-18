@@ -39,6 +39,7 @@ app.get('/lists', catchAsync( async (req, res, next) => {
 }));
 
 app.post('/lists', catchAsync( async (req, res, next) => {
+    if(!req.body.list) throw new ExpressError('Invalid List Data', 400);
     const { list, items } = req.body;
     const newList = new List({...list});
     await newList.save();
@@ -55,6 +56,7 @@ app.get('/lists/:id', catchAsync( async (req, res, next) => {
 }));
 
 app.put('/lists/:id', catchAsync( async(req, res, next) => {
+    if(!req.body.list) throw new ExpressError('Invalid List Data', 400);
     const { id } = req.params;
     await List.findByIdAndUpdate(id, {...req.body.list});
     res.redirect(`/lists/${id}`);
@@ -77,6 +79,7 @@ app.get('/lists/:id/items/new', catchAsync( async (req, res, next) => {
 }));
 
 app.post('/lists/:id/items', catchAsync( async (req, res, next) => {
+    if(!req.body.item) throw new ExpressError('Invalid Item Data', 400);
     const { description, link } = req.body.item;
     const list = await List.findById(req.params.id);
     list.items.push({...req.body.item})
@@ -91,6 +94,7 @@ app.get('/lists/:id/items/:item_id/edit', catchAsync( async(req, res, next) => {
 }));
 
 app.put('/lists/:id/items/:item_id', catchAsync( async(req, res, next) => {
+    if(!req.body.item) throw new ExpressError('Invalid Item Data', 400);
     const { id, item_id } = req.params;
     const { description, link } = req.body.item;
     const list = await List.findById(id);
