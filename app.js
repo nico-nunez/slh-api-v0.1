@@ -68,16 +68,42 @@ app.get('/lists/:id/edit', async (req, res) => {
     res.render('lists/edit', { list });
 });
 
+app.get('/lists/:id/items/new', async (req, res) => {
+    const list = await List.findById(req.params.id);
+    res.render('lists/itemNew', { list });
+})
+
+app.post('/lists/:id/items', async (req, res) => {
+    const { description, link } = req.body.item;
+    const list = await List.findById(req.params.id);
+    list.items.push({...req.body.item})
+    await list.save();
+    res.redirect(`/lists/${req.params.id}`);
+});
+
 app.get('/lists/:id/items/:item_id/edit', async(req, res) => {
-    res.send('Edit Item!!!');
+    const list = await List.findById(req.params.id);
+    const item = list.items.id(req.params.item_id);
+    res.render('lists/itemEdit', {list, item});
 });
 
 app.put('/lists/:id/items/:item_id', async(req, res) => {
-    res.send('Item Updated!!!!');
+    const { id, item_id } = req.params;
+    const { description, link } = req.body.item;
+    const list = await List.findById(id);
+    const item = list.items.id(item_id);
+    item.description = description;
+    item.link = link
+    await list.save()
+    res.redirect(`/lists/${id}`);
 });
 
 app.delete('/lists/:id/items/:item_id', async(req, res) => {
-    res.send('Item Deleted!!!');
+    const { id, item_id } = req.params;
+    const list = await List.findById(id);
+    list.items = list.items.filter( item => item.id !== item_id);
+    await list.save();
+    res.redirect(`/lists/${id}`);
 });
 
 
