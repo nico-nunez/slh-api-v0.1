@@ -1,0 +1,13 @@
+.hidden {
+    display: none;
+}
+
+.btn-info {
+    background-color: green;
+    color: whitesmoke;
+}
+.btn-info:hover {
+    background-color: green;
+    color: whitesmoke;
+}
+

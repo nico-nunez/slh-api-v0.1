@@ -1,5 +1,7 @@
 <% layout('layouts/boilerplate') %> 
 
+<link rel="stylesheet" href="/styles/lists.css">
+
 <div class="row">
     <h1 class="text-center">Add a new list</h1>
     <div class="col-lg-5 col-md-6 ms-auto me-auto">
@@ -17,7 +19,7 @@
             </div>
             <p class="mb-1">Items:</p>
             <div class="card mb-3">
-                <div class="card-body item-input-content">
+                <div class="card-body items-input-content">
                     <div class="item-input-group">
                         <label class="form-label" for="item">Name or Description</label>
                         <input 
@@ -26,6 +28,7 @@
                             id="item"
                             class="form-control"
                             placeholder="enter description"
+                            required
                         >
                         <label class="form-label mt-3" for="link">Link</label>
                         <input 
@@ -37,8 +40,13 @@
                         >
                     </div>
                 </div>
-                <div class="text-center">
-                    <a class="btn btn-secondary mb-3 add-additional-item">Add Another</a>
+                <div class="mb-3 item-btns">
+                    <a href="#" class="btn btn-secondary ms-3 mt-2 add-item">
+                        Add Another
+                    </a>
+                    <a href="#" class="btn btn-danger ms-3 mt-2 cancel-item hidden">
+                        Cancel
+                    </a>
                 </div>
             </div>
             <div>
@@ -71,5 +79,5 @@
 })()
 </script>
 
-<script src="/js/items.js"></script>
+<script src="/js/lists.js"></script>
 
