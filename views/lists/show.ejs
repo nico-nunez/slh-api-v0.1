@@ -5,8 +5,14 @@
     <div class="col-lg-4 col-md-6 ms-auto me-auto">
 		<div class="card mb-3">
 			<div class="card-body">
-				<% for (const [i, item] of list.items.entries()) { %> 
-				<p class="card-text">- <%= item.description %></p>
+				<% for (const item of list.items) { %> 
+                    <% if(item.link) { %>
+                        - <a href="<%= item.link %>" class="card-text" target="_blank">
+                            <%= item.description %>
+                        </a>
+                    <% } else { %>     
+				        <p class="card-text">- <%= item.description %></p>
+                    <% } %> 
 				<% } %>
 			</div>
 		</div>
