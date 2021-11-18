@@ -5,11 +5,14 @@ body{
     background-image: url('../assets/showPageBG2.jpg');
     background-size: cover;
     background-repeat: no-repeat;
-    letter-spacing: 2px;
+    
 }
 
 p {
+    margin-bottom: 0;
     text-align: center;
     font-size: 72px;
     font-weight: bold;
+    letter-spacing: 4px;
+    text-transform: capitalize;
 }
