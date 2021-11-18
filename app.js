@@ -4,7 +4,9 @@ const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override');
+const Joi = require('joi')
 const { ExpressError, errorHandler, catchAsync } = require('./utils');
+const { validateList } = require('./middleware');
 
 // --------- Models -----------
 const List = require('./models/list');
@@ -38,8 +40,7 @@ app.get('/lists', catchAsync( async (req, res, next) => {
     res.render('lists/index', {lists});
 }));
 
-app.post('/lists', catchAsync( async (req, res, next) => {
-    if(!req.body.list) throw new ExpressError('Invalid List Data', 400);
+app.post('/lists', validateList, catchAsync( async (req, res, next) => {
     const { list, items } = req.body;
     const newList = new List({...list});
     await newList.save();
@@ -55,7 +56,7 @@ app.get('/lists/:id', catchAsync( async (req, res, next) => {
     res.render('lists/show', {list});
 }));
 
-app.put('/lists/:id', catchAsync( async(req, res, next) => {
+app.put('/lists/:id', validateList, catchAsync( async(req, res, next) => {
     if(!req.body.list) throw new ExpressError('Invalid List Data', 400);
     const { id } = req.params;
     await List.findByIdAndUpdate(id, {...req.body.list});
