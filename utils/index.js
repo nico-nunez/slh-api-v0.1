@@ -19,7 +19,7 @@ const errorHandler = (err, req, res, next) => {
 	if (!err.message) err.message = "Oh, no! Something went REALLY wrong!";
 	//   req.flash('error', err.message);
 	//   res.status(status).redirect('/lists');
-    res.status(status).send(err.message)
+    res.status(status).render('errors', { err })
 };
 
 // async function updateImages(req, camp) {
