@@ -3,7 +3,7 @@
 <div class="row">
 	<h1 class="text-center">Edit List</h1>
 	<div class="col-lg-5 col-md-6 ms-auto me-auto">
-		<form action="/lists/<%= list._id %>?_method=PUT" method="POST">
+		<form action="/lists/<%= list._id %>?_method=PUT" method="POST" novalidate class="validate-form">
 			<label class="form-label" for="title">Title</label>
 			<input
 				class="form-control mb-3"
@@ -11,6 +11,7 @@
 				name="list[title]"
 				id="title"
 				value="<%= list.title %>"
+                required
 			/>
 			<div>
 				<p class="mb-1">Items</p>
@@ -32,7 +33,7 @@
                         </div>
 						
 						<% } %>
-                        <a href="/lists/<%= list._id %>/items/new" class="btn btn-secondary mt-2"
+                        <a href="/lists/<%= list._id %>/items/new" class="btn btn-secondary mt-2 add-item"
                             >Add Item</a
                         >
 					</div>
@@ -47,4 +48,28 @@
         </form>
 	</div>
 </div>
+
+<script>
+    (function () {
+      'use strict'
+    
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      const forms = document.querySelectorAll('.validate-form')
+    
+      // Loop over them and prevent submission
+      Array.from(forms)
+        .forEach(function (form) {
+          form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+              event.preventDefault()
+              event.stopPropagation()
+            }
+    
+            form.classList.add('was-validated')
+          }, false)
+        })
+    })()
+</script>
+
+
 

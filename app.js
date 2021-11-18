@@ -4,6 +4,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override');
+const { ExpressError, errorHandler, catchAsync } = require('./utils');
 
 // --------- Models -----------
 const List = require('./models/list');
@@ -29,67 +30,67 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 
 app.get('/', (req, res) => {
-    res.render('home');
+    res.render('index');
 });
 
-app.get('/lists', async (req, res) => {
+app.get('/lists', catchAsync( async (req, res, next) => {
     const lists = await List.find({})
     res.render('lists/index', {lists});
-});
+}));
 
-app.post('/lists', async (req, res) => {
-    const { list } = req.body;
+app.post('/lists', catchAsync( async (req, res, next) => {
+    const { list, items } = req.body;
     const newList = new List({...list});
     await newList.save();
     res.redirect(`lists/${newList._id}`);
-})
+}));
 
 app.get('/lists/new', (req, res) => {
     res.render('lists/new');
 });
 
-app.get('/lists/:id', async (req, res) => {
+app.get('/lists/:id', catchAsync( async (req, res, next) => {
     const list = await List.findById(req.params.id);
     res.render('lists/show', {list});
-});
+}));
 
-app.put('/lists/:id', async(req, res) => {
+app.put('/lists/:id', catchAsync( async(req, res, next) => {
     const { id } = req.params;
     await List.findByIdAndUpdate(id, {...req.body.list});
     res.redirect(`/lists/${id}`);
-});
+}));
 
-app.delete('/lists/:id', async (req, res) => {
+app.delete('/lists/:id', catchAsync( async (req, res, next) => {
     const { id } = req.params;
     await List.findByIdAndDelete(id);
     res.redirect('/lists');
-});
+}));
 
-app.get('/lists/:id/edit', async (req, res) => {
+app.get('/lists/:id/edit', catchAsync( async (req, res, next) => {
     const list = await List.findById(req.params.id);
     res.render('lists/edit', { list });
-});
+}));
 
-app.get('/lists/:id/items/new', async (req, res) => {
+app.get('/lists/:id/items/new', catchAsync( async (req, res, next) => {
     const list = await List.findById(req.params.id);
     res.render('lists/itemNew', { list });
-})
+}));
 
-app.post('/lists/:id/items', async (req, res) => {
+app.post('/lists/:id/items', catchAsync( async (req, res, next) => {
     const { description, link } = req.body.item;
     const list = await List.findById(req.params.id);
     list.items.push({...req.body.item})
     await list.save();
-    res.redirect(`/lists/${req.params.id}/edit`);
-});
+    res.redirect(`/lists/${req.params.id}`);
+}));
 
-app.get('/lists/:id/items/:item_id/edit', async(req, res) => {
+app.get('/lists/:id/items/:item_id/edit', catchAsync( async(req, res, next) => {
     const list = await List.findById(req.params.id);
     const item = list.items.id(req.params.item_id);
     res.render('lists/itemEdit', {list, item});
-});
+}));
 
-app.put('/lists/:id/items/:item_id', async(req, res) => {
+app.put('/lists/:id/items/:item_id', catchAsync( async(req, res, next) => {
     const { id, item_id } = req.params;
     const { description, link } = req.body.item;
     const list = await List.findById(id);
@@ -98,17 +99,22 @@ app.put('/lists/:id/items/:item_id', async(req, res) => {
     item.link = link
     await list.save()
     res.redirect(`/lists/${id}`);
-});
+}));
 
-app.delete('/lists/:id/items/:item_id', async(req, res) => {
+app.delete('/lists/:id/items/:item_id', catchAsync( async(req, res, next) => {
     const { id, item_id } = req.params;
     const list = await List.findById(id);
     list.items = list.items.filter( item => item.id !== item_id);
     await list.save();
-    res.redirect(`/lists/${id}/edit`);
-});
+    res.redirect(`/lists/${id}`);
+}));
+
+app.all('*', (req, res, next) => {
+    next(new ExpressError('Page Not Found', 404));
+  })
 
 
+app.use(errorHandler);
 
 const port = process.env.PORT || 8080
 app.listen(port, () => {

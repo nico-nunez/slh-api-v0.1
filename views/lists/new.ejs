@@ -2,8 +2,8 @@
 
 <div class="row">
     <h1 class="text-center">Add a new list</h1>
-    <div class="col-md-4 offset-md-4">
-        <form action="/lists" method="POST">
+    <div class="col-lg-5 col-md-6 ms-auto me-auto">
+        <form action="/lists" method="POST" novalidate class="validate-form">
             <div class="mb-3 form-group">
                 <label class="form-label" for="title">Title</label>
                 <input 
@@ -12,9 +12,36 @@
                 name="list[title]" 
                 id="title"
                 placeholder="List Title"
+                required
             >
             </div>
-            <div class="d-flex justify-content-between">
+            <p class="mb-1">Items:</p>
+            <div class="card mb-3">
+                <div class="card-body item-input-content">
+                    <div class="item-input-group">
+                        <label class="form-label" for="item">Name or Description</label>
+                        <input 
+                            type="text" 
+                            name="list[items][0][description]" 
+                            id="item"
+                            class="form-control"
+                            placeholder="enter description"
+                        >
+                        <label class="form-label mt-3" for="link">Link</label>
+                        <input 
+                            type="text" 
+                            name="list[items][0][link]" 
+                            id="link"
+                            class="form-control"
+                            placeholder="enter link"
+                        >
+                    </div>
+                </div>
+                <div class="text-center">
+                    <a class="btn btn-secondary mb-3 add-additional-item">Add Another</a>
+                </div>
+            </div>
+            <div>
                 <button type="submit" class="btn btn-primary">Create List</button>
                 <a href="/lists" class="btn btn-danger">Cancel</a>
             </div>
@@ -22,4 +49,27 @@
     </div>
 </div>
 
+<script>
+(function () {
+  'use strict'
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll('.validate-form')
+
+  // Loop over them and prevent submission
+  Array.from(forms)
+    .forEach(function (form) {
+      form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+
+        form.classList.add('was-validated')
+      }, false)
+    })
+})()
+</script>
+
+<script src="/js/items.js"></script>
 
