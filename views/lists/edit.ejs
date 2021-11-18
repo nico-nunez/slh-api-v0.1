@@ -32,26 +32,19 @@
                         </div>
 						
 						<% } %>
-                        <a href="/lists/<%= list._id %>/items/new" class="btn btn-secondary col-sm-12 mt-1"
+                        <a href="/lists/<%= list._id %>/items/new" class="btn btn-secondary mt-2"
                             >Add Item</a
                         >
 					</div>
 				</div>
 			</div>
-            <button type="submit" class="btn btn-primary col-sm-12">
+            <button type="submit" class="btn btn-primary">
                 Update
             </button>
-        </form>
-        <div class="mt-1">
-            <form action="/lists/<%= list._id %>?_method=DELETE" method="POST">
-                <button type="submit" class="btn btn-danger col-sm-12">
-                    Delete
-                </button>
-            </form>
-            <a href="/lists/<%= list._id %>" class="btn btn-secondary col-sm-12 mt-1"
+            <a href="/lists/<%= list._id %>" class="btn btn-warning mt-1"
                 >Cancel</a
             >
-        </div>
+        </form>
 	</div>
 </div>
 

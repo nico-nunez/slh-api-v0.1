@@ -31,7 +31,11 @@ const listSchema = new Schema({
     type: String,
     required: true
   },
-  items: [itemSchema]
+  items: [itemSchema],
+      // updated: Date,
+    // created: Date,
+    // author,
+
 });
 
 

@@ -80,7 +80,7 @@ app.post('/lists/:id/items', async (req, res) => {
     const list = await List.findById(req.params.id);
     list.items.push({...req.body.item})
     await list.save();
-    res.redirect(`/lists/${req.params.id}`);
+    res.redirect(`/lists/${req.params.id}/edit`);
 });
 
 app.get('/lists/:id/items/:item_id/edit', async(req, res) => {
@@ -105,7 +105,7 @@ app.delete('/lists/:id/items/:item_id', async(req, res) => {
     const list = await List.findById(id);
     list.items = list.items.filter( item => item.id !== item_id);
     await list.save();
-    res.redirect(`/lists/${id}`);
+    res.redirect(`/lists/${id}/edit`);
 });
 
 
