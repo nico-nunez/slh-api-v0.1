@@ -15,7 +15,7 @@ const { ExpressError, errorHandler} = require('./utils');
 // Routes
 const listsRoutes = require('./routes/lists');
 const partiesRoutes = require('./routes/parties');
-
+const usersRoutes = require('./routes/users');
 // -------------- Mongoose -----------
 const mongoDBUrl = process.env.MONGODB_URL || 'mongodb://localhost:27017/grab-bag';
 
@@ -63,14 +63,9 @@ app.get('/', (req, res) => {
     res.render('home');
 });
 
-app.get('/usersTest', async (req, res) => {
-    const newUser = new User({email: '', username: 'Fakey McFakester', profileName: 'fake_son'});
-    const user = await User.register(newUser, 'fakePass');
-    res.send(newUser);
-});
-
 app.use('/lists', listsRoutes);
 app.use('/parties', partiesRoutes);
+app.use('/users', usersRoutes);
 
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found', 404));
