@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override');
 const { ExpressError, errorHandler, catchAsync } = require('./utils');
-const { validateList } = require('./middleware');
+const { validateList } = require('./joiSchemas');
 
 const listsRoutes = require('./routes/lists');
 const groupsRoutes = require('./routes/groups');

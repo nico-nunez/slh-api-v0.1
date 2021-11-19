@@ -1,0 +1,19 @@
+<% layout('layouts/boilerplate') %>
+
+<h1 class="text-center">All Groups</h1>
+<div class="col-md-10 offset-md-1">
+    <div class="row">
+        <% for (const group of groups) { %>
+            <div class="col-md-5 ms-auto">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h4 class="card-title"><%= group.title %></h4>
+                        <p>Days remaing ...</p>
+                        <a href="/groups/<%= group._id %>" class="btn btn-primary">View</a>
+                        <p class="text-muted">num members, creator</p>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+    </div>
+</div>

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const List = require('../models/list');
 const { ExpressError, catchAsync } = require('../utils');
-const { validateList } = require('../middleware');
+const { validateList } = require('../joiSchemas');
 
 router.get('/', catchAsync( async (req, res, next) => {
     const lists = await List.find({})

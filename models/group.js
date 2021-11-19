@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const List = require('./list');
+// const List = require('./list');
 
 const groupSchema = new Schema({
     title: {
@@ -8,23 +8,23 @@ const groupSchema = new Schema({
         required: true,
         unique: true,
     },
-    created: {
+    dateCreated: {
         type: Date
     },
-    endDate: {
+    dateEnd: {
         type: Date
     },
-    creator: { 
-        type: Schema.Types.ObjectId,
-        ref: 'User' 
-    },
-    members: [
-        { type: Schema.Types.ObjectId, ref: 'User' }
-    ],
-    lists: [
-        { type: Schema.Types.ObjectId, ref: 'List' },
-    ],
-    public: Boolean
+    // creator: { 
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'User' 
+    // },
+    // members: [
+    //     { type: Schema.Types.ObjectId, ref: 'User' }
+    // ],
+    // lists: [
+    //     { type: Schema.Types.ObjectId, ref: 'List' },
+    // ],
+    isPrivate: Boolean
 });
 
 module.exports = mongoose.model('Group', groupSchema);
