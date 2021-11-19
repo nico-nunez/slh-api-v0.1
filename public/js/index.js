@@ -1,5 +1,6 @@
 const datesFull =  document.querySelectorAll('.date-full');
 
 for (const date of datesFull) {
-    date.innerHTML = dayjs().format('MM-DD-YYYY');
+    const dateText = date.textContent;
+    date.innerHTML = dayjs(dateText).add(1, 'day').format('MM-DD-YYYY');
 }
