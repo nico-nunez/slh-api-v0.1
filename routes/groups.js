@@ -8,7 +8,6 @@ const Group = require('../models/group');
 
 router.get('/', catchAsync( async (req, res, next) => {
     const groups = await Group.find();
-    console.log(groups)
     res.render('groups/index', {groups})
 }));
 
@@ -28,6 +27,12 @@ router.get('/new', (req, res) => {
     }
     res.render('groups/new', {dates});
 });
+
+router.get('/:id', catchAsync( async (req, res, next) => {
+    const { id } = req.params;
+    const group = await Group.findById( id );
+    res.render('groups/show', { group })
+}))
 
 
 
