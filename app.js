@@ -6,7 +6,13 @@ const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override');
 const session = require('express-session');
 const flash = require('connect-flash');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const User = require('./models/user');
+
 const { ExpressError, errorHandler} = require('./utils');
+
+// Routes
 const listsRoutes = require('./routes/lists');
 const partiesRoutes = require('./routes/parties');
 
@@ -40,6 +46,12 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(session(sessionConfig));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use((req, res, next) => {
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
@@ -49,6 +61,12 @@ app.use((req, res, next) => {
 
 app.get('/', (req, res) => {
     res.render('home');
+});
+
+app.get('/usersTest', async (req, res) => {
+    const newUser = new User({email: '', username: 'Fakey McFakester', profileName: 'fake_son'});
+    const user = await User.register(newUser, 'fakePass');
+    res.send(newUser);
 });
 
 app.use('/lists', listsRoutes);
