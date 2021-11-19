@@ -1,0 +1,25 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="text-center">
+    <h1 class="">All Parties</h1>
+    <a href="/parties/new" class="btn btn-primary">New Party</a>
+</div>
+<div class="col-md-12">
+    <div class="row">
+        <% for (const party of parties) { %>
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h4 class="card-title"><%= party.name %></h4>
+                        <p>Join by: <%= party.dateJoinBy %></p>
+                        <p>End Date: <%= party.dateEnd %></p>
+                        <p>Participants: </p>
+                        <p>Creator: </p>
+                        <a href="/parties/<%= party._id %>" class="btn btn-primary">View</a>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+
+    </div>
+</div>

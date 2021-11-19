@@ -3,19 +3,32 @@
 <link rel="stylesheet" href="/styles/lists.css">
 
 <div class="row">
-    <h1 class="text-center">Add a new list</h1>
+    <h1 class="text-center">Get This Party Started!</h1>
     <div class="col-lg-5 col-md-6 ms-auto me-auto">
-        <form action="/groups" method="POST" novalidate class="validate-form">
+        <form action="/parties" method="POST" novalidate class="validate-form">
             <div class="mb-3 form-group">
-                <label class="form-label" for="title">Title</label>
+                <label class="form-label" for="name">Name</label>
                 <input 
                 class="form-control" 
                 type="text" 
-                name="group[title]" 
-                id="title"
-                placeholder="group title"
+                name="party[name]" 
+                id="name"
+                placeholder="party name"
                 required
             >
+            </div>
+            <div class="mb-3 form-group">
+                <label class="form-label" for="date-end">Join Deadline</label>
+                <input 
+                    type="date" 
+                    class="form-control"
+                    id="date-end"
+                    name="party[dateJoinBy]" 
+                    min="<%= dates.min %>"
+                    max="<%= dates.max %>"
+                    value="<%= dates.min %>"
+                    required
+                >       
             </div>
             <div class="mb-3 form-group">
                 <label class="form-label" for="date-end">End Date</label>
@@ -23,7 +36,7 @@
                     type="date" 
                     class="form-control"
                     id="date-end"
-                    name="group[dateEnd]" 
+                    name="party[dateEnd]" 
                     min="<%= dates.min %>"
                     max="<%= dates.max %>"
                     value="<%= dates.min %>"
@@ -35,7 +48,7 @@
                     type="checkbox" 
                     role="switch" 
                     id="flexSwitchCheckDefault" 
-                    name="group[isPrivate]" 
+                    name="party[isPrivate]" 
                     checked
                     value="private"
                     >

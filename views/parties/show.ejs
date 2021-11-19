@@ -2,15 +2,15 @@
 
 <% layout('layouts/boilerplate') %>
 
-<h1 class="text-center"><%= group.title %></h1>
+<h1 class="text-center"><%= party.title %></h1>
 <div class="col-md-12">
     <div class="row">
         <div class="col-md-6 ms-auto me-auto">
             <div class="card mb-3">
                 <div class="card-body d-flex justify-content-between">
-                    <p>Creator: </p>
-                    <p>Join by: </p>
-                    <p>End Date: </p>
+                    <p>Creator: Jack Frost</p>
+                    <p>Join by: <%= party.dateJoinBy %></p>
+                    <p>End Date: <%= party.dateEnd %></p>
                 </div>
             </div>
         </div>
@@ -50,14 +50,3 @@
         </div>
     </div>
 </div>
-
-<!-- <div class="col-md-5 ms-auto">
-    <div class="card mb-3">
-        <div class="card-body">
-            <h4 class="card-title"><%= group.title %></h4>
-            <p>Days remaing: ...</p>
-            <a href="/groups/<%= group._id %>" class="btn btn-primary">View</a>
-            <p class="text-muted">num members, creator</p>
-        </div>
-    </div>
-</div> -->

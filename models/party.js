@@ -2,13 +2,16 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 // const List = require('./list');
 
-const groupSchema = new Schema({
-    title: {
+const partySchema = new Schema({
+    name: {
         type: String,
         required: true,
         unique: true,
     },
     dateCreated: {
+        type: Date
+    },
+    dateJoinBy: {
         type: Date
     },
     dateEnd: {
@@ -27,4 +30,4 @@ const groupSchema = new Schema({
     isPrivate: Boolean
 });
 
-module.exports = mongoose.model('Group', groupSchema);
+module.exports = mongoose.model('Party', partySchema);

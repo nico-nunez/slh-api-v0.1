@@ -25,17 +25,18 @@ function validateList(req, res, next) {
     return next();
 }
 
-function validateGroup(req, res, next) {
+function validateParty(req, res, next) {
 
-    const groupSchema = Joi.object({
-        group: Joi.object({
-            title: Joi.string().min(3).max(30).required(),
+    const partySchema = Joi.object({
+        party: Joi.object({
+            name: Joi.string().min(3).max(30).required(),
+            dateJoinBy: Joi.date().required(),
             dateEnd: Joi.date().required(),
             isPrivate: Joi.string().valid('private')
         }).required()
     });
 
-    const { error } = groupSchema.validate(req.body);
+    const { error } = partySchema.validate(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(',');
         throw new ExpressError(msg, 400);
@@ -45,5 +46,5 @@ function validateGroup(req, res, next) {
 
 module.exports = {
     validateList,
-    validateGroup
+    validateParty
 }

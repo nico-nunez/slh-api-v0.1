@@ -5,10 +5,10 @@ const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override');
 const { ExpressError, errorHandler, catchAsync } = require('./utils');
-const { validateList } = require('./joiSchemas');
+// const { validateList } = require('./joiSchemas');
 
 const listsRoutes = require('./routes/lists');
-const groupsRoutes = require('./routes/groups');
+const partiesRoutes = require('./routes/parties');
 
 // -------------- Mongoose -----------
 const mongoDBUrl = process.env.MONGODB_URL || 'mongodb://localhost:27017/grab-bag';
@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/lists', listsRoutes);
-app.use('/groups', groupsRoutes);
+app.use('/parties', partiesRoutes);
 
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found', 404));
