@@ -74,46 +74,6 @@ app.get('/lists/:id/edit', catchAsync( async (req, res, next) => {
     res.render('lists/edit', { list });
 }));
 
-// app.get('/lists/:id/items/new', catchAsync( async (req, res, next) => {
-//     const list = await List.findById(req.params.id);
-//     res.render('lists/itemNew', { list });
-// }));
-
-// app.post('/lists/:id/items', catchAsync( async (req, res, next) => {
-//     if(!req.body.item) throw new ExpressError('Invalid Item Data', 400);
-//     const { description, link } = req.body.item;
-//     const list = await List.findById(req.params.id);
-//     list.items.push({...req.body.item})
-//     await list.save();
-//     res.redirect(`/lists/${req.params.id}`);
-// }));
-
-// app.get('/lists/:id/items/:item_id/edit', catchAsync( async(req, res, next) => {
-//     const list = await List.findById(req.params.id);
-//     const item = list.items.id(req.params.item_id);
-//     res.render('lists/itemEdit', {list, item});
-// }));
-
-// app.put('/lists/:id/items/:item_id', catchAsync( async(req, res, next) => {
-//     if(!req.body.item) throw new ExpressError('Invalid Item Data', 400);
-//     const { id, item_id } = req.params;
-//     const { description, link } = req.body.item;
-//     const list = await List.findById(id);
-//     const item = list.items.id(item_id);
-//     item.description = description;
-//     item.link = link
-//     await list.save()
-//     res.redirect(`/lists/${id}`);
-// }));
-
-// app.delete('/lists/:id/items/:item_id', catchAsync( async(req, res, next) => {
-//     const { id, item_id } = req.params;
-//     const list = await List.findById(id);
-//     list.items = list.items.filter( item => item.id !== item_id);
-//     await list.save();
-//     res.redirect(`/lists/${id}`);
-// }));
-
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found', 404));
   })
