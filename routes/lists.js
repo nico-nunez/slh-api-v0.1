@@ -14,6 +14,7 @@ router.post('/', validateList, catchAsync( async (req, res, next) => {
     const { list } = req.body;
     const newList = new List({...list});
     await newList.save();
+    req.flash('success', 'Success! New List created.');
     res.redirect(`lists/${newList._id}`);
 }));
 
@@ -34,12 +35,14 @@ router.get('/:id', catchAsync( async (req, res, next) => {
 router.put('/:id', validateList, catchAsync( async(req, res, next) => {
     const { id } = req.params;
     await List.findByIdAndUpdate(id, {...req.body.list}, {runValidators: true});
+    req.flash('success', 'Success! List has been updated.')
     res.redirect(`/lists/${id}`);
 }));
 
 router.delete('/:id', catchAsync( async (req, res, next) => {
     const { id } = req.params;
     await List.findByIdAndDelete(id);
+    req.flash('success', 'Success! List has been deleted.');
     res.redirect('/lists');
 }));
 

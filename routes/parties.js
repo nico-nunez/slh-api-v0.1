@@ -16,6 +16,7 @@ router.post('/', validateParty, catchAsync( async (req, res, next) => {
     party.isPrivate = party.isPrivate ? true : false;
     const newParty = new Party(party);
     await newParty.save();
+    req.flash('success', 'Success! Your party has been created.');
     res.redirect('/parties');
 }));
 
@@ -36,6 +37,7 @@ router.get('/:id', catchAsync( async (req, res, next) => {
 router.delete('/:id', catchAsync ( async (req, res, next) => {
     const { id } = req.params;
     await Party.findByIdAndDelete( id );
+    req.flash('success', 'Success! Party has been deleted.');
     res.redirect('/parties');
 }));
 
