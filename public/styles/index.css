@@ -1,3 +1,7 @@
 .card {
     border-color: slategrey;
 }
+
+.date-full {
+    font-weight: bold;
+}

@@ -11,8 +11,16 @@
                 <div class="card mb-3">
                     <div class="card-body">
                         <h4 class="card-title"><%= party.name %></h4>
-                        <p>Join by: <%= party.dateJoinBy %></p>
-                        <p>End Date: <%= party.dateEnd %></p>
+                        <p>Join by: 
+                            <span class="date-full">
+                                <%= party.dateJoinBy %>
+                            </span>
+                        </p>
+                        <p>End Date: 
+                            <span class="date-full">
+                                <%= party.dateEnd %>
+                            </span>
+                        </p>
                         <p>Participants: </p>
                         <p>Creator: </p>
                         <a href="/parties/<%= party._id %>" class="btn btn-primary">View</a>
