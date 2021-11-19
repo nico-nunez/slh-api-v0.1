@@ -5,7 +5,10 @@ body{
     background-image: url('../assets/showPageBG2.jpg');
     background-size: cover;
     background-repeat: no-repeat;
-    
+}
+
+nav{
+    letter-spacing: 2px;
 }
 
 p {

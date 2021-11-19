@@ -14,7 +14,6 @@ router.get('/', catchAsync( async (req, res, next) => {
 router.post('/', validateParty, catchAsync( async (req, res, next) => {
     const { party } = req.body;
     party.isPrivate = party.isPrivate ? true : false;
-    party.dateCreated = dayjs().format('YYYY-MM-DD');
     const newParty = new Party(party);
     await newParty.save();
     res.redirect('/parties');
@@ -32,7 +31,13 @@ router.get('/:id', catchAsync( async (req, res, next) => {
     const { id } = req.params;
     const party = await Party.findById( id );
     res.render('parties/show', { party })
-}))
+}));
+
+router.delete('/:id', catchAsync ( async (req, res, next) => {
+    const { id } = req.params;
+    await Party.findByIdAndDelete( id );
+    res.redirect('/parties');
+}));
 
 
 

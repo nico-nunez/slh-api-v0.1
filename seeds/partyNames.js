@@ -20,7 +20,7 @@ module.exports = [
     'A Jolly Good Time',
     'Sugarplum Celebration',
     'Chillin’ Holiday Hangout',
-    '1st Annual “Naughty or Nice” Party',
+    'Naughty or Nice Party',
     'Miracle on My Street',
     'Jack Frost Jubilee',
     'Holiday Hoopla',
@@ -44,11 +44,10 @@ module.exports = [
     '1st Annual White Elephant Gift Exchange',
     'Swap ‘Til You Drop 2021',
     'A White Elephant You’ll Never Forget',
-    '“Who’s Your Santa?” Secret Santa Party',
+    'Who’s Your Santa?',
     'Secret Santa Social',
-    '“Sleigh Hello to My Little Friend” Secret Santa Party',
-    '[Host’s] “Batch Made in Heaven” Christmas Cookie Exchange',
+    'Sleigh Hello to My Little Friend',
+    '"Batch Made in Heaven" Cookie Exchange',
     'Cookie Fest 2021',
-    '1st Annual “Sweet Relief” Cookie Swap',
     
 ]

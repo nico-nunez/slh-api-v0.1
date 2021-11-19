@@ -8,15 +8,8 @@ const partySchema = new Schema({
         required: true,
         unique: true,
     },
-    dateCreated: {
-        type: Date
-    },
-    dateJoinBy: {
-        type: Date
-    },
-    dateEnd: {
-        type: Date
-    },
+    joinBy: Date,
+    endsOn: Date,
     // creator: { 
     //     type: Schema.Types.ObjectId,
     //     ref: 'User' 
@@ -28,6 +21,6 @@ const partySchema = new Schema({
     //     { type: Schema.Types.ObjectId, ref: 'List' },
     // ],
     isPrivate: Boolean
-});
+},{timestamps: true});
 
 module.exports = mongoose.model('Party', partySchema);

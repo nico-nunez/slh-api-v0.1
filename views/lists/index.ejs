@@ -1,6 +1,9 @@
 <% layout('layouts/boilerplate') %>
 
-<h1 class="text-center">All Lists</h1>
+<div class="text-center mb-3">
+    <h1>All Lists</h1>
+    <a href="/lists/new" class="btn btn-primary">Create List</a>
+</div>
 <div class="col-md-12">
     <div class="row">
         <% for (const list of lists) { %>

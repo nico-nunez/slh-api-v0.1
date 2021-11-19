@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const dayjs = require('dayjs');
 
 const imageSchema = new Schema({
     url: String,
@@ -32,11 +33,7 @@ const listSchema = new Schema({
     required: true
   },
   items: [itemSchema],
-      // updated: Date,
-    // created: Date,
-    // author,
-
-});
+},{timestamps: true});
 
 
 module.exports = mongoose.model('List', listSchema);

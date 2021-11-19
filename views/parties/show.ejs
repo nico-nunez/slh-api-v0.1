@@ -20,6 +20,13 @@
                         </span>
                     </p>
                 </div>
+                <div class="text-center mb-3">
+                    <form action="/parties/<%= party._id %>?_method=DELETE" method="POST">
+                        <button type="submit" class="btn btn-danger">
+                            Delete
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const List = require('../models/list');
+const days = require('dayjs');
 const { ExpressError, catchAsync } = require('../utils');
 const { validateList } = require('../joiSchemas');
 
@@ -10,7 +11,7 @@ router.get('/', catchAsync( async (req, res, next) => {
 }));
 
 router.post('/', validateList, catchAsync( async (req, res, next) => {
-    const { list, items } = req.body;
+    const { list } = req.body;
     const newList = new List({...list});
     await newList.save();
     res.redirect(`lists/${newList._id}`);
@@ -32,7 +33,7 @@ router.get('/:id', catchAsync( async (req, res, next) => {
 
 router.put('/:id', validateList, catchAsync( async(req, res, next) => {
     const { id } = req.params;
-    await List.findByIdAndUpdate(id, {...req.body.list});
+    await List.findByIdAndUpdate(id, {...req.body.list}, {runValidators: true});
     res.redirect(`/lists/${id}`);
 }));
 
