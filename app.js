@@ -8,9 +8,7 @@ const { ExpressError, errorHandler, catchAsync } = require('./utils');
 const { validateList } = require('./middleware');
 
 const listsRoutes = require('./routes/lists');
-
-// --------- Models -----------
-const List = require('./models/list');
+const groupsRoutes = require('./routes/groups');
 
 // -------------- Mongoose -----------
 const mongoDBUrl = process.env.MONGODB_URL || 'mongodb://localhost:27017/grab-bag';
@@ -36,7 +34,8 @@ app.get('/', (req, res) => {
     res.render('home');
 });
 
-app.use('/lists', listsRoutes)
+app.use('/lists', listsRoutes);
+app.use('/groups', groupsRoutes);
 
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found', 404));
