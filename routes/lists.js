@@ -4,13 +4,14 @@ const List = require('../models/list');
 const days = require('dayjs');
 const { ExpressError, catchAsync } = require('../utils');
 const { validateList } = require('../joiSchemas');
+const { isLoggedIn } = require('../middleware');
 
 router.get('/', catchAsync( async (req, res, next) => {
     const lists = await List.find({})
     res.render('lists/index', {lists});
 }));
 
-router.post('/', validateList, catchAsync( async (req, res, next) => {
+router.post('/', isLoggedIn, validateList, catchAsync( async (req, res, next) => {
     const { list } = req.body;
     const newList = new List({...list});
     await newList.save();
@@ -18,7 +19,7 @@ router.post('/', validateList, catchAsync( async (req, res, next) => {
     res.redirect(`lists/${newList._id}`);
 }));
 
-router.get('/new', (req, res) => {
+router.get('/new', isLoggedIn, (req, res) => {
     res.render('lists/new');
 });
 

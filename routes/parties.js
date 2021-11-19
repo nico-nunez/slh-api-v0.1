@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router();
 const { ExpressError, errorHandler, catchAsync } = require('../utils');
 const { validateParty } = require('../joiSchemas');
+const { isLoggedIn } = require('../middleware');
 const dayjs = require('dayjs');
 
 const Party = require('../models/party');
@@ -11,7 +12,7 @@ router.get('/', catchAsync( async (req, res, next) => {
     res.render('parties/index', {parties})
 }));
 
-router.post('/', validateParty, catchAsync( async (req, res, next) => {
+router.post('/', isLoggedIn, validateParty, catchAsync( async (req, res, next) => {
     const { party } = req.body;
     party.isPrivate = party.isPrivate ? true : false;
     const newParty = new Party(party);
@@ -20,7 +21,7 @@ router.post('/', validateParty, catchAsync( async (req, res, next) => {
     res.redirect('/parties');
 }));
 
-router.get('/new', (req, res) => {
+router.get('/new', isLoggedIn, (req, res) => {
     const dates = {
         min: dayjs().add(1, 'day').format('YYYY-MM-DD'),
         max: dayjs().add(1, 'year').format('YYYY-MM-DD')

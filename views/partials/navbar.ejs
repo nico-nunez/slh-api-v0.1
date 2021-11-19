@@ -27,8 +27,12 @@
                 <a class="nav-link" href="/parties">All Parties</a>
             </div>
             <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="/users/login">Login</a>
-                <a class="nav-link" href="/users/register">Register</a>
+                <% if(loggedInUser) { %>
+                    <a class="nav-link" href="/users/logout">Logout</a>
+                <%} else { %> 
+                    <a class="nav-link" href="/users/login">Login</a>
+                    <a class="nav-link" href="/users/register">Register</a>
+                <% } %> 
             </div>
         </div>
     </div>
