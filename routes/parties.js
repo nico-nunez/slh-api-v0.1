@@ -31,12 +31,20 @@ router.get('/new', (req, res) => {
 router.get('/:id', catchAsync( async (req, res, next) => {
     const { id } = req.params;
     const party = await Party.findById( id );
+    if(!party) {
+        req.flash('error', "Sorry, coud not find that party");
+        return res.redirect('/parties');
+    }
     res.render('parties/show', { party })
 }));
 
 router.delete('/:id', catchAsync ( async (req, res, next) => {
     const { id } = req.params;
     await Party.findByIdAndDelete( id );
+    if(!party) {
+        req.flash('error', "Sorry, coud not find that party");
+        return res.redirect('/parties');
+    }
     req.flash('success', 'Success! Party has been deleted.');
     res.redirect('/parties');
 }));

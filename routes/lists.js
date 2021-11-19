@@ -24,17 +24,29 @@ router.get('/new', (req, res) => {
 
 router.get('/:id/edit', catchAsync( async (req, res, next) => {
     const list = await List.findById(req.params.id);
+    if(!list) {
+        req.flash('error', "Sorry, coud not find that list");
+        return res.redirect('/parties');
+    }
     res.render('lists/edit', { list });
 }));
 
 router.get('/:id', catchAsync( async (req, res, next) => {
     const list = await List.findById(req.params.id);
+    if(!list) {
+        req.flash('error', "Sorry, coud not find that list");
+        return res.redirect('/parties');
+    }
     res.render('lists/show', {list});
 }));
 
 router.put('/:id', validateList, catchAsync( async(req, res, next) => {
     const { id } = req.params;
-    await List.findByIdAndUpdate(id, {...req.body.list}, {runValidators: true});
+    const list = await List.findByIdAndUpdate(id, {...req.body.list}, {new: true, runValidators: true});
+    if(!list) {
+        req.flash('error', "Sorry, coud not find that list");
+        return res.redirect('/parties');
+    }
     req.flash('success', 'Success! List has been updated.')
     res.redirect(`/lists/${id}`);
 }));
