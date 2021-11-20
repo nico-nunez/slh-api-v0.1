@@ -8,6 +8,7 @@ const dayjs = require('dayjs');
 const List = require('../models/list');
 const Party = require('../models/party');
 
+const creator = '6198140850dae10abb82c4fa';
 // -------------- Mongoose -----------
 const mongoDBUrl = process.env.MONGODB_URL || 'mongodb://localhost:27017/grab-bag';
 
@@ -44,12 +45,12 @@ const seedLists = async () => {
     const numNames = firstNames.length;
     const numItems = items.length;
     await List.deleteMany({});
-    for (let i=0; i<30; i++){
+    for (let i=0; i<10; i++){
         const name = firstNames[randInt(numNames)];
-        const created = dayjs();
         const list = new List({
             title: `${name}'s List`,
             items: items[randInt(numItems)],
+            creator
         });
         await list.save();
     } 
@@ -57,7 +58,7 @@ const seedLists = async () => {
 
 const seedParties = async () => {
     await Party.deleteMany({});
-    for (let i=0; i<30; i++) {
+    for (let i=0; i<10; i++) {
         const randNum = randInt(partyNames.length);
         const [ name ] = partyNames.splice(randNum, 1);
         const joinBy = dayjs().add(1, 'day');
@@ -66,6 +67,7 @@ const seedParties = async () => {
             name,
             joinBy,
             endsOn,
+            creator,
             isPrivate: randNum % 2 === 0
         })
         await party.save();

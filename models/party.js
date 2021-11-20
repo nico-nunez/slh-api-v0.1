@@ -10,10 +10,10 @@ const partySchema = new Schema({
     },
     joinBy: Date,
     endsOn: Date,
-    // creator: { 
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'User' 
-    // },
+    creator: { 
+        type: Schema.Types.ObjectId,
+        ref: 'User' 
+    },
     // members: [
     //     { type: Schema.Types.ObjectId, ref: 'User' }
     // ],

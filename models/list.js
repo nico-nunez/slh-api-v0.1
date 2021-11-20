@@ -13,7 +13,7 @@ const itemSchema = new Schema({
         required: true
     },
     link: String,
-    purchased: Boolean
+    // purchased: Boolean
     // images: [imageSchema]
 })
   
@@ -28,11 +28,15 @@ const itemSchema = new Schema({
 //   });
 
 const listSchema = new Schema({
-  title: {
-    type: String,
-    required: true
-  },
-  items: [itemSchema],
+    title: {
+        type: String,
+        required: true
+    },
+    items: [itemSchema],
+    creator: {
+        type: Schema.Types.ObjectId, 
+        ref: 'User'
+    }
 },{timestamps: true});
 
 

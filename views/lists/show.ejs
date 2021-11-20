@@ -19,14 +19,16 @@
                 <p class="text-muted mb-0">Last updated ... </p>
 			</div>
 		</div>
-        <div class="d-flex justify-content-between mb-3">
-            <a href="/lists/<%= list._id %>/edit" class="btn btn-secondary">Edit</a>
-            <form action="/lists/<%= list._id %>?_method=DELETE" method="POST">
-                <button type="submit" class="btn btn-danger">
-                    Delete
-                </button>
-            </form>
-        </div>
+        <% if (loggedInUser && list.creator.equals(loggedInUser._id)) { %> 
+            <div class="d-flex justify-content-between mb-3">
+                <a href="/lists/<%= list._id %>/edit" class="btn btn-secondary">Edit</a>
+                <form action="/lists/<%= list._id %>?_method=DELETE" method="POST">
+                    <button type="submit" class="btn btn-danger">
+                        Delete
+                    </button>
+                </form>
+            </div>
+        <% } %> 
         <a href="/lists" class="">Back</a>
 	</div>
 </div>
