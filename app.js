@@ -27,10 +27,10 @@ const usersRoutes = require('./routes/users');
 const familiesRoutes = require('./routes/families');
 // -------------- Mongoose -----------
 
-// const dbURL = process.env.DB_URL
+
 const mongoDBUrl = process.env.MONGODB_URL || 'mongodb://localhost:27017/grab-bag';
 const secret = process.env.SECRET || 'supersecretwordything';
-// const mongoDBUrl = dbURL
+
 
 const db = mongoose.connection;
 mongoose.connect(mongoDBUrl);
