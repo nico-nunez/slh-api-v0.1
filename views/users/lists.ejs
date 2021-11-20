@@ -1,0 +1,33 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="text-center mb-3">
+    <h1><%= user.profileName %>'s  Lists</h1>
+    <% if (loggedInUser && loggedInUser._id === user._id) { %> 
+        <a href="/lists/new" class="btn btn-primary">Create List</a>
+    <% } %> 
+</div>
+<div class="col-md-12">
+    <div class="row">
+        <% for (const list of userLists) { %>
+            <div class="col-md-5 ms-auto">
+                <div class="card mb-3">
+                    <div class="card-body py-0">
+                        <div class="d-flex justify-content-between">
+                            <h4 class="card-title mt-3 text-center"><%= list.title %></h4>
+                            <p class="text-muted mt-auto">Updated ....</p>
+                        </div>
+                        <ul class="list-group mb-3">
+                            <% for (const [i, item] of list.items.entries()) { %> 
+                                <% if (i > 2) break %>
+                                <li class="list-group-item">- <%= item.description %></li>
+                                <% } %>
+                        </ul>
+                        <a href="/lists/<%= list._id %>" class="btn btn-primary mb-3">View</a>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+    </div>
+</div>
+
+<a href="/lists/new">New List</a>

@@ -1,0 +1,35 @@
+<% layout('layouts/boilerplate') %> 
+
+<div class="row">
+    <h1 class="text-center"><%= family.name %> family</h1>
+    <div class="col-lg-4 col-md-6 ms-auto me-auto">
+		<div class="card mb-3">
+			<div class="card-body">
+                <ul class="list-group mb-3">
+                    <% for (const member of family.members) { %>  
+                        <li class="list-group-item">
+                            <a href="/users/<%= member._id %>">
+                                <%= member.profileName %>
+                            </a>
+                        </li>
+                    <% } %>
+                </ul>
+                <p class="text-muted mb-0">Last updated ... </p>
+			</div>
+		</div>
+        <% if (loggedInUser && family.creator.equals(loggedInUser._id)) { %> 
+            <div class="d-flex justify-content-between mb-3">
+                <a href="/lists/<%= family._id %>/edit" class="btn btn-secondary">Edit</a>
+                <form action="/lists/<%= family._id %>?_method=DELETE" method="POST">
+                    <button type="submit" class="btn btn-danger">
+                        Delete
+                    </button>
+                </form>
+            </div>
+        <% } %>
+        <form action="/families/<%= family._id %>" method="POST">
+            <button type="submit" class="btn btn-primary">Join</button>
+        </form>
+        <a href="/lists" class="">Back</a>
+	</div>
+</div>

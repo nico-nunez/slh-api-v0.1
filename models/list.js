@@ -13,19 +13,8 @@ const itemSchema = new Schema({
         required: true
     },
     link: String,
-    // purchased: Boolean
-    // images: [imageSchema]
 })
   
-//   imageSchema.virtual('thumbnail').get(function() {
-//     return this.url.replace('/upload', '/upload/w_100,h_80');
-//   });
-//   imageSchema.virtual('indexPage').get(function() {
-//     return this.url.replace('/upload', '/upload/w_300,h_300');
-//   });
-//   imageSchema.virtual('showPage').get(function() {
-//     return this.url.replace('/upload', '/upload/w_600,h_500');
-//   });
 
 const listSchema = new Schema({
     title: {
@@ -36,8 +25,11 @@ const listSchema = new Schema({
     creator: {
         type: Schema.Types.ObjectId, 
         ref: 'User'
-    }
+    },
+    parties: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Party'
+    }]
 },{timestamps: true});
-
 
 module.exports = mongoose.model('List', listSchema);

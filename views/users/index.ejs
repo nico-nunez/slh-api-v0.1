@@ -1,3 +1,31 @@
-<% layout('layouts/boilerplate') %> 
+<% layout('layouts/boilerplate') %>
 
-<h1>User Home</h1>
+<div class="text-center mb-3">
+    <h1>All Users</h1>
+    <a href="/lists/new" class="btn btn-primary">Create List</a>
+</div>
+<div class="col-md-12">
+    <div class="row">
+        <% for (const user of users) { %>
+            <div class="col-md-5 ms-auto">
+                <div class="card mb-3">
+                    <div class="card-body py-0">
+                        <div class="d-flex justify-content-between">
+                            <h4 class="card-title mt-3 text-center"><%= user.profileName %></h4>
+                        </div>
+                        <ul class="list-group mb-3">
+                            <% for (const selection of user.selections) { %> 
+                                <li class="list-group-item">
+                                    Giftee: <%= selection.giftee.profileName %> 
+                                    Party: <%= selection.party.name %> 
+                                </li>
+                            <% } %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<a href="/lists/new">New List</a>

@@ -16,6 +16,7 @@ const { ExpressError, errorHandler} = require('./utils');
 const listsRoutes = require('./routes/lists');
 const partiesRoutes = require('./routes/parties');
 const usersRoutes = require('./routes/users');
+const familiesRoutes = require('./routes/families');
 // -------------- Mongoose -----------
 const mongoDBUrl = process.env.MONGODB_URL || 'mongodb://localhost:27017/grab-bag';
 
@@ -67,6 +68,7 @@ app.get('/', (req, res) => {
 app.use('/lists', listsRoutes);
 app.use('/parties', partiesRoutes);
 app.use('/users', usersRoutes);
+// app.use('/families', familiesRoutes);
 
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found', 404));

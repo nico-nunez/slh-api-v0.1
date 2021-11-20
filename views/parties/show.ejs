@@ -1,7 +1,5 @@
 <% layout('layouts/boilerplate') %>
 
-<% layout('layouts/boilerplate') %>
-
 <h1 class="text-center"><%= party.name %></h1>
 <div class="col-md-12">
     <div class="row">
@@ -21,7 +19,10 @@
                     </p>
                 </div>
                 <% if (loggedInUser && party.creator.equals(loggedInUser._id)) { %> 
-                    <div class="text-center mb-3">
+                    <div class="text-center mb-3 d-flex justify-content-around">
+                        <a href="/parties/<%= party._id %>/start" class="btn btn-primary">
+                            Start Party
+                        </a>
                         <form action="/parties/<%= party._id %>?_method=DELETE" method="POST">
                             <button type="submit" class="btn btn-danger">
                                 Delete
@@ -37,14 +38,15 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4 class="card-title mb-0">Participants</h4>
-                        <a href="" class="btn btn-primary">Join</a>
+                        <h4 class="card-title mb-0">Members</h4>
+                        <form action="/parties/<%= party._id %>" method="POST">
+                            <button class="btn btn-primary" type="submit">Join</button>
+                        </form>
                     </div>
                     <ul class="list-group">
-                        <li class="list-group-item">dlas;jkf</li>
-                        <li class="list-group-item">dlas;jkf</li>
-                        <li class="list-group-item">dlas;jkf</li>
-                        <li class="list-group-item">dlas;jkf</li>
+                        <% for (const member of party.members) { %>
+                            <li class="list-group-item"><%= member.profileName %></li>
+                        <% } %>  
                     </ul>
                 </div>
             </div>
@@ -54,13 +56,16 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h4 class="card-title mb-0">Lists</h4>
-                        <a href="" class="btn btn-primary">Add</a>
+                        <!-- <a href="" class="btn btn-primary">Add</a> -->
                     </div>
                     <ul>
-                        <li class="list-group-item">dlas;jkf</li>
-                        <li class="list-group-item">dlas;jkf</li>
-                        <li class="list-group-item">dlas;jkf</li>
-                        <li class="list-group-item">dlas;jkf</li>
+                        <% for (const list of party.lists){ %> 
+                            <li class="list-group-item">
+                                <a href="/lists/<%= list._id %> ">
+                                    <%= list.creator.profileName %>'s list
+                                </a>
+                            </li>
+                        <% } %>  
                     </ul>
                 </div>
             </div>

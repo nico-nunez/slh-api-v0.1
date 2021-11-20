@@ -15,6 +15,7 @@ router.post('/', isLoggedIn, validateList, catchAsync( async (req, res, next) =>
     const { list } = req.body;
     const newList = new List({...list});
     newList.creator = req.user._id;
+    newList.parties = []
     await newList.save();
     req.flash('success', 'Success! New List created.');
     res.redirect(`lists/${newList._id}`);

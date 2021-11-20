@@ -1,0 +1,28 @@
+<% layout('layouts/boilerplate') %> 
+
+<link rel="stylesheet" href="/styles/lists.css">
+
+<div class="row">
+    <h1 class="text-center">Create New Family</h1>
+    <div class="col-lg-5 col-md-6 ms-auto me-auto">
+        <form action="/families" method="POST" novalidate class="validate-form">
+            <div class="mb-3 form-group">
+                <label class="form-label" for="name">Name</label>
+                <input 
+                class="form-control" 
+                type="text" 
+                name="family[name]" 
+                id="name"
+                placeholder="family name"
+                required
+            >
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary">Create</button>
+                <a href="/lists" class="btn btn-danger">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="/js/lists.js"></script>
