@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== "production") {
+    require('dotenv').config();
+}
+
 const express = require('express')
 const app = express();
 const path = require('path');
@@ -8,6 +12,10 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
+const mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
+const MongoStore = require('connect-mongo');
+
 const User = require('./models/user');
 
 const { ExpressError, errorHandler} = require('./utils');
@@ -18,7 +26,11 @@ const partiesRoutes = require('./routes/parties');
 const usersRoutes = require('./routes/users');
 const familiesRoutes = require('./routes/families');
 // -------------- Mongoose -----------
+
+// const dbURL = process.env.DB_URL
 const mongoDBUrl = process.env.MONGODB_URL || 'mongodb://localhost:27017/grab-bag';
+const secret = process.env.SECRET || 'supersecretwordything';
+// const mongoDBUrl = dbURL
 
 const db = mongoose.connection;
 mongoose.connect(mongoDBUrl);
@@ -28,11 +40,26 @@ db.once("open", () => {
     console.log("Mongo Connection Open...");
 });
 
+const store = MongoStore.create({
+    mongoUrl: mongoDBUrl,
+    touchAfter: 24*60*60,
+    crypto: {
+      secret 
+    }
+});
+
+store.on('error', function (e) {
+    console.log(('SESSION STORE ERROR', e))
+});
+
 const sessionConfig = {
-    secret: 'thisisjustatemporarysecret',
+    store,
+    secret,
+    name: 'appSession',
     resave: false,
     saveUninitialized: true,
     cookie: {
+        // secure: true,
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7 * 31,
         maxAge: 1000 * 60 * 60 * 24 * 7 * 31
     }
@@ -44,8 +71,10 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')))
+app.use(mongoSanitize())
 app.use(session(sessionConfig));
 app.use(flash());
+app.use(helmet({contentSecurityPolicy: false}));
 
 app.use(passport.initialize());
 app.use(passport.session());
