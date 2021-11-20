@@ -3,12 +3,14 @@
 <div class="text-center mb-3">
     <h1 class=""><%= user.profileName %></h1>
 </div>
-<div class="row d-flex justify-content-between">
-    <div class="col-md-5 col-lg-3 ms-auto me-auto">
+<div class="row d-flex justify-content-between px-1">
+    <div class="col-md-5 col-lg-3 ms-auto me-auto mt-3">
         <div class="row">
-            <div class="card px-3 py-3">
+            <div class="card py-3">
                 <h4 class="card-title text-center">My Lists</h4>
-                <a href="/lists/new" class="btn btn-primary">New List</a>
+                <div class="text-center">
+                    <a href="/lists/new" class="btn btn-primary">New List</a>
+                </div>
                 <div class="card-body text-center">
                     <ul class="list-group">
                     <% for (const list of userLists) { %> 
@@ -23,16 +25,18 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3 ms-auto me-auto">
+    <div class="col-md-3 ms-auto me-auto mt-3">
         <div class="row">
             <div class="card px-3 py-3">
                 <h4 class="card-title text-center">My Parties</h4>
+                <div class="text-center">
                 <a href="/lists/new" class="btn btn-primary">Create Party</a>
+                </div>
                 <div class="card-body text-center">
                     <ul class="list-group">
                         <% for (const party of parties) { %> 
                             <li class="list-group-item">
-                                <a href="#">
+                                <a href="/parties/<%= party._id %>">
                                     <%= party.name %> 
                                 </a>
                             </li>
@@ -42,7 +46,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3 ms-auto me-auto">
+    <div class="col-md-3 ms-auto me-auto mt-3">
         <div class="row">
             <div class="card px-3 py-3">
                 <h4 class="card-title text-center">My Giftees</h4>

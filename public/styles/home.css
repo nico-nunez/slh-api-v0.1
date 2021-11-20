@@ -19,3 +19,9 @@ p {
     letter-spacing: 4px;
     text-transform: capitalize;
 }
+
+@media screen and (max-width: 900px) {
+    body {
+        background-image: url('../assets/homeBGmobile.jpg');
+    }
+}

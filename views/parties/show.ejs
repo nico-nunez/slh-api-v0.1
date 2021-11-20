@@ -45,7 +45,11 @@
                     </div>
                     <ul class="list-group">
                         <% for (const member of party.members) { %>
-                            <li class="list-group-item"><%= member.profileName %></li>
+                            <li class="list-group-item">
+                                <a href="/users/<%= member._id %>/lists">
+                                    <%= member.profileName %>
+                                </a>
+                            </li>
                         <% } %>  
                     </ul>
                 </div>

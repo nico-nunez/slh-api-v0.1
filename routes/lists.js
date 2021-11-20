@@ -34,7 +34,7 @@ router.get('/:id/edit', isLoggedIn, isCreatorList, catchAsync( async (req, res, 
     res.render('lists/edit', { list });
 }));
 
-router.get('/:id', catchAsync( async (req, res, next) => {
+router.get('/:id', isLoggedIn, catchAsync( async (req, res, next) => {
     const list = await List.findById(req.params.id).populate('creator');
     if(!list) {
         req.flash('error', "Sorry, coud not find that list");

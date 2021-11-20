@@ -35,7 +35,7 @@ router.get('/new', isLoggedIn, (req, res) => {
     res.render('parties/new', {dates});
 });
 
-router.get('/:id', catchAsync( async (req, res, next) => {
+router.get('/:id', isLoggedIn, catchAsync( async (req, res, next) => {
     const { id } = req.params;
     const party = await Party.findById( id ).populate('creator members lists');
     if(!party) {

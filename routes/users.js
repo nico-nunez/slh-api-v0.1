@@ -3,12 +3,10 @@ const router = express.Router();
 const passport = require('passport');
 const days = require('dayjs');
 const { ExpressError, catchAsync } = require('../utils');
-const { isLoggedIn, isUser, isFamily } = require('../middleware');
+const { isLoggedIn, isUser} = require('../middleware');
 const List = require('../models/list');
 const User = require('../models/user');
 const Party = require('../models/party')
-
-// const { validateUser } = require('../joiSchemas');
 
 
 router.get('/', catchAsync(async(req, res, next) => {
@@ -40,7 +38,7 @@ router.post('/register', catchAsync (async (req, res) => {
             const redirect = req.session.redirectedFrom || '/parties';
             delete req.session.redirectedFrom;
             req.flash('success', 'Welcome! Thank you for joining!');
-            res.redirect(redirect);
+            return res.redirect(redirect);
         });
     } catch (e) {
         req.flash('error', e.message);
@@ -54,10 +52,10 @@ router.get('/login', (req, res) => {
 });
 
 router.post('/login', passport.authenticate('local', {failureFlash: true, failureRedirect: 'login'}), (req, res) => {
-    const redirect = req.session.redirectedFrom || `/users/${req.user._id}`;
+    const redirection = req.session.redirectedFrom || `/parties`;
     delete req.session.redirectedFrom;
     req.flash('success', 'Welcome back!');
-    res.redirect(redirect);
+    res.redirect(redirection);
 });
 
 router.get('/logout', (req, res) => {
