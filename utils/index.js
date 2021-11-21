@@ -16,9 +16,8 @@ const catchAsync = (func) => {
 const errorHandler = (err, req, res, next) => {
 	const { status = 500 } = err;
 	if (!err.message) err.message = "Oh, no! Something went REALLY wrong!";
-	  req.flash('error', err.message);
-	  res.status(status).redirect('/lists');
-    res.status(status).render('errors', { err })
+    req.flash('error', err.message);
+    res.status(status).redirect('/lists');
 };
 
 module.exports = {
