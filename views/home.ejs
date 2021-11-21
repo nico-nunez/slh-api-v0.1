@@ -37,12 +37,26 @@
 				</button>
 				<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
-                        <a class="nav-link" href="/lists">All Lists</a>
-                        <a class="nav-link" href="/parties">All Parties</a>
+                        <% if (!loggedInUser) { %> 
+                            <a class="nav-link" href="/users/login">Home</a>
+                            <% } else { %>
+                                <a class="nav-link" href="/users/<%= loggedInUser._id %> ">
+                                    Home
+                                </a>
+                            <% } %> 
+                        <a class="nav-link" href="/lists">Lists</a>
+                        <a class="nav-link" href="/parties">Parties</a>
                     </div>
                     <div class="navbar-nav ms-auto">
+                        <% if (!loggedInUser) { %> 
                         <a class="nav-link" href="/users/login">Login</a>
                         <a class="nav-link" href="/users/register">Register</a>
+                        <% } else { %>
+                            <a class="nav-link" href="/users/<%= loggedInUser._id %> ">
+                                <%= loggedInUser.profileName %> 
+                            </a>
+                            <a class="nav-link" href="/users/logout">Logout</a>
+                        <% } %> 
                     </div>
 				</div>
 			</div>

@@ -9,17 +9,6 @@ const User = require('../models/user');
 const Party = require('../models/party')
 
 
-router.get('/', catchAsync(async(req, res, next) => {
-    const users = await User.find().populate({
-        path: 'selections',
-        populate: {
-            path: 'giftee party',
-        },
-    });
-    res.render('users/index', { users });
-}))
-
-
 router.get('/register', (req, res) => {
     res.render('users/register');
 });
@@ -52,7 +41,7 @@ router.get('/login', (req, res) => {
 });
 
 router.post('/login', passport.authenticate('local', {failureFlash: true, failureRedirect: 'login'}), (req, res) => {
-    const redirection = req.session.redirectedFrom || `/parties`;
+    const redirection = req.session.redirectedFrom || `/users/${req.user.id}`;
     delete req.session.redirectedFrom;
     req.flash('success', 'Welcome back!');
     res.redirect(redirection);
