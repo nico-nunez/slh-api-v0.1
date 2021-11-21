@@ -2,6 +2,7 @@ const addItemBtn = document.querySelector('.add-item');
 const cancelItemBtn = document.querySelector('.cancel-item');
 const editItemsContent = document.querySelector('.items-input-content');
 
+
 addItemBtn.addEventListener('click', handleAddAnotherItemEvt);
 cancelItemBtn.addEventListener('click', handleCancelItemEvt);
 
@@ -68,6 +69,7 @@ function handleItemEditEvt(evt) {
         addItemBtn.classList.add('hidden');
     }
 }
+
 
 
 

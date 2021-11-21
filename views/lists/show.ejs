@@ -16,7 +16,14 @@
                         <% } %> 
                     <% } %>
                 </ul>
-                <p class="text-muted mb-0">Last updated ... </p>
+                <div class="text-muted text-small text-center">
+                    <p class="mb-0">
+                        updated - 
+                        <span class="updatedAt">
+                            <%= list.updatedAt %>
+                        </span>
+                    </p>
+                </div>
 			</div>
 		</div>
         <% if (loggedInUser && list.creator.equals(loggedInUser._id)) { %> 

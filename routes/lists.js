@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const List = require('../models/list');
-const days = require('dayjs');
 const { ExpressError, catchAsync } = require('../utils');
 const { validateList } = require('../joiSchemas');
 const { isLoggedIn, isCreatorList } = require('../middleware');
