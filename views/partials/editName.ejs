@@ -1,0 +1,26 @@
+<div class="row hidden" id="edit-name">
+    <div class="col-lg-5 col-md-6 ms-auto me-auto">
+        <div class="card">
+            <h4 class="card-title text-center mt-3">Profile Name Update</h4>
+            <div class="card-body">
+                <form action="/users/<%= currentUser._id %>/edit?_method=PUT" method="POST" novalidate class="validate-form">
+                    <div class="mb-3 form-group">
+                        <label class="form-label" for="profileName">New Profile Name</label>
+                        <input 
+                        class="form-control" 
+                        type="text" 
+                        name="profileName" 
+                        id="profileName"
+                        value="<%= currentUser.profileName %>"
+                        required
+                    >
+                    <p class="text-muted mt-1">*This only changes the name people see, not your login</p>
+                    </div>
+                    <button type="submit" class="btn btn-danger">Update</button>
+                    <a href="" class="btn btn-warning">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
