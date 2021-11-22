@@ -1,14 +1,14 @@
 <% layout('layouts/boilerplate') %>
 
 <div class="text-center mb-3">
-    <h1><%= user.profileName %>'s  Lists</h1>
-    <% if (loggedInUser && loggedInUser._id === user._id) { %> 
+    <h1><%= currentUser.profileName %>'s  Lists</h1>
+    <% if (loggedInUser && loggedInUser._id === currentUser._id) { %> 
         <a href="/lists/new" class="btn btn-primary">Create List</a>
     <% } %> 
 </div>
 <div class="col-md-12">
     <div class="row">
-        <% for (const list of userLists) { %>
+        <% for (const list of currentUserLists) { %>
             <div class="col-md-5 ms-auto">
                 <div class="card mb-3">
                     <div class="card-body py-0">

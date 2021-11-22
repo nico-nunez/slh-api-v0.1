@@ -54,21 +54,21 @@ router.get('/logout', (req, res) => {
 })
 
 router.get('/:id', isLoggedIn, isUser, catchAsync(async (req, res) => {
-    const user = await User.findById( req.params.id).populate({
+    const currentUser = await User.findById( req.params.id).populate({
         path: 'selections',
         populate: {
             path: 'giftee party'
         }
     });
-    const userLists = await List.find({'creator': req.user._id});
+    const currentUserLists = await List.find({'creator': req.user._id});
     const parties = await Party.find({'members': req.user._id })
-    res.render('users/profile', {user, userLists, parties});
+    res.render('users/profile', {currentUser, currentUserLists, parties});
 }));
 
 router.get('/:id/lists', isLoggedIn, catchAsync(async (req, res) => {
-    const user = await User.findById(req.params.id)
-    const userLists = await List.find({'creator': req.params.id});
-    res.render('users/lists', {user, userLists});
+    const currentUser = await User.findById(req.params.id)
+    const currentUserLists = await List.find({'creator': req.params.id});
+    res.render('users/lists', {currentUser, currentUserLists});
 }));
 
 router.get('/:id/famlies', isLoggedIn, catchAsync(async (req, res) => {
@@ -81,8 +81,9 @@ router.get('/:id/parties', isLoggedIn, isUser, catchAsync(async (req, res) => {
     res.render('users/parties', {userParties});
 }));
 
-router.get('/:id/edit', catchAsync( async (req, res, next) => {
-    res.render('users/edit')
+router.get('/:id/edit', isLoggedIn, isUser, catchAsync( async (req, res, next) => {
+    const currentUser = await User.findById( req.params.id );
+    res.render('users/edit', { currentUser })
 }));
 
 module.exports = router;

@@ -11,3 +11,12 @@
 .text-small {
     font-size: .9rem;
 }
+
+.icon-present {
+    height: 24px;
+    width: 24px;
+}
+
+.hidden {
+    display: none;
+}

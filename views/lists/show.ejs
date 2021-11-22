@@ -7,17 +7,16 @@
 			<div class="card-body">
                 <ul class="list-group mb-3">
                     <% for (const item of list.items) { %> 
-                        <% if (item.link) { %> 
-                            <li class="list-group-item">
+                        <li class="list-group-item">
+                            <img src="/assets/icons8-present-60.png" class="icon-present"/>
+                            <% if (item.link) { %>
                                 <a href="<%= item.link %> ">
-                                    - <%= item.description %>
+                                   <%= item.description %>
                                 </a>
-                            </li>
-                        <% } else { %>
-                            <li class="list-group-item">
-                                    - <%= item.description %>
-                            </li>
-                        <% } %> 
+                            <% } else { %>
+                                <span> <%= item.description %></span>
+                            <% } %> 
+                        </li>
                     <% } %>
                 </ul>
                 <div class="text-muted text-small text-center">
