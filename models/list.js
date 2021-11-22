@@ -29,6 +29,10 @@ const listSchema = new Schema({
     parties: [{
         type: Schema.Types.ObjectId,
         ref: 'Party'
+    }],
+    followers: [{
+        type: Schema.Types.ObjectId, 
+        ref: 'User'
     }]
 },{timestamps: true});
 
