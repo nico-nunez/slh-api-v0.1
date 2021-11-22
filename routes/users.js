@@ -86,4 +86,22 @@ router.get('/:id/edit', isLoggedIn, isUser, catchAsync( async (req, res, next) =
     res.render('users/edit', { currentUser })
 }));
 
+router.put('/:id/edit', isLoggedIn, isUser, catchAsync( async (req, res, next) => {
+    const { profileName, password } = req.body;
+    const { id } = req.params;
+    const user = await User.findById(id);
+    if(profileName) {
+       user.profileName = profileName;
+       await user.save();
+    }
+    if(password) {
+        if(password.new !== password.confirm) {
+            req.flash('error', 'Password confirmation must match.');
+        } else {
+            await user.changePassword(password.current, password.new);
+        }
+    }
+    res.redirect(`/users/${id}`);
+}))
+
 module.exports = router;
