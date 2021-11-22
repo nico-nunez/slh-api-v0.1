@@ -7,12 +7,16 @@
 			<div class="card-body">
                 <ul class="list-group mb-3">
                     <% for (const item of list.items) { %> 
-                        <% if(item.link) { %>
-                            - <a href="<%= item.link %>" class="list-group-item" target="_blank">
-                                <%= item.description %>
-                            </a>
-                        <% } else { %>     
-                            <li class="list-group-item">- <%= item.description %></li>
+                        <% if (item.link) { %> 
+                            <li class="list-group-item">
+                                <a href="<%= item.link %> ">
+                                    - <%= item.description %>
+                                </a>
+                            </li>
+                        <% } else { %>
+                            <li class="list-group-item">
+                                    - <%= item.description %>
+                            </li>
                         <% } %> 
                     <% } %>
                 </ul>

@@ -19,8 +19,18 @@
                         <ul class="list-group mb-3">
                             <% for (const [i, item] of list.items.entries()) { %> 
                                 <% if (i > 2) break %>
-                                <li class="list-group-item">- <%= item.description %></li>
-                                <% } %>
+                                <% if (item.link) { %> 
+                                    <li class="list-group-item">
+                                        <a href="<%= item.link %> ">
+                                            - <%= item.description %>
+                                        </a>
+                                    </li>
+                                <% } else { %>
+                                    <li class="list-group-item">
+                                            - <%= item.description %>
+                                    </li>
+                                <% } %> 
+                            <% } %>
                         </ul>
                         <div class="d-flex justify-content-between align-items-center">
                             <a href="/lists/<%= list._id %>" class="btn btn-primary mb-3">View</a>
