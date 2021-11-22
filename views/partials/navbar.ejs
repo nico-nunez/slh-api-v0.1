@@ -2,7 +2,11 @@
 
 <nav class="navbar sticky-top navbar-expand-md navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">
+        <% if(loggedInUser) { %> 
+            <a class="navbar-brand" href="/users/<%= loggedInUser._id %>">
+            <% } else { %> 
+            <a class="navbar-brand" href="/">
+            <% } %> 
             <img
                 src="https://www.clipartmax.com/png/full/16-167073_cartoon-santa-hat-clip-art-santa-hat-with-face.png"
                 alt="logo"
