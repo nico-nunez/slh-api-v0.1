@@ -29,7 +29,10 @@
                             </span>
                         </p>
                         <p>Members: <%= party.members.length %>  </p>
-                        <p>Creator: <%= party.creator.profileName %> </p>
+                        <p>Creator: 
+                            <a href="/users/<%= party.creator._id %>/public_profile" class="link-secondary">
+                                <%= party.creator.profileName %> 
+                            </a></p>
                         <a href="/parties/<%= party._id %>" class="btn btn-primary">View</a>
                     </div>
                 </div>

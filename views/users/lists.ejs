@@ -13,8 +13,12 @@
                 <div class="card mb-3">
                     <div class="card-body py-0">
                         <div class="d-flex justify-content-between">
-                            <h4 class="card-title mt-3 text-center"><%= list.title %></h4>
-                            <p class="text-muted mt-auto">Updated ....</p>
+                            <h4 class="card-title mt-3"><%= list.title %></h4>
+                            <p class="text-muted">
+                                <a href="/users/<%= list.creator._id %>/lists" class="link-info">
+                                    -<%= list.creator.profileName %> 
+                                </a>
+                            </p>
                         </div>
                         <ul class="list-group mb-3">
                             <% for (const [i, item] of list.items.entries()) { %> 

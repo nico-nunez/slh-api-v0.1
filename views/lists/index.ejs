@@ -11,12 +11,12 @@
             <div class="col-md-5 ms-auto">
                 <div class="card mb-3">
                     <div class="card-body py-0">
-                        <div class="d-flex justify-content-between">
-                            <h4 class="card-title mt-3 text-center"><%= list.title %></h4>
-                            <!-- <p class="text-muted mt-auto">
-                                Updated 
-                            </p> -->
-                        </div>
+                        <h4 class="card-title mt-3"><%= list.title %></h4>
+                        <p class="text-muted">
+                            <a href="/users/<%= list.creator._id %>/public_profile" class="link-secondary">
+                                -<%= list.creator.profileName %> 
+                            </a>
+                        </p>
                         <ul class="list-group mb-3">
                             <% for (const [i, item] of list.items.entries()) { %> 
                                 <% if (i > 2) break %>

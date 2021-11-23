@@ -101,7 +101,10 @@ app.use('/parties', partiesRoutes);
 app.use('/users', usersRoutes);
 // app.use('/families', familiesRoutes);
 
+
+app.get('/favicon.ico', (req, res) => res.status(204));
 app.all('*', (req, res, next) => {
+    console.log(req.path)
     next(new ExpressError('Page Not Found', 404));
   })
 

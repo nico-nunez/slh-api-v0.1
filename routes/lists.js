@@ -6,7 +6,7 @@ const { validateList } = require('../joiSchemas');
 const { isLoggedIn, isCreatorList } = require('../middleware');
 
 router.get('/', catchAsync( async (req, res, next) => {
-    const lists = await List.find({})
+    const lists = await List.find({}).populate('creator');
     res.render('lists/index', {lists});
 }));
 
