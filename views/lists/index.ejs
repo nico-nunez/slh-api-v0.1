@@ -33,10 +33,10 @@
                             <% } %>
                         </ul>
                         <div class="d-flex justify-content-between align-items-center">
-                            <% if (list.items.length > 2) { %> 
-                                <a href="/lists/<%= list._id %>" class="btn btn-primary mb-3">More</a>
-                            <% } else { %> 
+                            <% if (list.items.length < 4) { %> 
                                 <a href="/lists/<%= list._id %>" class="btn btn-primary mb-3">View</a>
+                            <% } else { %> 
+                                <a href="/lists/<%= list._id %>" class="btn btn-primary mb-3">More</a>
                             <% } %> 
                             <div class="text-muted text-small text-center">
                                 <p class="mb-0">
