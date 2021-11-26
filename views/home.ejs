@@ -15,56 +15,12 @@
         <link rel="stylesheet" href="/styles/home.css">
 	</head>
 	<body>
-		<nav class="navbar sticky-top navbar-expand-md navbar-dark bg-dark">
-			<div class="container-fluid">
-				<a class="navbar-brand" href="#">
-					<img
-						src="https://www.clipartmax.com/png/full/16-167073_cartoon-santa-hat-clip-art-santa-hat-with-face.png"
-						alt="logo"
-						height="42"
-					/>
-				</a>
-				<button
-					class="navbar-toggler"
-					type="button"
-					data-bs-toggle="collapse"
-					data-bs-target="#navbarNavAltMarkup"
-					aria-controls="navbarNavAltMarkup"
-					aria-expanded="false"
-					aria-label="Toggle navigation"
-				>
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <div class="navbar-nav">
-                        <% if (!loggedInUser) { %> 
-                            <a class="nav-link" href="/users/login">Home</a>
-                            <% } else { %>
-                                <a class="nav-link" href="/users/<%= loggedInUser._id %> ">
-                                    Home
-                                </a>
-                            <% } %> 
-                        <a class="nav-link" href="/lists">Lists</a>
-                        <a class="nav-link" href="/parties">Parties</a>
-                    </div>
-                    <div class="navbar-nav ms-auto">
-                        <% if (!loggedInUser) { %> 
-                        <a class="nav-link" href="/users/login">Login</a>
-                        <a class="nav-link" href="/users/register">Register</a>
-                        <% } else { %>
-                            <a class="nav-link" href="/users/<%= loggedInUser._id %> ">
-                                <%= loggedInUser.profileName %> 
-                            </a>
-                            <a class="nav-link" href="/users/logout">Logout</a>
-                        <% } %> 
-                    </div>
-				</div>
-			</div>
-		</nav>
-        <p>The</p>
-		<p>Nunez Family</p>
-        <p>Grab Bag</p>
+        <%- include('./partials/navbar')  %> 
 
+        <img src="/assets/home-mobile-min.png" alt="background" class="bg-home-mobile">
+        <img src="/assets/home-desktop-min.png" alt="background" class="bg-home-desktop">
+        <a href="/lists" class="btn btn-login">Enter</a>
+        
 		<script
 			src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
 			integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"

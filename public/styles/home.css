@@ -2,9 +2,9 @@
 body{ 
     font-family: 'Petemoss', cursive;
     font-size: 32px;
-    background-image: url('../assets/showPageBG2.jpg');
+    /* background-image: url('../assets/home1-min.png');
     background-size: cover;
-    background-repeat: no-repeat;
+    background-repeat: no-repeat; */
 }
 
 nav{
@@ -20,8 +20,46 @@ p {
     text-transform: capitalize;
 }
 
+.bg-home-mobile {
+    height: 95vh;
+    width: 100vw;
+    max-width: 100%;
+    position: absolute;
+    left: 0;
+    top: 40px;
+    z-index: -100;
+}
+.bg-home-desktop {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    height: 97vh;
+    max-width: 100%;
+    position: absolute;
+    z-index: -99;
+}
+
+.btn-login {
+    position: absolute;
+    top:90%;
+    left: 50%;
+    padding: 0 30px;
+    font-size: 48px;
+    letter-spacing: 8px;
+    font-weight: bold;
+    background-color: aliceblue;
+    border-radius: 25px;
+    transform: translateX(-50%);
+    box-shadow: inset 0px 0px 15px rgb(102, 76, 161);
+    border: 1px solid rgba(102, 76, 161, 0.418);
+    color: #502a86;
+}
+
 @media screen and (max-width: 900px) {
-    body {
-        background-image: url('../assets/homeBGmobile.jpg');
+    .btn-login {
+        top:77%;
     }
+    .bg-home-desktop {
+        display: none;
+    };
 }

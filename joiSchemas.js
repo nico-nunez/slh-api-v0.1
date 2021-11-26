@@ -12,7 +12,7 @@ function validateList(req, res, next) {
 
     const listSchema = Joi.object({
         list: Joi.object({
-            title: Joi.string().min(3).max(30).required(),
+            title: Joi.string().min(3).max(50).required(),
             items: Joi.array().items(itemSchema)
         }).required()
     });
