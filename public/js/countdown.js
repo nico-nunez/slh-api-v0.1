@@ -1,6 +1,10 @@
 function countdown() {
-        // Set the date we're counting down to
-    const countDownDate = new Date("Dec 25, 2021 00:00:00").getTime();
+    const currentYear = new Date().getFullYear();
+    let xmas = new Date(`Dec 25, ${currentYear} 00:00:00`);
+    const today = Date.now();
+    if (xmas.getTime() < today)
+        xmas.setFullYear(currentYear + 1);
+    const countDownDate = xmas.getTime();
     // Update the count down every 1 second
     var countdown = setInterval(function() {
     // Get today's date and time
