@@ -13,6 +13,7 @@ const itemSchema = new Schema({
         required: true
     },
     link: String,
+    purchased: Boolean
 })
   
 
@@ -33,7 +34,12 @@ const listSchema = new Schema({
     followers: [{
         type: Schema.Types.ObjectId, 
         ref: 'User'
-    }]
+    }],
+    public: {
+      type: Boolean,
+      required: true,
+      default: false
+    }
 },{timestamps: true});
 
 module.exports = mongoose.model('List', listSchema);

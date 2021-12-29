@@ -28,11 +28,7 @@ router.post('/', isLoggedIn, validateParty, catchAsync( async (req, res, next) =
 }));
 
 router.get('/new', isLoggedIn, (req, res) => {
-    const dates = {
-        min: dayjs().add(1, 'day').format('YYYY-MM-DD'),
-        max: dayjs().add(1, 'year').format('YYYY-MM-DD')
-    }
-    res.render('parties/new', {dates});
+    res.render('parties/new');
 });
 
 router.get('/:id', isLoggedIn, catchAsync( async (req, res, next) => {

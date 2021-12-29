@@ -26,7 +26,6 @@ const { ExpressError, errorHandler} = require('./utils');
 const listsRoutes = require('./routes/lists');
 const partiesRoutes = require('./routes/parties');
 const usersRoutes = require('./routes/users');
-const familiesRoutes = require('./routes/families');
 // -------------- Mongoose -----------
 
 
@@ -99,7 +98,6 @@ app.get('/', (req, res) => {
 app.use('/lists', listsRoutes);
 app.use('/parties', partiesRoutes);
 app.use('/users', usersRoutes);
-// app.use('/families', familiesRoutes);
 
 
 app.get('/favicon.ico', (req, res) => res.status(204));

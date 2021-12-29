@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="/styles/lists.css">
 
 <div class="row">
-    <h1 class="text-center">Get This Party Started!</h1>
+    <h1 class="text-center">Get The Party Started!</h1>
     <div class="col-lg-5 col-md-6 ms-auto me-auto">
         <form action="/parties" method="POST" novalidate class="validate-form">
             <div class="mb-3 form-group">
@@ -12,35 +12,30 @@
                 class="form-control" 
                 type="text" 
                 name="party[name]" 
-                id="name"
+                id="party-name"
                 placeholder="party name"
                 required
             >
             </div>
             <div class="mb-3 form-group">
-                <label class="form-label" for="date-end">Join Deadline</label>
+                <label class="form-label" for="party-start">Starts:</label>
                 <input 
                     type="date" 
                     class="form-control"
-                    id="date-end"
-                    name="party[joinBy]" 
-                    min="<%= dates.min %>"
-                    max="<%= dates.max %>"
-                    value="<%= dates.min %>"
+                    id="party-start"
+                    name="party[joinBy]"
                     required
                 >       
             </div>
             <div class="mb-3 form-group">
-                <label class="form-label" for="date-end">End Date</label>
+                <label class="form-label" for="party-end">Ends:</label>
                 <input 
                     type="date" 
                     class="form-control"
-                    id="date-end"
+                    id="party-end"
                     name="party[endsOn]" 
-                    min="<%= dates.min %>"
-                    max="<%= dates.max %>"
-                    value="<%= dates.min %>"
-                    required>       
+                    required
+                  >       
             </div>
             <div class="form-check form-switch">
                 <input 
@@ -50,7 +45,6 @@
                     id="flexSwitchCheckDefault" 
                     name="party[isPrivate]" 
                     checked
-                    value="private"
                     >
                 <label class="form-check-label" for="private">Private</label>
               </div>
@@ -59,5 +53,4 @@
     </div>
 </div>
 
-
-<script src="/js/lists.js"></script>
+<script src="/js/parties.js"></script>

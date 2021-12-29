@@ -30,9 +30,8 @@ function validateParty(req, res, next) {
     const partySchema = Joi.object({
         party: Joi.object({
             name: Joi.string().min(3).max(30).required(),
-            joinBy: Joi.date().required(),
-            endsOn: Joi.date().required(),
-            isPrivate: Joi.string().valid('private')
+            startsOn: Joi.date().required(),
+            endsOn: Joi.date().required()
         }).required()
     });
 
