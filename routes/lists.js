@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const List = require('../models/list');
 const { ExpressError, catchAsync } = require('../utils');
-const { validateList } = require('../joiSchemas');
-const { isLoggedIn, isCreatorList } = require('../middleware');
+const { validateList } = require('../middleware/joiSchemas');
+const { isLoggedIn, isCreatorList } = require('../middleware/validators');
 
 router.get('/', catchAsync( async (req, res, next) => {
     const lists = await List.find({}).populate('creator');

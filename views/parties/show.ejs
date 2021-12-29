@@ -2,77 +2,122 @@
 
 <h1 class="text-center"><%= party.name %></h1>
 <div class="col-md-12">
-    <div class="row">
-        <div class="col-md-6 ms-auto me-auto">
-            <div class="card mb-3">
-                <div class="card-body d-flex justify-content-between">
-                    <p>Creator: <%= party.creator.profileName %> </p>
-                    <p>Join by: 
-                        <span class="date-full">
-                            <%= party.joinBy %>
-                        </span>
-                    </p>
-                    <p>End Date: 
-                        <span class="date-full">
-                            <%= party.endsOn %>
-                        </span>
-                    </p>
+	<div class="row">
+		<div class="col-md-6 ms-auto me-auto">
+			<div class="card mb-3">
+				<div class="card-body d-flex justify-content-between">
+					<p>Creator: <%= party.creator.profileName %></p>
+					<p>
+						Starts:
+						<span class="date-full"> <%= party.startsOn %> </span>
+					</p>
+					<p>
+						Ends:
+						<span class="date-full"> <%= party.endsOn %> </span>
+					</p>
+				</div>
+				<% if (loggedInUser && party.creator.equals(loggedInUser._id)) { %>
+				<div class="text-center mb-3 d-flex justify-content-around">
+					<a href="/parties/<%= party._id %>/edit" class="btn btn-primary">
+						Edit
+					</a>
+					<button
+						type="button"
+						class="btn btn-danger"
+						data-bs-toggle="modal"
+						data-bs-target="#staticBackdrop"
+					>
+						Delete
+					</button>
+
+					<!-- Modal Confirm Delete -->
+					<div
+						class="modal fade"
+						id="staticBackdrop"
+						data-bs-backdrop="static"
+						data-bs-keyboard="false"
+						tabindex="-1"
+						aria-labelledby="staticBackdropLabel"
+						aria-hidden="true"
+					>
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="staticBackdropLabel">
+										Delete Confirmation
+									</h5>
+									<button
+										type="button"
+										class="btn-close"
+										data-bs-dismiss="modal"
+										aria-label="Close"
+									></button>
+								</div>
+								<div class="modal-body">
+                  <p>Are you sure you want to delete?  This action cannot be reversed.</p>
                 </div>
-                <% if (loggedInUser && party.creator.equals(loggedInUser._id)) { %> 
-                    <div class="text-center mb-3 d-flex justify-content-around">
-                        <a href="/parties/<%= party._id %>/start" class="btn btn-primary">
-                            Start Party
-                        </a>
-                        <form action="/parties/<%= party._id %>?_method=DELETE" method="POST">
-                            <button type="submit" class="btn btn-danger">
-                                Delete
-                            </button>
-                        </form>
-                    </div>
-                <% } %> 
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-4 col-md-5 ms-auto me-auto mb-3">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4 class="card-title mb-0">Members</h4>
-                        <form action="/parties/<%= party._id %>" method="POST">
-                            <button class="btn btn-primary" type="submit">Join</button>
-                        </form>
-                    </div>
-                    <ul class="list-group">
-                        <% for (const member of party.members) { %>
-                            <li class="list-group-item">
-                                <a href="/users/<%= member._id %>/public_profile" class="link-secondary">
-                                    <%= member.profileName %>
-                                </a>
-                            </li>
-                        <% } %>  
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-5 ms-auto me-auto">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4 class="card-title mb-0">Lists</h4>
-                        <!-- <a href="" class="btn btn-primary">Add</a> -->
-                    </div>
-                    <ul>
-                        <% for (const list of party.lists){ %> 
-                            <li class="list-group-item">
-                                <a href="/lists/<%= list._id %> ">
-                                    <%= list.creator.profileName %>'s list
-                                </a>
-                            </li>
-                        <% } %>  
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+								<div class="modal-footer">
+									<button
+										type="button"
+										class="btn btn-warning"
+										data-bs-dismiss="modal"
+									>
+										Cancel
+									</button>
+                  <form action="/parties/<%= party._id %>?_method=DELETE" method="POST">
+                    <button type="submit" class="btn btn-danger">Confirm</button>
+                  </form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<% } %>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-4 col-md-5 ms-auto me-auto mb-3">
+			<div class="card">
+				<div class="card-body">
+					<div class="d-flex justify-content-between align-items-center mb-3">
+						<h4 class="card-title mb-0">Members</h4>
+						<form action="/parties/<%= party._id %>" method="POST">
+							<button class="btn btn-primary" type="submit">Join</button>
+						</form>
+					</div>
+					<ul class="list-group">
+						<% for (const member of party.members) { %>
+						<li class="list-group-item">
+							<a
+								href="/users/<%= member._id %>/public_profile"
+								class="link-secondary"
+							>
+								<%= member.profileName %>
+							</a>
+						</li>
+						<% } %>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-md-5 ms-auto me-auto">
+			<div class="card">
+				<div class="card-body">
+					<div class="d-flex justify-content-between align-items-center mb-3">
+						<h4 class="card-title mb-0">Lists</h4>
+					</div>
+					<ul>
+						<% for (const list of party.lists){ %>
+						<li class="list-group-item">
+							<a href="/lists/<%= list._id %> ">
+								<%= list.creator.profileName %>'s list
+							</a>
+						</li>
+						<% } %>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

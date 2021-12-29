@@ -1,6 +1,6 @@
-const List = require('./models/list');
-const Party = require('./models/party');
-const User = require('./models/user');
+const List = require('../models/list');
+const Party = require('../models/party');
+const User = require('../models/user');
 
 const isLoggedIn = (req, res, next) => {
     if(!req.isAuthenticated()) {
