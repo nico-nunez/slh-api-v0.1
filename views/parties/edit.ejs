@@ -1,0 +1,59 @@
+<% layout('layouts/boilerplate') %> 
+
+<link rel="stylesheet" href="/styles/lists.css">
+
+<div class="row">
+    <h1 class="text-center">Edit Party</h1>
+    <div class="col-lg-5 col-md-6 ms-auto me-auto">
+        <form action="/parties/<%= party.id %>" method="POST" novalidate class="validate-form">
+            <div class="mb-3 form-group">
+                <label class="form-label" for="name">Name</label>
+                <input 
+                class="form-control" 
+                type="text" 
+                name="party[name]" 
+                id="party-name"
+                placeholder="party name"
+                value="<%= party.name %>""
+                required
+            >
+            </div>
+            <div class="mb-3 form-group">
+                <label class="form-label" for="party-start">Starts:</label>
+                <input 
+                    type="date" 
+                    class="form-control"
+                    id="party-start"
+                    name="party[startsOn]"
+                    value="<%= party.startsOn %>"
+                    required
+                >       
+            </div>
+            <div class="mb-3 form-group">
+                <label class="form-label" for="party-end">Ends:</label>
+                <input 
+                    type="date" 
+                    class="form-control"
+                    id="party-end"
+                    name="party[endsOn]"
+                    value="<%= party.endsOn %>"
+                    required
+                  >       
+            </div>
+            <div class="form-check form-switch">
+                <input 
+                    class="form-check-input" 
+                    type="checkbox" 
+                    role="switch" 
+                    id="flexSwitchCheckDefault" 
+                    name="party[isPublic]"
+                    <%= party.isPublic ? checked : '' %>
+                    >
+                <label class="form-check-label" for="private">Public</label>
+              </div>
+            <button class="btn btn-primary" type="submit">Create</button>
+        </form>
+    </div>
+</div>
+
+<script src="/js/parties.js"></script>

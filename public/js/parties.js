@@ -9,28 +9,27 @@
   maxStart.setFullYear(maxStart.getFullYear() + 2);
 
   const minEnd = new Date(minStart);
-  minEnd.setDate(minEnd.getDate() + 1);
+  minEnd.setDate(minEnd.getUTCDate() + 1);
 
   const maxEnd = new Date(minStart);
   maxEnd.setFullYear(maxEnd.getFullYear() + 2);
 
   startDate.setAttribute('min', formatDate(minStart));
   startDate.setAttribute('max', formatDate(maxStart));
-  startDate.setAttribute('value', formatDate(minStart));
 
   endDate.setAttribute('min', formatDate(minEnd));
   endDate.setAttribute('max', formatDate(maxEnd));
-  endDate.setAttribute('value', formatDate(minEnd));
   
-
-
   startDate.addEventListener('change', handleDateChange);
 
   function handleDateChange(evt) {
-    const newMinEnd = new Date(evt.target.value);
-    newMinEnd.setDate(newMinEnd.getDate() + 2);
+    const dateArr = evt.target.value.split('-');
+    const dateStr = dateArr.join('/')
+    const newMinEnd = new Date(dateStr);
+
+    newMinEnd.setDate(newMinEnd.getDate() + 1);
     endDate.setAttribute('min', formatDate(newMinEnd));
-    endDate.setAttribute('value', formatDate(newMinEnd));
+    endDate.setAttribute('value', '');
   }
 
   function formatDate(dateObj) {

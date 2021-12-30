@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { ExpressError, errorHandler, catchAsync } = require("../utils");
+const { ExpressError, catchAsync, formatDate } = require("../utils");
 const { validateParty } = require("../middleware/joiSchemas");
 const { isLoggedIn, isCreatorParty } = require("../middleware/validators");
 const dayjs = require("dayjs");
@@ -8,6 +8,7 @@ const secretSantaSelector = require("../utils/secretSantaSelector");
 const List = require("../models/list");
 
 const Party = require("../models/party");
+const { json } = require("express");
 
 router.get(
 	"/",
@@ -50,6 +51,7 @@ router.get(
 		res.render("parties/show", { party });
 	})
 );
+
 router.post(
 	"/:id",
 	isLoggedIn,
@@ -67,6 +69,26 @@ router.post(
 			await party.save();
 		}
 		res.redirect(party._id);
+	})
+);
+
+router.get(
+	"/:id/edit",
+	isLoggedIn,
+	isCreatorParty,
+	catchAsync(async (req, res, next) => {
+		const { id } = req.params;
+    const foundParty = await Party.findById(id).populate("creator members lists");
+		if (!foundParty) {
+			req.flash("error", "Sorry, coud not find that party");
+			return res.redirect("/parties");
+		}
+    
+    const party = foundParty.toObject();
+    party.startsOn = formatDate(foundParty.startsOn);
+    party.endsOn = formatDate(foundParty.endsOn);
+
+		res.render("parties/edit", { party });
 	})
 );
 

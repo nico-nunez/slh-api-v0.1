@@ -20,8 +20,19 @@ const errorHandler = (err, req, res, next) => {
     res.status(status).redirect('/lists');
 };
 
+const formatDate = (dateObj) => {
+  const monthStr = String(dateObj.getUTCMonth() + 1);
+  const monthFormatted = '0'.repeat(2 - monthStr.length) + monthStr;
+
+  const dateStr = String(dateObj.getUTCDate());
+  const dateFormatted = '0'.repeat(2 - dateStr.length) + dateStr;
+  
+  return `${dateObj.getFullYear()}-${monthFormatted}-${dateFormatted}`
+}
+
 module.exports = {
 	ExpressError,
 	errorHandler,
 	catchAsync,
+  formatDate
 };
