@@ -28,8 +28,8 @@ const authRoutes = require('./routes/auth');
 // -------------- Mongoose -----------
 
 
-const mongoDBUrl = process.env.MONGODB_URL || 'mongodb://localhost:27017/grab-bag';
-const secret = process.env.SECRET || 'supersecretwordything';
+const mongoDBUrl = process.env.MONGODB_URL;
+const secret = process.env.SECRET;
 
 
 const db = mongoose.connection;
