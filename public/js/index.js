@@ -20,3 +20,12 @@ function formatLastUpdated(dates) {
         date.innerHTML = dayjs(dateText).from(dayjs());
     }
 }
+
+const test = setInterval(() => {
+  if(document.querySelector('body').classList.contains('home')) {
+    console.log('home page');
+  } else {
+    clearInterval(test);
+    console.log('not home');
+  }
+}, 1000);

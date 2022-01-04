@@ -1,65 +1,69 @@
 @import url("https://fonts.googleapis.com/css2?family=Petemoss&display=swap");
-body{ 
-    font-family: 'Petemoss', cursive;
-    font-size: 32px;
-    /* background-image: url('../assets/home1-min.png');
-    background-size: cover;
-    background-repeat: no-repeat; */
+body {
+	font-family: "Petemoss", cursive;
+	font-size: 32px;
 }
 
-nav{
-    letter-spacing: 2px;
+nav {
+	letter-spacing: 2px;
 }
 
-p {
-    margin-bottom: 0;
-    text-align: center;
-    font-size: 72px;
-    font-weight: bold;
-    letter-spacing: 4px;
-    text-transform: capitalize;
-}
-
-.bg-home-mobile {
-    height: 95vh;
-    width: 100vw;
-    max-width: 100%;
-    position: absolute;
-    left: 0;
-    top: 40px;
-    z-index: -100;
-}
-.bg-home-desktop {
-    position: absolute;
-    top: 30px;
-    left: 0;
-    height: 97vh;
-    max-width: 100%;
-    position: absolute;
-    z-index: -99;
+.title {
+  margin-top: 50px;
+  font-size: 64px;
+  font-weight: bold;
+  letter-spacing: 4px;
 }
 
 .btn-login {
-    position: absolute;
-    top:90%;
-    left: 50%;
-    padding: 0 30px;
-    font-size: 48px;
-    letter-spacing: 8px;
-    font-weight: bold;
-    background-color: aliceblue;
-    border-radius: 25px;
-    transform: translateX(-50%);
-    box-shadow: inset 0px 0px 15px rgb(102, 76, 161);
-    border: 1px solid rgba(102, 76, 161, 0.418);
-    color: #502a86;
+  margin-top: 50px;
+	padding: 0 20px;
+	font-size: 38px;
+	letter-spacing: 8px;
+	font-weight: bold;
+	background-color: aliceblue;
+	border-radius: 25px;
+	box-shadow: inset 0px 0px 15px rgb(102, 76, 161);
+	border: 1px solid rgba(102, 76, 161, 0.418);
+	color: #502a86;
 }
 
-@media screen and (max-width: 900px) {
-    .btn-login {
-        top:77%;
-    }
-    .bg-home-desktop {
-        display: none;
-    };
+.countdown-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.countdown-text {
+  margin: 0;
+  font-size: 38px;
+  letter-spacing: 3px;
+}
+
+#countdown-clock {
+  margin: 0;
+  font-size: 48px;
+  line-height: 40px;
+  letter-spacing: 3px;
+}
+
+@media screen and (max-width: 400px) {
+  .title {
+    font-size: 48px;
+  }
+
+  .countdown-content {
+    transform: translate(-50%, -25%);
+  }
+
+  .countdown-text {
+    margin-bottom: 0;
+    font-size: 32px;
+  }
+
+  #countdown-clock {
+    width: 100vw;
+    font-size: 38px;
+  }
 }

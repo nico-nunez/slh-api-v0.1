@@ -1,30 +1,38 @@
 (function () {
-  let countdown;
-  clearInterval(countdown)
-  const currentYear = new Date().getFullYear();
-  let xmas = new Date(`Dec 25, ${currentYear} 00:00:00`);
-  const today = Date.now();
-  if (xmas.getTime() < today)
-      xmas.setFullYear(currentYear + 1);
-  const countDownDate = xmas.getTime();
-  // Update the count down every 1 second
-  countdown = setInterval(function() {
-  // Get today's date and time
-      const now = new Date().getTime();
-      // Find the distance between now and the count down date
-      const distance = countDownDate - now;
-      // Time calculations for days, hours, minutes and seconds
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-      // Display the result in the element with id="demo"
-      document.getElementById("countdown").innerHTML = days + "d " + hours + "h "
-      + minutes + "m " + seconds + "s ";
-      // If the count down is finished, write some text
-      if (distance < 0) {
-          clearInterval(x);
-          document.getElementById("demo").innerHTML = "EXPIRED";
-      }
-  }, 1000);
-})()
+	let countdown;
+	clearInterval(countdown);
+	const currentYear = new Date().getFullYear();
+	const xmasDate = new Date(`Dec 25, ${currentYear} 00:00:00`);
+
+	if (xmasDate.getTime() < Date.now()) 
+    xmasDate.setFullYear(currentYear + 1);
+
+  const updateCounter = () => {
+		const timeDiff =  xmasDate.getTime() - Date.now();
+
+		const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+		const hours = Math.floor(
+			(timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+		);
+		const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+		const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+		document.getElementById("countdown-clock").textContent =
+			days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+  }
+
+  updateCounter();
+
+  countdown = setInterval(updateCounter, 1000);
+})();
+
+
+// FOR REACT...if implemented later
+// countdown = setInterval(() => {
+//   if(document.querySelector('body').classList.contains('home')) {
+//     updateCounter();
+//   } else {
+//     clearInterval(countdown);
+//   }
+// }, 1000);
+
