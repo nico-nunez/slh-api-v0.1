@@ -1,9 +1,9 @@
 <% layout('layouts/boilerplate') %> 
 
 <div class="text-center mb-3">
-    <h1 class="mb-0"><%= currentUser.profileName %></h1>
+    <h1 class="mb-0"><%= currentUser.displayName %></h1>
     <% if (loggedInUser){ %> 
-        <p><a href="" id="edit-name-link">Edit profile name</a> | <a href="" id="change-pass-link">Change password</a></p>
+        <p><a href="" id="edit-name-link">Edit display name</a> | <a href="" id="change-pass-link">Change password</a></p>
     <% } %> 
 </div>
 
@@ -48,7 +48,7 @@
                         <% } %> 
                     </ul>
                     <div class="text-center mt-3">
-                        <a href="/lists/new" class="btn btn-primary">Create Party</a>
+                        <a href="/parties/new" class="btn btn-primary">Create Party</a>
                         </div>
                 </div>
             </div>

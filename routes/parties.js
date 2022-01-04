@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { ExpressError, catchAsync, formatDate } = require("../utils");
-const { validateParty } = require("../middleware/joiSchemas");
+const { validParty } = require("../middleware/joiSchemas");
 const { isLoggedIn, isCreatorParty } = require("../middleware/validators");
 const dayjs = require("dayjs");
 const secretSantaSelector = require("../utils/secretSantaSelector");
@@ -21,7 +21,7 @@ router.get(
 router.post(
 	"/",
 	isLoggedIn,
-	validateParty,
+	validParty,
 	catchAsync(async (req, res, next) => {
 		const { party } = req.body;
 		party.isPublic = Boolean(party.isPublic);

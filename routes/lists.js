@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const List = require('../models/list');
 const { ExpressError, catchAsync } = require('../utils');
-const { validateList } = require('../middleware/joiSchemas');
+const { validList } = require('../middleware/joiSchemas');
 const { isLoggedIn, isCreatorList } = require('../middleware/validators');
 
 router.get('/', catchAsync( async (req, res, next) => {
@@ -10,7 +10,7 @@ router.get('/', catchAsync( async (req, res, next) => {
     res.render('lists/index', {lists});
 }));
 
-router.post('/', isLoggedIn, validateList, catchAsync( async (req, res, next) => {
+router.post('/', isLoggedIn, validList, catchAsync( async (req, res, next) => {
     const { list } = req.body;
     const newList = new List({...list});
     newList.creator = req.user._id;
@@ -42,7 +42,7 @@ router.get('/:id', isLoggedIn, catchAsync( async (req, res, next) => {
     res.render('lists/show', {list});
 }));
 
-router.put('/:id', isLoggedIn, isCreatorList, validateList, catchAsync( async(req, res, next) => {
+router.put('/:id', isLoggedIn, isCreatorList, validList, catchAsync( async(req, res, next) => {
     const { id } = req.params;
     const list = await List.findByIdAndUpdate(id, {...req.body.list}, {new: true, runValidators: true});
     if(!list) {

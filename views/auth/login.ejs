@@ -1,0 +1,52 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="row">
+	<h1 class="text-center">Login</h1>
+	<div class="col-lg-4 col-md-6 ms-auto me-auto card py-4 px-4">
+		<% if (loggedInUser) { %>
+		<a href="/auth/logout" class="btn btn-primary">Logout</a>
+		<% } else { %>
+		<form
+			action="/auth/login"
+			method="POST"
+			novalidate
+			class="validate-form mb-2"
+		>
+			<div class="mb-3 form-group">
+				<label class="form-label" for="email">Email:</label>
+				<input
+					class="form-control"
+					type="email"
+					name="email"
+					id="email"
+					placeholder="jDoe@email.com"
+					required
+				/>
+			</div>
+			<div class="mb-3 form-group">
+				<label class="form-label" for="password">Password</label>
+				<input
+					class="form-control"
+					type="password"
+					name="password"
+					id="password"
+					placeholder="password"
+					required
+				/>
+			</div>
+			<div class="d-flex align-items-end">
+				<button class="btn btn-primary me-3">Login</button>
+			</div>
+		</form>
+		<div>
+      or
+			<div class="mt-2 mb-2">
+        <a href="/auth/google" class="btn btn-secondary">Login with Google</a>
+      </div>
+			<div>
+				<a href="/auth/register" class="btn btn-danger">Register</a>
+			</div>
+		</div>
+		<% } %>
+	</div>
+</div>

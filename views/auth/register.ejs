@@ -4,34 +4,28 @@
     <h1 class="text-center">Register</h1>
     <div class="col-lg-5 col-md-6 ms-auto me-auto card py-4 px-4">
         <% if (loggedInUser) { %> 
-            <a href="/users/logout" class="btn btn-primary">Logout</a>
+            <a href="/auth/logout" class="btn btn-primary">Logout</a>
         <% } else { %> 
-            <form action="/users/register" method="POST" novalidate class="validate-form">
+            <form action="/auth/register" method="POST" novalidate class="validate-form">
                 <div class="mb-3 form-group">
-                    <label class="form-label" for="username">Username:</label>
-                    <label for="username" class="form-label text-muted">
-                        Used to login. Must be unique.
-                    </label>
+                    <label class="form-label" for="email">Email:</label>
                     <input 
                     class="form-control" 
-                    type="text" 
-                    name="newUser[username]" 
-                    id="username"
-                    placeholder="login name"
+                    type="email" 
+                    name="newUser[email]" 
+                    id="email"
+                    placeholder="jDoe@email.com"
                     required
                 >
                 </div>
                 <div class="mb-3 form-group">
-                    <label class="form-label" for="profileName">Profile Name:</label>
-                    <label for="profileName" class="form-label text-muted">
-                        This is the name people will see.
-                    </label>
+                    <label class="form-label" for="displayName">Profile Name:</label>
                     <input 
                     class="form-control" 
                     type="text" 
-                    name="newUser[profileName]" 
+                    name="newUser[displayName]" 
                     id="profileName"
-                    placeholder="display name"
+                    placeholder="J. Doe"
                     required
                 >
                 </div>
@@ -60,7 +54,7 @@
                 <div class="d-flex align-items-end">
                     <button class="btn btn-primary me-3">Register</button>
                     or
-                    <a href="/users/login" class="ms-3">Login</a>
+                    <a href="/auth/login" class="ms-3">Login</a>
                 </div>
             </form>
         <% } %> 

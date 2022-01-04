@@ -11,14 +11,12 @@ const methodOverride = require('method-override');
 const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
-const LocalStrategy = require('passport-local');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
 const MongoStore = require('connect-mongo');
 const dayjs = require('dayjs');
+const passportConfig = require('./middleware/passport');
 
-
-const User = require('./models/user');
 
 const { ExpressError, errorHandler} = require('./utils');
 
@@ -26,6 +24,7 @@ const { ExpressError, errorHandler} = require('./utils');
 const listsRoutes = require('./routes/lists');
 const partiesRoutes = require('./routes/parties');
 const usersRoutes = require('./routes/users');
+const authRoutes = require('./routes/auth');
 // -------------- Mongoose -----------
 
 
@@ -70,6 +69,7 @@ app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
 app.use(express.urlencoded({extended: true}));
+app.use(express.json());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(mongoSanitize())
@@ -79,9 +79,8 @@ app.use(helmet({contentSecurityPolicy: false}));
 
 app.use(passport.initialize());
 app.use(passport.session());
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+
+passportConfig();
 
 app.use((req, res, next) => {
     res.locals.loggedInUser = req.user
@@ -98,6 +97,7 @@ app.get('/', (req, res) => {
 app.use('/lists', listsRoutes);
 app.use('/parties', partiesRoutes);
 app.use('/users', usersRoutes);
+app.use('/auth', authRoutes);
 
 
 app.get('/favicon.ico', (req, res) => res.status(204));
