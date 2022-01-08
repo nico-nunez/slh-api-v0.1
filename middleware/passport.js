@@ -1,7 +1,8 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
-const User = require('../models/user');
+const { sendConfirmation } = require('../helpers/email');
+const User = require('../models/User');
 
 module.exports = () => {
 
@@ -14,13 +15,17 @@ module.exports = () => {
   const googleCallback = async (accessToken, refreshToken, profile, done) => {
     const existingUser = await User.findOne({ googleID: profile.id });
 
-    if(existingUser) {
-      done(null, existingUser);
-    } else {
-      const newUser = new User({ googleID: profile.id, displayName: profile.displayName });
-      const user = await newUser.save();
-      done(null, user);
-    }
+    if(existingUser)
+      return done(null, existingUser);
+      
+    const newUser = new User({ 
+      googleID: profile.id,
+      email: profile.email,
+      displayName: profile.displayName,
+    });
+    const user = await newUser.save();
+    sendConfirmation(user);
+    done(null, user);
   }
 
   const serializeUser = (user, done) => {

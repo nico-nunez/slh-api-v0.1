@@ -1,4 +1,4 @@
-const { ExpressError, errorHandler, catchAsync } = require("../utils");
+const { ExpressError } = require("../helpers/errors");
 const Joi = require("joi");
 
 function validateInput(joiSchema, body) {

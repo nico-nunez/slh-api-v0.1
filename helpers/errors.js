@@ -18,7 +18,7 @@ const errorHandler = (err, req, res, next) => {
 	if (!err.message) err.message = "Oh, no! Something went REALLY wrong!";
     req.flash('error', err.stack);
     // req.flash('error', err.message);
-    res.status(status).redirect('/lists');
+    return res.status(status).redirect('/lists');
 };
 
 const formatDate = (dateObj) => {

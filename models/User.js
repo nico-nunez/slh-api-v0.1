@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 const passportLocalMongoose = require("passport-local-mongoose");
 
 
-const UserSchema = new mongoose.Schema(
+const UserSchema = new Schema(
 	{
     googleID: {
       type: String,
@@ -15,9 +15,16 @@ const UserSchema = new mongoose.Schema(
 			unique: true,
 			sparse: true,
 		},
+    confirmed: {
+      type: Boolean,
+      default: false
+    },
 		displayName: String,
+    listsFollowing: [ 
+      {type: Schema.Types.ObjectId, ref: 'List'}
+    ],
 		selections: [
-      {type: Schema.Types.ObjectId, ref: "SecretSanta"}
+      {type: Schema.Types.ObjectId, ref: 'Selection'}
 		],
 	},
 	{ timestamps: true }

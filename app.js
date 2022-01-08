@@ -12,12 +12,11 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
-const dayjs = require('dayjs');
 const passportConfig = require('./middleware/passport');
-const { connectDB, sessionConfig } = require('./utils/configs');
+const { connectDB, sessionConfig } = require('./helpers/configs');
 
 
-const { ExpressError, errorHandler} = require('./utils');
+const { ExpressError, errorHandler } = require('./helpers/errors');
 
 connectDB();
 
@@ -45,16 +44,17 @@ app.use(passport.session());
 passportConfig();
 
 app.use((req, res, next) => {
-    res.locals.loggedInUser = req.user
-    res.locals.success = req.flash('success');
-    res.locals.error = req.flash('error');
-    next();
+  res.locals.loggedInUser = req.user
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
+  next();
 })
 
 
 app.get('/', (req, res) => {
-    res.render('home');
+  res.render('home');
 });
+
 
 app.use('/lists', listsRoutes);
 app.use('/parties', partiesRoutes);
@@ -64,13 +64,13 @@ app.use('/auth', authRoutes);
 
 app.get('/favicon.ico', (req, res) => res.status(204));
 app.all('*', (req, res, next) => {
-    next(new ExpressError('Page Not Found', 404));
-  })
+  next(new ExpressError('Page Not Found', 404));
+})
 
 
 app.use(errorHandler);
 
 const port = process.env.PORT || 8080
 app.listen(port, () => {
-    console.log(`Server running on ${port}`);
+  console.log(`Server running on ${port}`);
 })

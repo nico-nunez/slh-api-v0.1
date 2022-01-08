@@ -1,12 +1,12 @@
-const List = require('../models/list');
-const Party = require('../models/party');
-const User = require('../models/user');
+const List = require('../models/List');
+const Party = require('../models/Party');
+const User = require('../models/User');
 
 const isLoggedIn = (req, res, next) => {
     if(!req.isAuthenticated()) {
         req.session.redirectedFrom = req.originalUrl
         req.flash('error', 'Must be logged in.');
-        return res.redirect('/users/login');
+        return res.redirect('/auth/login');
     }
     next();
 }
@@ -36,7 +36,7 @@ async function isUser (req, res, next) {
     const user = await User.findById( id );
     if(!user._id.equals(req.user._id)) {
       req.flash('error', 'Permission denied.');
-      return res.redirect('/users/login');
+      return res.redirect('/auth/login');
     }
     next();
   }

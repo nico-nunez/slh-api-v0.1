@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const List = require('../models/list');
-const { ExpressError, catchAsync } = require('../utils');
+const List = require('../models/List');
+const { catchAsync } = require('../helpers/errors');
 const { validList } = require('../middleware/joiSchemas');
 const { isLoggedIn, isCreatorList } = require('../middleware/validators');
 

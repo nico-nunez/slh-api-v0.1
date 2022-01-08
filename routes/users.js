@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const passport = require('passport');
-const days = require('dayjs');
-const { ExpressError, catchAsync } = require('../utils');
+const { catchAsync } = require('../helpers/errors');
 const { isLoggedIn, isUser} = require('../middleware/validators');
-const List = require('../models/list');
-const User = require('../models/user');
-const Party = require('../models/party')
+
+const List = require('../models/List');
+const User = require('../models/User');
+const Party = require('../models/Party')
 
 
 
@@ -14,7 +13,7 @@ router.get('/:id', isLoggedIn, isUser, catchAsync(async (req, res, next) => {
     const currentUser = await User.findById( req.params.id).populate({
         path: 'selections',
         populate: {
-            path: 'giftee party'
+            path: 'recipient party'
         }
     });
     const currentUserLists = await List.find({'creator': req.user._id});

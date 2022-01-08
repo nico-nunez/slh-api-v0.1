@@ -1,7 +1,6 @@
 formatDates(); // format MM-DD-YYYY
 formatLastUpdated();
 
-
 function formatDates() {
     const datesFull =  document.querySelectorAll('.date-full');
     for (const date of datesFull) {
@@ -10,8 +9,6 @@ function formatDates() {
     }
     
 }
-
-
 
 function formatLastUpdated(dates) {
     const updatedDates = document.querySelectorAll('.updatedAt');

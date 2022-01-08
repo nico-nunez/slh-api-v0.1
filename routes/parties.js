@@ -1,13 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { ExpressError, catchAsync, formatDate } = require("../utils");
+const { catchAsync, formatDate } = require("../helpers/errors");
 const { validParty } = require("../middleware/joiSchemas");
 const { isLoggedIn, isCreatorParty } = require("../middleware/validators");
 const dayjs = require("dayjs");
-const secretSantaSelector = require("../utils/secretSantaSelector");
-const List = require("../models/list");
+const { getSelections } = require("../helpers/utils");
 
-const Party = require("../models/party");
+const Party = require("../models/Party");
 const { json } = require("express");
 
 router.get(
@@ -111,12 +110,12 @@ router.get(
 	catchAsync(async (req, res, next) => {
 		const party = await Party.findById(req.params.id).populate("members");
 		const members = party.members;
-		const selections = secretSantaSelector(members, party._id);
+		const selections = getSelections(members, party._id);
 		for (const selection of selections) {
-			const gifter = selection.gifter;
-			gifter.selections.push(selection);
+			const { selector } = selection;
+			selector.selections.push(selection);
 			await selection.save();
-			await gifter.save();
+			await selector.save();
 		}
 		res.redirect(`/parties/${party._id}`);
 	})
