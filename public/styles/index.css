@@ -1,32 +1,30 @@
 @import url("https://fonts.googleapis.com/css2?family=Petemoss&display=swap");
 
-/* body {
-    background-image: url('/assets/home-main-min.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-} */
-
 .card {
-    border-color: slategrey;
+	border-color: slategrey;
 }
 
 .date-full {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 .text-small {
-    font-size: .9rem;
+	font-size: 0.9rem;
+}
+
+.text-xsmall {
+  font-size: 0.8rem;
 }
 
 .icon-present {
-    height: 24px;
-    width: 24px;
+	height: 24px;
+	width: 24px;
 }
 
 .hidden {
-    display: none;
+	display: none;
 }
 
 .btn-primary {
-    background-color: #7655a5;
+	background-color: #7655a5;
 }

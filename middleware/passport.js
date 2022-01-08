@@ -24,7 +24,7 @@ module.exports = () => {
       displayName: profile.displayName,
     });
     const user = await newUser.save();
-    sendConfirmation(user);
+    // sendConfirmation(user); - uncomment here and auth.js for prod
     done(null, user);
   }
 

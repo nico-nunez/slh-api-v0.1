@@ -1,55 +1,57 @@
 const { ExpressError } = require("../helpers/errors");
 const Joi = require("joi");
 
-function validateInput(joiSchema, body) {
-  const { error } = joiSchema.validate(body);
-	if (error) {
-		const msg = error.details.map((el) => el.message).join(",");
-		throw new ExpressError(msg, 400);
-	}
+
+
+function validateInput(joiSchema, req) {
+  const redirectURL = req.originalUrl;
+	const {value, error} = joiSchema.validate(req.body);
+  if(error) {
+    const message = error.details.map(err => err.message).join(',');
+    throw new ExpressError(message, 400, redirectURL);
+  }
+  req.body = value;
 }
 
-function validUser(req, res, next) {
-  const userSchema = Joi.object({
-      email: Joi.string()
-      .email({ 
-        minDomainSegments: 2,
-        tlds: { 
-          allow: ['com', 'net']
-        }
-      })
-      .required()
-      .messages({
-        'any.required': "Valid email is required.",
-        'string.email': "Please eneter a valid email."
-      }),
+function validRegistration(req, res, next) {
+	const userSchema = Joi.object({
+		newUser: Joi.object({
+			email: Joi.string()
+				.email({
+					minDomainSegments: 2,
+					tlds: {
+						allow: ["com", "net"],
+					},
+				})
+				.trim()
+				.required()
+				.messages({
+					"any.required": "Valid email is required.",
+					"string.email": "Please eneter a valid email.",
+				}),
 
-      displayName: Joi.string(),
-    
-    password: Joi.string()
-      .required()
-      .alphanum()
-      .min(6)
-      .max(32)
-      .messages({
-        'any.required': 'Password is required.',
-        'string.min': 'Password must be at least 6 characters.',
-        'string.max': 'Password must be 32 characters or less.',
-        'string.alphanum': 'Password can only alpha-numeric characters.'
-      }),
-    
-    confirmPass: Joi.string()
-      .required()
-      .valid(Joi.ref('password'))
-      .messages({
-        'any.required': "Please confirm password.",
-        'any.only': 'Passwords must match.'
-      })
-  });
+			displayName: Joi.string(),
 
-  validateInput(userSchema, req.body.newUser);
+			password: Joi.string()
+				.pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$'))
+				.required()
+				.messages({
+					"any.required": "Password is required.",
+					"string.pattern.base": `Password must be between 8-32 characters and contain at least
+           an uppercase, lowercase, number, and special character [!@$%&*?].
+        `,
+				}),
 
-  return next();
+			confirmPass: Joi.string().required().valid(Joi.ref("password")).messages({
+				"any.required": "Please confirm password.",
+				"any.only": "Passwords must match.",
+			}),
+		}),
+	});
+
+	validateInput(userSchema, req);
+
+	return next();
 }
 
 function validList(req, res, next) {
@@ -65,7 +67,7 @@ function validList(req, res, next) {
 		}).required(),
 	});
 
-  validateInput(listSchema, req.body);
+	validateInput(listSchema, req.body);
 
 	return next();
 }
@@ -76,17 +78,17 @@ function validParty(req, res, next) {
 			name: Joi.string().min(3).max(30).required(),
 			startsOn: Joi.date().required(),
 			endsOn: Joi.date().required(),
-			isPublic: Joi.string()
-		}).required()
+			isPublic: Joi.string(),
+		}).required(),
 	});
 
-  validateInput(partySchema, req.body);
+	validateInput(partySchema, req.body);
 
 	return next();
 }
 
 module.exports = {
-  validUser,
+	validRegistration,
 	validList,
 	validParty,
 };

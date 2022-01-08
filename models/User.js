@@ -15,7 +15,7 @@ const UserSchema = new Schema(
 			unique: true,
 			sparse: true,
 		},
-    confirmed: {
+    verified: {
       type: Boolean,
       default: false
     },
