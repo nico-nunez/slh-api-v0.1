@@ -6,9 +6,9 @@ Verify Your Email Address
 Welcome, and thank you for joining!
 Please very the email address associated with your account by clicking the link below, or copy and paste it into your browser.
 
-http://localhost:8080/auth/confirmation/click?ucc=${confirmCode}
+http://localhost:8080/auth/confirmation/email?ucc=${confirmCode}
 
-This link is valid for 7 days, and is only to confirm your account.
+This link is valid for 24 hours, and is only to confirm your account.
 
 We will not send any other messages unless specifically requested.
   

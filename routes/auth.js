@@ -6,7 +6,7 @@ const { sendConfirmation } = require('../helpers/email');
 
 const { validRegistration } = require("../middleware/joiSchemas");
 const User = require("../models/User");
-const Confirmation = require('../models/Confirmation');
+const LinkCode = require('../models/LinkCode');
 const { isLoggedIn } = require("../middleware/validators");
 
 
@@ -26,7 +26,7 @@ router.post(
 			const redirect = req.session.redirectedFrom || `/users/${user.id}`;
 			delete req.session.redirectedFrom;
 			req.flash("success", "Welcome! Thank you for joining!");
-      // sendConfirmation(user); - uncomment here and middle/passport.js for prod
+      sendConfirmation(user); //- uncomment here and middle/passport.js for prod
 			return res.redirect(redirect);
 		});
 	})
@@ -72,20 +72,22 @@ router.get(
 	(req, res) => {
 		const redirection = req.session.redirectedFrom || `/users/${req.user.id}`;
 		delete req.session.redirectedFrom;
-		req.flash("success", "Welcome back!");
+		req.flash("success", "Welcome!");
 		res.redirect(redirection);
 	}
 );
 
-router.get('/confirmation/click', isLoggedIn, catchAsync( async(req, res, next) => {
+router.get('/confirmation/email', isLoggedIn, catchAsync( async(req, res, next) => {
   const { ucc } = req.query;
-  const foundConfirm = await Confirmation.findOne({ ucc });
-  if (foundConfirm && foundConfirm.userID === req.user.id) {
+  const foundCode = await LinkCode.findOne({ ucc });
+  if (foundCode && foundCode.referenceID === req.user.id) {
     req.flash('success', 'Thank you! Email has been verified.');
     const user = await User.findById(req.user.id);
     user.verified = true;
     await user.save();
-    await Confirmation.findOneAndDelete({ ucc });
+    foundCode.valid = false;
+    foundCode.expireAt = Date.now();
+    foundCode.save();
   } else {
     req.flash('error', 'Unable to verify email.  Please try agian, or request a new link.');
   }

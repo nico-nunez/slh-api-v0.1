@@ -24,7 +24,7 @@ module.exports = () => {
       displayName: profile.displayName,
     });
     const user = await newUser.save();
-    // sendConfirmation(user); - uncomment here and auth.js for prod
+    sendConfirmation(user); //- uncomment here and auth.js for prod
     done(null, user);
   }
 
@@ -41,5 +41,4 @@ module.exports = () => {
   passport.use(new GoogleStrategy(googleOptions, googleCallback));
   passport.serializeUser(serializeUser);
   passport.deserializeUser(deserializeUser);
-
 }
