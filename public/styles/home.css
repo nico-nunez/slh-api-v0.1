@@ -4,10 +4,6 @@ body {
 	font-size: 32px;
 }
 
-nav {
-	letter-spacing: 2px;
-}
-
 .title {
   margin-top: 50px;
   font-size: 64px;
@@ -46,6 +42,11 @@ nav {
   font-size: 48px;
   line-height: 40px;
   letter-spacing: 3px;
+}
+
+.footer {
+  background-color: #146B3A;
+  color: aliceblue;
 }
 
 @media screen and (max-width: 400px) {

@@ -1,6 +1,33 @@
 nav {
-    font-family: 'Petemoss', cursive;
-    font-size: 32px;
-    letter-spacing: 2px;
-    background-color: rgba(80, 42, 134, .95);
+	font-family: "Petemoss", cursive;
+	font-size: 32px;
+	letter-spacing: 2px;
+	background-color: #165b33;
+}
+
+.navbar .navbar-nav a.nav-link{
+  line-height: 28px;
+  padding-bottom: 4px;
+  color: aliceblue;
+  position: relative;
+}
+.navbar .navbar-nav a.nav-link:hover{
+  color: aliceblue;
+}
+.navbar .navbar-nav a.nav-link::before{
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: aliceblue;
+  transform-origin: center;
+  transition: transform 0.22s ease-in-out;
+}
+.navbar .navbar-nav a.nav-link:hover::before{
+  opacity: 1;
+  transform: scaleX(1);
+  color: aliceblue;
 }

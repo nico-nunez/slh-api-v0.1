@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Petemoss&display=swap");
 
+
 .card {
 	border-color: slategrey;
 }
@@ -27,4 +28,19 @@
 
 .btn-primary {
 	background-color: #7655a5;
+}
+
+#avatar-box {
+  display: inline-block;
+  padding: 20px;
+  border-radius: 50%;
+  background-color: cyan;
+}
+#avatar-profile {
+  height: 150px;
+}
+
+.footer {
+  background-color: #146B3A;
+  color: aliceblue;
 }
