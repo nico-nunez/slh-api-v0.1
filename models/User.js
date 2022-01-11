@@ -3,15 +3,17 @@ const Schema = mongoose.Schema;
 const passportLocalMongoose = require("passport-local-mongoose");
 
 
-const UserSchema = new Schema(
+const userSchema = new Schema(
 	{
     googleID: {
       type: String,
+      trim: true,
       unique: true,
       sparse: true
     },
 		email: {
 			type: String,
+      trim: true,
 			unique: true,
 			sparse: true,
 		},
@@ -19,7 +21,14 @@ const UserSchema = new Schema(
       type: Boolean,
       default: false
     },
-		displayName: String,
+		displayName: {
+      type: String,
+      trim: true
+    },
+    avatar: {
+      type: String,
+      trim: true
+    },
     listsFollowing: [ 
       {type: Schema.Types.ObjectId, ref: 'List'}
     ],
@@ -30,6 +39,10 @@ const UserSchema = new Schema(
 	{ timestamps: true }
 );
 
-UserSchema.plugin(passportLocalMongoose, {usernameField: 'email'});
+userSchema.plugin(passportLocalMongoose, {
+  usernameField: 'email',
+  maxAttempts: 5,
+  errorMessages: { UserExistsError: 'Email is already registered.  You can attempt to login, or recover your password if necessary.'}
+  });
 
-module.exports = mongoose.model("User", UserSchema);
+module.exports = mongoose.model("User", userSchema);

@@ -1,15 +1,18 @@
 <% layout('layouts/boilerplate') %> 
 
 <div class="text-center mb-3">
-    <h1 class="mb-0"><%= currentUser.displayName %></h1>
-    <% if (loggedInUser){ %> 
-        <p><a href="" id="edit-name-link">Edit display name</a> | <a href="" id="change-pass-link">Change password</a></p>
+  <div id="avatar-box">
+    <% if (currentUser.avatar) { %> 
+      <img class="avatar-profile" src="<%= currentUser.avatar %>" alt="avatar">
+    <% } else { %> 
+      <img id="avatar-profile" src="/assets/snowman.png" alt="avatar">
     <% } %> 
+  </div>
+  <h1 class="mb-0"><%= currentUser.displayName %></h1>
+  <% if (loggedInUser){ %> 
+    <p><a href="/users/edit/<%= currentUser.id %>">Update profile</a></p>
+  <% } %> 
 </div>
-
-    
-<%- include('../partials/editName.ejs')  %> 
-<%- include('../partials/changePassword.ejs')  %> 
 
 <div class="row d-flex justify-content-between px-1">
     <div class="col-md-5 col-lg-3 ms-auto me-auto mt-3">
