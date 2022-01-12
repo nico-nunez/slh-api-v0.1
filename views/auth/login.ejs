@@ -2,7 +2,7 @@
 
 <div class="row">
 	<h1 class="text-center">Login</h1>
-	<div class="col-lg-4 col-md-6 ms-auto me-auto card py-4 px-4">
+	<div class="col-lg-5 col-md-6 col-sm-8 ms-auto me-auto card py-4 px-4">
 		<% if (loggedInUser) { %>
 		<a href="/auth/logout" class="btn btn-primary">Logout</a>
 		<% } else { %>
@@ -34,18 +34,19 @@
 					required
 				/>
 			</div>
-			<div class="d-flex align-items-end">
-				<button class="btn btn-primary me-3">Login</button>
+			<div class="login-local">
+        <div class="login-options">
+          <button class="btn btn-primary me-2">Login</button>
+          <a href="/auth/password/recovery" class="password-recovery">Forgot password?</a>
+        </div>
+        <a href="/auth/register" class="btn btn-danger">Register</a>
 			</div>
 		</form>
-		<div>
-      or
+		<div class="login-oauth">
+      <div class="login-divider"></div>
 			<div class="mt-2 mb-2">
-        <a href="/auth/google" class="btn btn-secondary">Login with Google</a>
+        <a href="/auth/google" class="btn btn-google"></a>
       </div>
-			<div>
-				<a href="/auth/register" class="btn btn-danger">Register</a>
-			</div>
 		</div>
 		<% } %>
 	</div>

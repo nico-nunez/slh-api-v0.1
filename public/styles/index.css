@@ -26,10 +26,6 @@
 	display: none;
 }
 
-.btn-primary {
-	background-color: #7655a5;
-}
-
 #avatar-box {
   display: inline-block;
   padding: 20px;
@@ -38,6 +34,40 @@
 }
 #avatar-profile {
   height: 150px;
+}
+
+
+/* ------- LOGIN -------- */
+.login-local {
+  display: flex;
+  justify-content: space-between;
+}
+
+.login-options {
+  display: flex;
+  align-items: flex-end;
+}
+.password-recovery {
+  font-size: .9rem;
+}
+
+.login-divider {
+  margin: 10px auto;
+  margin-bottom: 15px;
+  border-top: 1px solid rgba(0, 0, 0, 0.35);
+  text-align: center;
+}
+
+.btn-google {
+  width: 195px;
+  height: 50px;
+  background-image: url('/assets/btn_google_signin_dark_normal_web.png');
+}
+.btn-google:hover {
+  background-image: url('/assets/btn_google_signin_dark_focus_web.png');
+}
+.btn-google:active {
+  background-image: url('/assets/btn_google_signin_dark_pressed_web.png');
 }
 
 .footer {

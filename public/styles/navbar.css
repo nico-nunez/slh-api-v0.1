@@ -17,17 +17,17 @@ nav {
 .navbar .navbar-nav a.nav-link::before{
   content: '';
   position: absolute;
-  width: 100%;
+  width: 70%;
   transform: scaleX(0);
   height: 2px;
   bottom: 0;
-  left: 0;
+  left: 15%;
+  opacity: .7;
   background-color: aliceblue;
   transform-origin: center;
   transition: transform 0.22s ease-in-out;
 }
 .navbar .navbar-nav a.nav-link:hover::before{
-  opacity: 1;
   transform: scaleX(1);
   color: aliceblue;
 }
