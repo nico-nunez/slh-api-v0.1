@@ -14,7 +14,8 @@ const {
 const { 
   validRegistration,
   validEmail,
-  validPassword
+  validPassUpdate,
+  validPassReset
 } = require("../middleware/joiSchemas");
 
 
@@ -132,38 +133,35 @@ router.post('/confirmation/email', isLoggedIn, catchAsync( async(req, res, next)
   res.redirect(`user/${req.user.id}`);
 }));
 
-// Update password - logged in user
+// ---- UPDATE PASSWORD ----
 router.get('/password/update', isLoggedIn, (req, res) => {
   res.render('auth/update');
 });
 
 router.put(
   '/password/update',
-  isLoggedIn, validPassword,
+  isLoggedIn, validPassUpdate,
   catchAsync( async (req, res, next) => {
     const { currentPass, password } = req.body;
     const user = await User.findById(req.user.id);
-
-    if(!user) {
-      req.flash('error', 'Unable to update password.');
-      return res.redirect('/auth/login');
-    }  
     
     await user.changePassword(currentPass, password);
     await user.save();
 
     req.flash('success', 'Successfully updated password');
-    res.redirect('/auth/login');
+    res.redirect(`/auth/${user.id}`);
   }));
 
 
-// ----- START PASSWORD RESET ------
+// ----- RESET PASSWORD ------
 router.get('/password/reset/request', (req,res) => {
   res.render('auth/reset');
 });
 
 // Update password - forgot password
-router.get('/password/reset/update', isValidLink, (req, res) => {
+router.get('/password/reset/update',
+isValidLink,
+(req, res) => {
   const { ulc } = req.query;
   res.render('auth/update', {ulc});
 });
@@ -189,7 +187,7 @@ router.post('/password/reset',
 
 router.put(
   '/password/reset/update',
-  isValidLink, validPassword,
+  isValidLink, validPassReset,
   catchAsync( async(req, res, next) => {
   const link = await Link.findOne({ code: req.body.ulc });
 

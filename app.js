@@ -64,8 +64,7 @@ app.use('/auth', authRoutes);
 
 app.get('/favicon.ico', (req, res) => res.status(204));
 app.all('*', (req, res, next) => {
-  const redirect = req.user ? `/users/${req.user.id}` : '/'
-  next(new ExpressError('Page Not Found', 404, redirect));
+  next(new ExpressError('Page Not Found', 404));
 })
 
 

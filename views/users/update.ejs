@@ -25,6 +25,7 @@
           type="text"
           class="form-control"
           aria-label="displayName"
+          name="profile[displayName]"
           value="<%= user.displayName %>"
           autofocus
           required
@@ -43,6 +44,7 @@
           type="hidden"
           class="form-control email-input"
           aria-label="email"
+          name="profile[email]"
           value="<%= user.email %>"
           required
         >
@@ -58,8 +60,5 @@
     </form>
 	</div>
 </div>
-
-
-
 
 <script src="/js/users.js"></script>

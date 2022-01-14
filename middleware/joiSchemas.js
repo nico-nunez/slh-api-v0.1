@@ -34,6 +34,13 @@ const confirmSchema = Joi.string()
     "any.only": "Passwords must match.",
   });
 
+const nameSchema = Joi.string()
+  .alphanum()
+  .max(30)
+  .trim()
+  .required()
+
+
 function validateInput(joiSchema, req, redirect=null) {
   const redirectURL = redirect || req.originalUrl;
 	const {value, error} = joiSchema.validate(req.body);
@@ -49,7 +56,7 @@ function validRegistration(req, res, next) {
 		newUser: Joi.object({
 			email: emailSchema,
 
-			displayName: Joi.string(),
+			displayName: nameSchema,
 
 			password: passwordSchema,
 
@@ -89,9 +96,7 @@ function validParty(req, res, next) {
 			isPublic: Joi.string(),
 		}).required(),
 	});
-
 	validateInput(partySchema, req.body);
-
 	return next();
 }
 
@@ -99,24 +104,40 @@ function validEmail(req, res, next) {
   const resetSchema = Joi.object({
     email: emailSchema
   });
-
   validateInput(resetSchema, req, '/auth/password/update/reset');
-
   return next();
 }
 
-function validPassword(req, res, next) {
-  const { ulc } = req.body;
-  const addULC = ulc ? `?ulc=${ulc}` : '';
-  const redirect = `/auth/password/update${addULC}`;
-  const newPassSchema = Joi.object({
-    currentPass: Joi.string(),
+function validPassUpdate(req, res, next) {
+  const updatePassSchema = Joi.object({
+    currentPass: passwordSchema,
     password: passwordSchema,
     confirm: confirmSchema,
-    ulc: Joi.string()
   });
-  validateInput(newPassSchema, req, redirect);
+  validateInput(updatePassSchema, req, );
+  return next();
+}
 
+function validPassReset(req, res, next) {
+  const redirect = `/auth/password/update?=${req.body.ulc}`;
+  const resetPassSchema = Joi.object({
+    password: passwordSchema,
+    confirm: confirmSchema,
+    ulc: Joi.string().required()
+  });
+  validateInput(resetPassSchema, req, redirect);
+  return next();
+}
+
+
+function validProfile(req, res, next) {
+  const profileSchema = Joi.object({
+    profile: Joi.object({
+      displayName: nameSchema,
+      email: emailSchema
+    })
+  })
+  validateInput(profileSchema, req, `/users/${req.user.id}/update` );
   return next();
 }
 
@@ -125,5 +146,7 @@ module.exports = {
 	validList,
 	validParty,
   validEmail,
-  validPassword
+  validPassUpdate,
+  validPassReset,
+  validProfile
 };
