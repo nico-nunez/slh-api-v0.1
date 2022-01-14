@@ -10,7 +10,7 @@
   </div>
   <h1 class="mb-0"><%= currentUser.displayName %></h1>
   <% if (loggedInUser){ %> 
-    <p><a href="/users/edit/<%= currentUser.id %>">Update profile</a></p>
+    <p><a href="/users/<%= currentUser.id %>/update">Update profile</a></p>
   <% } %> 
 </div>
 

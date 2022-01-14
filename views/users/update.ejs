@@ -1,0 +1,65 @@
+<% layout('layouts/boilerplate') %> 
+
+<div class="row mb-5">
+	<h1 class="text-center">Update Profile</h1>
+  <div class="text-center mb-3">
+    <div id="avatar-box">
+      <% if (user.avatar) { %> 
+        <img class="avatar-profile" src="<%= user.avatar %>" alt="avatar">
+      <% } else { %> 
+        <img id="avatar-profile" src="/assets/snowman.png" alt="avatar">
+      <% } %> 
+    </div>
+  </div>
+	<div class="col-lg-6 col-md-8 ms-auto me-auto card py-4 px-4">
+		<form
+			action="/users/<%= user.id %>/update?_method=PUT"
+			method="POST"
+			novalidate
+			class="validate-form"
+      id="update-profile"
+		>
+      <div class="input-group mb-3">
+        <span class="input-group-text">Display Name:</span>
+        <input 
+          type="text"
+          class="form-control"
+          aria-label="displayName"
+          value="<%= user.displayName %>"
+          autofocus
+          required
+        >
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text">Email:</span>
+        <span class="form-control">
+          <% if (!user.verified) { %>
+            <a href="/auth/confirmation/email">confirm</a>
+          <% } else { %> 
+            <span class="email-update">update</span>
+          <% } %> 
+        </span>
+        <input 
+          type="hidden"
+          class="form-control email-input"
+          aria-label="email"
+          value="<%= user.email %>"
+          required
+        >
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text">Password:</span>
+        <span class="form-control">
+          <a href="/auth/password/update">change</a>
+        </span>
+      </div>
+      <button class="btn btn-primary me-2" type="submit">Update</button>
+      <a href="/users/<%= user.id %>" class="btn btn-danger">Cancel</a>
+    </form>
+	</div>
+</div>
+
+
+
+
+<script src="/js/users.js"></script>

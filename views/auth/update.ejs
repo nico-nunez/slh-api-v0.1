@@ -54,7 +54,7 @@
 					required
 				/>
 			</div>
-      <% if(ulc) { %> 
+      <% if(typeof(ulc) !== 'undefined') { %> 
         <input type="hidden" value="<%= ulc %>" name="ulc">
       <% } %> 
 			<div class="login-local">
@@ -62,7 +62,7 @@
           <button class="btn btn-primary me-2">Submit</button>
         </div>
         <% if (loggedInUser) { %> 
-          <a href="/users/<% loggedInUser.id %>" class="btn btn-danger">Cancel</a>
+          <a href="/users/<%= loggedInUser.id %>" class="btn btn-danger">Cancel</a>
         <% } else { %> 
           <a href="/auth/login" class="btn btn-danger">Cancel</a>
         <% } %> 

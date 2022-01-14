@@ -45,27 +45,28 @@ router.get('/:id/parties', isLoggedIn, isUser, catchAsync(async (req, res) => {
     res.render('users/parties', {userParties});
 }));
 
-router.get('/:id/edit', isLoggedIn, isUser, catchAsync( async (req, res, next) => {
-    const currentUser = await User.findById( req.params.id );
-    res.render('users/edit', { currentUser })
+router.get('/:id/update', isLoggedIn, isUser, catchAsync( async (req, res, next) => {
+    const user = await User.findById( req.user.id );
+    res.render('users/update', { user })
 }));
 
-router.put('/:id/edit', isLoggedIn, isUser, catchAsync( async (req, res, next) => {
-    const { profileName, password } = req.body;
-    const { id } = req.params;
-    const user = await User.findById(id);
-    if(profileName) {
-       user.profileName = profileName;
-       await user.save();
-    }
-    if(password) {
-        if(password.new !== password.confirm) {
-            req.flash('error', 'Password confirmation must match.');
-        } else {
-            await user.changePassword(password.current, password.new);
-        }
-    }
-    res.redirect(`/users/${id}`);
+router.put('/:id/update', isLoggedIn, isUser, catchAsync( async (req, res, next) => {
+    // const { profileName, password } = req.body;
+    // const { id } = req.params;
+    // const user = await User.findById(id);
+    // if(profileName) {
+    //    user.profileName = profileName;
+    //    await user.save();
+    // }
+    // if(password) {
+    //     if(password.new !== password.confirm) {
+    //         req.flash('error', 'Password confirmation must match.');
+    //     } else {
+    //         await user.changePassword(password.current, password.new);
+    //     }
+    // }
+    // res.redirect(`/users/${id}`);
+    res.send('profile updated');
 }))
 
 module.exports = router;

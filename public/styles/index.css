@@ -77,3 +77,13 @@ form :invalid {
   background-color: #146B3A;
   color: aliceblue;
 }
+
+.input-group-text {
+  min-width: 130px;
+}
+
+.email-update {
+  cursor: pointer;
+  color: #0d6efd;
+  text-decoration: underline;
+}
