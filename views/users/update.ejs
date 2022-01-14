@@ -12,6 +12,11 @@
     </div>
   </div>
 	<div class="col-lg-6 col-md-8 ms-auto me-auto card py-4 px-4">
+    <% if (!user.verified) { %> 
+    <form action="/auth/confirmation/email" method="POST" id="confirm">
+      <input type="hidden" id="user" value="<%= user.id %>" name="id" required>
+    </form>
+    <% } %> 
 		<form
 			action="/users/<%= user.id %>/update?_method=PUT"
 			method="POST"
@@ -35,9 +40,9 @@
         <span class="input-group-text">Email:</span>
         <span class="form-control">
           <% if (!user.verified) { %>
-            <a href="/auth/confirmation/email">confirm</a>
+            <span class="email-confirm link">confirm<span>
           <% } else { %> 
-            <span class="email-update">update</span>
+            <span class="email-update link">update</span>
           <% } %> 
         </span>
         <input 

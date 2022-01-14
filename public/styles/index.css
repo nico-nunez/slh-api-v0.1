@@ -82,7 +82,7 @@ form :invalid {
   min-width: 130px;
 }
 
-.email-update {
+.link {
   cursor: pointer;
   color: #0d6efd;
   text-decoration: underline;

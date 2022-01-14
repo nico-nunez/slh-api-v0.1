@@ -1,9 +1,19 @@
 const updateEmail = document.querySelector('.email-update');
+const confirmEmail = document.querySelector('.email-confirm');
 
-const handleUpdateClick = (evt) => {
+
+const handleUpdateClick = evt => {
   evt.target.parentElement.classList.add('hidden');
   document.querySelector('.email-input').type = 'email';
   document.querySelector('.email-input').focus();
 }
 
-updateEmail.addEventListener('click', handleUpdateClick)
+const handleConfirmClick = () => {
+  document.querySelector('#confirm').submit();
+};
+
+if(updateEmail)
+  updateEmail.addEventListener('click', handleUpdateClick);
+
+if(confirmEmail)
+  confirmEmail.addEventListener('click', handleConfirmClick);

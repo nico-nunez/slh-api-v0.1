@@ -117,20 +117,23 @@ router.get(
   res.redirect(`/users/${req.user.id}`)
 }));
 
-router.post('/confirmation/email', isLoggedIn, catchAsync( async(req, res, next) => {
-  const { id } = req.user;
+router.post(
+  '/confirmation/email',
+  isLoggedIn,
+  catchAsync( async(req, res, next) => {
+  const { id } = req.body;
   const user = await User.findById(id);
-  if (user && !user.verified) {
-    const details = await sendEmailLink(user, 'confirmation');
-    const newLink = new Link(details);
-    await newLink.save();
+
+  if (!user || user.verified) 
+    throw new ExpressError('Unable to send confirmation email.', 400);
+
+  const details = await sendEmailLink(user, 'confirmation');
+  const newLink = new Link(details);
+  await newLink.save();
     
-    req.flash('success', 'A confirmation email has been sent.  Please check your spam folder if you do not see it in your inbox.')
-  } else {
-    req.flash('error', 'Unable to send email confirmation.');
-  }
+  req.flash('success', 'A confirmation email has been sent.  Please check your spam folder if you do not see it in your inbox.')
   
-  res.redirect(`user/${req.user.id}`);
+  res.redirect(`/users/${id}`);
 }));
 
 // ---- UPDATE PASSWORD ----
