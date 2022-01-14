@@ -1,0 +1,72 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="row">
+	<h1 class="text-center">Update Password</h1>
+	<div class="col-lg-5 col-md-6 col-sm-8 ms-auto me-auto card py-4 px-4">
+    <% if (loggedInUser) { %> 
+      <form
+        action="/auth/password/update?_method=PUT"
+        method="POST"
+        novalidate
+        class="validate-form mb-2"
+		>
+			<div class="mb-3 form-group">
+				<label class="form-label" for="currentPass">Current Password:</label>
+				<input
+					class="form-control"
+					type="password"
+					name="currentPass"
+					id="current"
+					placeholder="current password"
+					required
+				/>
+			</div>
+    <% } else { %>
+      <form
+        action="/auth/password/reset/update?_method=PUT"
+        method="POST"
+        novalidate
+        class="validate-form mb-2"
+		  >
+    <% } %> 
+			<div class="mb-3 form-group">
+				<label class="form-label" for="password">New Password:</label>
+				<input
+					class="form-control"
+					type="password"
+					name="password"
+					id="password"
+					placeholder="new password"
+					required
+				/>
+        <p class="text-muted text-xsmall mt-1 mb-0">Must be a minimum of 8 characters and contain at least:</p>
+        <p class="text-muted text-xsmall mb-0">- an uppercase and a lowercase letter.</p>
+        <p class="text-muted text-xsmall mb-0">- a number and a special charcter [!@$%&*?].</p>
+			</div>
+			<div class="mb-3 form-group">
+				<label class="form-label" for="confirm">Confirm New Password:</label>
+				<input
+					class="form-control"
+					type="password"
+					name="confirm"
+					id="password"
+					placeholder="re-type password"
+					required
+				/>
+			</div>
+      <% if(ulc) { %> 
+        <input type="hidden" value="<%= ulc %>" name="ulc">
+      <% } %> 
+			<div class="login-local">
+        <div class="login-options">
+          <button class="btn btn-primary me-2">Submit</button>
+        </div>
+        <% if (loggedInUser) { %> 
+          <a href="/users/<% loggedInUser.id %>" class="btn btn-danger">Cancel</a>
+        <% } else { %> 
+          <a href="/auth/login" class="btn btn-danger">Cancel</a>
+        <% } %> 
+			</div>
+		</form>
+	</div>
+</div>

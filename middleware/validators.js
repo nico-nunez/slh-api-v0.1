@@ -1,55 +1,64 @@
-const List = require("../models/List");
-const Party = require("../models/Party");
-const User = require("../models/User");
+const List = require('../models/List');
+const Party = require('../models/Party');
+const User = require('../models/User');
+const Link =  require('../models/Link');
+const { ExpressError, catchAsync } = require('../helpers/errors');
 
 const isLoggedIn = (req, res, next) => {
 	if (!req.isAuthenticated()) {
 		req.session.redirectedFrom = req.originalUrl;
-		req.flash("error", "Must be logged in.");
-		return res.redirect("/auth/login");
+    throw new ExpressError('Must be logged in.', 403, '/auth/login');
 	}
 	next();
 };
 
-async function isCreatorList(req, res, next) {
+const isCreatorList = catchAsync( async (req, res, next) => {
 	const list = await List.findById(req.params.id);
 	if (!list.creator.equals(req.user._id)) {
-		req.flash("error", "Permission denied.");
-		return res.redirect(`/lists/${id}`);
+    throw new ExpressError('Permision denied', 403, `/lists/${id}`);
 	}
 	next();
-}
+});
 
-async function isCreatorParty(req, res, next) {
+const isCreatorParty = catchAsync(async (req, res, next) => {
 	const party = await Party.findById(req.params.id);
 	if (!party.creator.equals(req.user._id)) {
-		req.flash("error", "Permission denied.");
-		return res.redirect(`/parties/${id}`);
+    throw new ExpressError('Permision denied', 403, `/parties/${id}`);
 	}
 	next();
-}
+});
 
-async function isUser(req, res, next) {
+const isUser = catchAsync( async(req, res, next) => {
 	const user = await User.findById(req.params.id);
 	if (!user._id.equals(req.user._id)) {
-		req.flash("error", "Permission denied.");
-		return res.redirect("/auth/login");
+    throw new ExpressError('Permission denied', 403, '/auth/login');
 	}
 	next();
-}
-async function isVerified(req, res, next) {
+});
+
+const isVerified = catchAsync(async (req, res, next) => {
 	const user = await User.findById(req.params.id);
 	if (!user.verified) {
-		req.flash("error", "Please verify your email before proceeding.");
-		return res.redirect(`/users/${user.id}`);
+    const msg = 'Must verify your email before proceeding.';
+		throw new ExpressError(msg, 403, `/users/${user.id}`);
 	}
 	next();
-}
+});
+
+const isValidLink = catchAsync( async(req, res, next) => {
+  const ulc = req.query.ulc || req.body.ulc;
+  const link = await Link.findOne({code: ulc, subject: 'reset'});
+  if (!link || !link.valid ) {
+    throw new ExpressError('Permission denied.', 403, '/auth/login');
+	}
+	next();
+});
 
 module.exports = {
 	isLoggedIn,
 	isCreatorList,
 	isCreatorParty,
 	isUser,
-  isVerified
+  isVerified,
+  isValidLink
 };

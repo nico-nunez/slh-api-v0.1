@@ -3,9 +3,28 @@ const fs = require('fs').promises;
 const path = require('path');
 const cheerio = require('cheerio');
 
-const LinkCode = require('../models/LinkCode');
+const Link = require('../models/Link');
 const { generateCode } = require('../helpers/utils');
-const { getConfirmText } = require('./messages/messagesTxt');
+const { getConfirmText, getResetText } = require('./messages/messagesTxt');
+
+const msgTypes = {
+  confirmation: {
+    len: 150,
+    html: 'confirmation.html',
+    text: getConfirmText,
+    path: '/confirmation/email',
+    subject: 'Verify Email Address',
+    validFor: 1000 * 60 * 60 * 24 * 7
+  },
+  reset: {
+    len: 200,
+    html: 'reset.html',
+    text: getResetText,
+    path: '/password/reset/update',
+    subject: 'Password Reset',
+    validFor: 1000 * 60 * 60
+  }
+}
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
@@ -21,40 +40,43 @@ const transporter = nodemailer.createTransport({
 })
 
 
-// ------- MESSAGES --------
 
-const getConfirmMsgs = async ( ucc ) => {
-  const filePath = path.join(__dirname, 'messages', 'confirmation.html');
-  const message = await fs.readFile(filePath, 'utf-8')
-  const $ = cheerio.load(message);
-  $('.verify-btn').prop('href', `http://localhost:8080/auth/confirmation/email?ucc=${ucc}`);
+const getMsgContent = async ( msgObj ) => {
+  const code = generateCode(msgObj.len, 'alphaNumeric', 'mixed');
+  const msgLink = `http://localhost:8080/auth${msgObj.path}?ulc=${code}`;
+
+  const filePath = path.join(__dirname, 'messages', msgObj.html);
+  const fileHTML = await fs.readFile(filePath, 'utf-8')
+  const $ = cheerio.load(fileHTML);
+  $('.btn-action-link').prop('href', msgLink);
   
   const msgHTML = $.html();
-  const msgText = getConfirmText(ucc);
+  const msgText = msgObj.text(msgLink);
   
-  return {msgHTML, msgText};
+  return {msgHTML, msgText, code};
 }
 
-const sendConfirmation = async (user) => {
-  const uniqueCode = generateCode(150,'alphaNumeric', 'mixed');
-  const { msgHTML, msgText } = await getConfirmMsgs(uniqueCode);
+const sendEmailLink = async (user, msgType) => {
+  const msgObj = msgTypes[msgType];
+  const { msgHTML, msgText, code } = await getMsgContent(msgObj);
   const msg = {
     from: '"Santas Lil Helper" santas.lil.helper.app@gmail.com',
     to: user.email,
-    subject: 'Verify Email Address',
+    subject: msgObj.subject,
     text: msgText,
     html: msgHTML
   }
-  const props = {
-    uniqueCode,
-    subject: 'confirmation',
+  const details = {
+    code,
+    subject: msgType,
     referenceID: user.id,
-    expireAt: Date.now() + (1000 * 60 * 60 * 24 * 5)
+    expireAt: Date.now() + msgObj.validFor
   }
 
-  const newConfirm = new LinkCode(props);
-  await newConfirm.save();
   await transporter.sendMail(msg);
+
+  return details;
 }
 
-module.exports = { sendConfirmation, getConfirmMsgs }
+
+module.exports = { sendEmailLink }

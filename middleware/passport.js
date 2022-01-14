@@ -1,8 +1,9 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
-const { sendConfirmation } = require('../helpers/email');
+const { sendEmailLink } = require('../helpers/email');
 const User = require('../models/User');
+const Link = require('../models/Link');
 
 module.exports = () => {
 
@@ -23,10 +24,17 @@ module.exports = () => {
       email: profile.email,
       displayName: profile.displayName,
     });
-    const user = await newUser.save();
-    sendConfirmation(user); //- uncomment here and auth.js for prod
-    done(null, user);
-  }
+    try {
+      const user = await newUser.save();
+      const details = await sendEmailLink(user, 'confirmation');
+      const newLink = new Link(details);
+      await newLink.save();
+      done(null, user);
+    } catch(err) {
+      if(err.code === 11000) err.message = "Email already registered."
+      return done(err, null);
+    }
+  };
 
   const serializeUser = (user, done) => {
     done(null, user.id);

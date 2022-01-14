@@ -1,10 +1,41 @@
 const { ExpressError } = require("../helpers/errors");
 const Joi = require("joi");
 
+const emailSchema = Joi.string()
+  .email({
+    minDomainSegments: 2,
+    tlds: {
+      allow: ["com", "net"],
+    },
+  })
+  .trim()
+  .lowercase()
+  .required()
+  .messages({
+    "any.required": "Valid email is required.",
+    "string.email": "Please enter a valid email.",
+  });
 
+const passwordSchema = Joi.string()
+  .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$'))
+  .required()
+  .messages({
+    "any.required": "Password is required.",
+    "string.pattern.base": `Password must be between 8-32 characters and contain at least
+    an uppercase, lowercase, number, and special character [!@$%&*?].
+  `,
+  });
 
-function validateInput(joiSchema, req) {
-  const redirectURL = req.originalUrl;
+const confirmSchema = Joi.string()
+  .required()
+  .valid(Joi.ref("password"))
+  .messages({
+    "any.required": "Please confirm password.",
+    "any.only": "Passwords must match.",
+  });
+
+function validateInput(joiSchema, req, redirect=null) {
+  const redirectURL = redirect || req.originalUrl;
 	const {value, error} = joiSchema.validate(req.body);
   if(error) {
     const message = error.details.map(err => err.message).join(',');
@@ -16,37 +47,14 @@ function validateInput(joiSchema, req) {
 function validRegistration(req, res, next) {
 	const userSchema = Joi.object({
 		newUser: Joi.object({
-			email: Joi.string()
-				.email({
-					minDomainSegments: 2,
-					tlds: {
-						allow: ["com", "net"],
-					},
-				})
-				.trim()
-				.required()
-				.messages({
-					"any.required": "Valid email is required.",
-					"string.email": "Please eneter a valid email.",
-				}),
+			email: emailSchema,
 
 			displayName: Joi.string(),
 
-			password: Joi.string()
-				.pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$'))
-				.required()
-				.messages({
-					"any.required": "Password is required.",
-					"string.pattern.base": `Password must be between 8-32 characters and contain at least
-           an uppercase, lowercase, number, and special character [!@$%&*?].
-        `,
-				}),
+			password: passwordSchema,
 
-			confirmPass: Joi.string().required().valid(Joi.ref("password")).messages({
-				"any.required": "Please confirm password.",
-				"any.only": "Passwords must match.",
-			}),
-		}),
+			confirmPass: confirmSchema,
+		})
 	});
 
 	validateInput(userSchema, req);
@@ -87,8 +95,35 @@ function validParty(req, res, next) {
 	return next();
 }
 
+function validEmail(req, res, next) {
+  const resetSchema = Joi.object({
+    email: emailSchema
+  });
+
+  validateInput(resetSchema, req, '/auth/password/update/reset');
+
+  return next();
+}
+
+function validPassword(req, res, next) {
+  const { ulc } = req.body;
+  const addULC = ulc ? `?ulc=${ulc}` : '';
+  const redirect = `/auth/password/update${addULC}`;
+  const newPassSchema = Joi.object({
+    currentPass: Joi.string(),
+    password: passwordSchema,
+    confirm: confirmSchema,
+    ulc: Joi.string()
+  });
+  validateInput(newPassSchema, req, redirect);
+
+  return next();
+}
+
 module.exports = {
 	validRegistration,
 	validList,
 	validParty,
+  validEmail,
+  validPassword
 };

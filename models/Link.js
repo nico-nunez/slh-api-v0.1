@@ -2,13 +2,14 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const linkCodeSchema = new Schema({
-  uniqueCode: {
+  code: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   subject: {
     type: String,
-    enum: ['confirmation', 'invitation', 'recovery'],
+    enum: ['confirmation', 'invitation', 'reset'],
     required: true
   },
   referenceID: {
@@ -26,4 +27,4 @@ const linkCodeSchema = new Schema({
   }
 });
 
-module.exports = mongoose.model('LinkCode', linkCodeSchema);
+module.exports = mongoose.model('Link', linkCodeSchema);
