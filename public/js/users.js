@@ -1,5 +1,5 @@
 const updateEmail = document.querySelector('.email-update');
-const confirmEmail = document.querySelector('.email-confirm');
+const sendConfirm = document.querySelector('.send-confirm');
 
 
 const handleUpdateClick = evt => {
@@ -15,5 +15,5 @@ const handleConfirmClick = () => {
 if(updateEmail)
   updateEmail.addEventListener('click', handleUpdateClick);
 
-if(confirmEmail)
-  confirmEmail.addEventListener('click', handleConfirmClick);
+if(sendConfirm)
+  sendConfirm.addEventListener('click', handleConfirmClick);
