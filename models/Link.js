@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const linkCodeSchema = new Schema({
+const linkSchema = new Schema({
   code: {
     type: String,
     required: true,
@@ -27,4 +27,12 @@ const linkCodeSchema = new Schema({
   }
 });
 
-module.exports = mongoose.model('Link', linkCodeSchema);
+
+linkSchema.pre('save', async function() {
+  const { referenceID, subject } = this;
+  await Link.deleteMany({referenceID, subject});
+})
+
+const Link = mongoose.model('Link', linkSchema);
+
+module.exports = Link;

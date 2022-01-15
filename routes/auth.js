@@ -125,7 +125,7 @@ router.post(
   const user = await User.findById(id);
 
   if (!user || user.verified) 
-    throw new ExpressError('Unable to send confirmation email.', 400);
+    throw new ExpressError('Email is either not registered or already confirmed.', 400);
 
   const details = await sendEmailLink(user, 'confirmation');
   const newLink = new Link(details);
@@ -175,10 +175,10 @@ router.post('/password/reset',
   const user = await User.findOne({email: req.body.email});
 
   if(!user || !user.verified || user.googleID) {
-    const msg = 'Cannot reset password.  Either this email is not registered, or is associated with an alternative login option.';
+    const msg = 'Cannot reset password.  Email is not registered, or is associated with an alternative login method.';
     throw new ExpressError(msg, 400, '/auth/login');
   }
-  
+
   const details = await sendEmailLink(user, 'reset');
   const newLink = new Link(details);
   await newLink.save();

@@ -25,6 +25,7 @@ router.get(
     });
     const currentUserLists = await List.find({'creator': req.user._id});
     const parties = await Party.find({'members': req.user._id })
+
     res.render('users/index', {currentUser, currentUserLists, parties});
 }));
 

@@ -49,7 +49,7 @@ const isValidLink = catchAsync( async(req, res, next) => {
   const ulc = req.query.ulc || req.body.ulc;
   const link = await Link.findOne({code: ulc, subject: 'reset'});
   if (!link || !link.valid ) {
-    throw new ExpressError('Permission denied.', 403, '/auth/login');
+    throw new ExpressError('Permission denied. This link is invalid or has expired.', 403, '/auth/login');
 	}
 	next();
 });

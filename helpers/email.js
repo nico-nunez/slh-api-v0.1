@@ -73,7 +73,7 @@ const sendEmailLink = async (user, msgType) => {
     expireAt: Date.now() + msgObj.validFor
   }
 
-  await transporter.sendMail(msg);
+  transporter.sendMail(msg);
 
   return details;
 }
