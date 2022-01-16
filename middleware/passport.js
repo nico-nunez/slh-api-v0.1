@@ -26,7 +26,7 @@ module.exports = () => {
     });
     try {
       const user = await newUser.save();
-      const details = await sendEmailLink(user, 'confirmation');
+      const details = await sendEmailLink(user, 'emailConfirm');
       const newLink = new Link(details);
       await newLink.save();
       done(null, user);

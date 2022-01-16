@@ -45,9 +45,9 @@ const isVerified = catchAsync(async (req, res, next) => {
 	next();
 });
 
-const isValidLink = catchAsync( async(req, res, next) => {
-  const ulc = req.query.ulc || req.body.ulc;
-  const link = await Link.findOne({code: ulc, subject: 'reset'});
+const isValidLinkReset = catchAsync( async(req, res, next) => {
+  const code = req.query.ulc || req.body.ulc;
+  const link = await Link.findOne({ code, type: 'resetRequest'});
   if (!link || !link.valid ) {
     throw new ExpressError('Permission denied. This link is invalid or has expired.', 403, '/auth/login');
 	}
@@ -60,5 +60,5 @@ module.exports = {
 	isCreatorParty,
 	isUser,
   isVerified,
-  isValidLink
+  isValidLinkReset
 };

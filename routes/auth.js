@@ -8,7 +8,7 @@ const User = require("../models/User");
 const Link = require('../models/Link');
 const {
   isLoggedIn,
-  isValidLink
+  isValidLinkReset
 } = require("../middleware/validators");
 
 const { 
@@ -22,6 +22,8 @@ const {
 router.get("/register", async (req, res) => {
 	res.render("auth/register");
 });
+
+
 
 router.post(
 	"/register",
@@ -37,7 +39,7 @@ router.post(
 			const redirect = req.session.redirectedFrom || `/users/${user.id}`;
 			delete req.session.redirectedFrom;
 
-      const details = await sendEmailLink(user, 'confirmation');
+      const details = await sendEmailLink(user, 'emailConfirm');
       const newLink = new Link(details);
       await newLink.save();
 
@@ -47,9 +49,13 @@ router.post(
 	})
 );
 
+
+
 router.get("/login", (req, res) => {
 	res.render("auth/login");
 });
+
+
 
 router.post(
 	"/login",
@@ -65,11 +71,15 @@ router.post(
 	}
 );
 
+
+
 router.get("/logout", (req, res) => {
 	req.logout();
 	req.flash("success", "Successfully logged out!");
 	res.redirect("login");
 });
+
+
 
 router.get(
 	"/google",
@@ -77,6 +87,8 @@ router.get(
 		scope: ["profile", "email"],
 	})
 );
+
+
 
 router.get(
 	"/google/callback",
@@ -87,53 +99,57 @@ router.get(
 	(req, res) => {
 		const redirection = req.session.redirectedFrom || `/users/${req.user.id}`;
 		delete req.session.redirectedFrom;
-		req.flash("success", "Welcome!");
+    if(req.user.email && !req.user.verified) {
+      req.flash("success", "Welcome! Please check your messages and confirm your email address.");
+    } else {
+      req.flash("success", "Welcome back!");
+    }
 		res.redirect(redirection);
 	}
 );
+
+
 
 router.get(
   '/confirmation/email',
   isLoggedIn,
   catchAsync( async(req, res, next) => {
-  const { ulc } = req.query;
-  const link = await Link.findOne({ ulc });
+  const code = req.query.ulc;
+  const link = await Link.findOneAndUpdate({ code }, {valid: false, expireAt: Date.now()});
 
-  if(!link || link.referenceID !== req.user.id) {
-    const msg = 'Unable to verify email. Please try again or request a new link.'
-    throw new ExpressError(msg, 400, `/users/${req.user.id}`);
-  }
+    if(!link || link.referenceID !== req.user.id) {
+      const msg = 'Unable to verify email. Please try again or request a new link.'
+      throw new ExpressError(msg, 400, `/users/${req.user.id}`);
+    }
 
-  const user = await User.findById(req.user.id);
-  user.verified = true;
-  await user.save();
+    const user = await User.findById(req.user.id);
+    user.verified = true;
+    await user.save();
 
-  link.valid = false;
-  link.expireAt = Date.now();
-  link.save();
-
-  req.flash('success', 'Thank you! Email has been verified.');
-  
-  res.redirect(`/users/${req.user.id}`)
+    req.flash('success', 'Thank you! Email has been verified.');
+    
+    res.redirect(`/users/${req.user.id}`)
 }));
+
+
 
 router.post(
   '/confirmation/email',
   isLoggedIn,
   catchAsync( async(req, res, next) => {
-  const { id } = req.body;
-  const user = await User.findById(id);
+    const { id } = req.body;
+    const user = await User.findById(id);
 
-  if (!user || user.verified) 
-    throw new ExpressError('Email is either not registered or already confirmed.', 400);
+    if (!user || user.verified) 
+      throw new ExpressError('Email is either not registered or already confirmed.', 400);
 
-  const details = await sendEmailLink(user, 'confirmation');
-  const newLink = new Link(details);
-  await newLink.save();
+    const details = await sendEmailLink(user, 'emailConfirm');
+    const newLink = new Link(details);
+    await newLink.save();
+      
+    req.flash('success', 'A confirmation email has been sent.  Please check your spam folder if you do not see it in your inbox.')
     
-  req.flash('success', 'A confirmation email has been sent.  Please check your spam folder if you do not see it in your inbox.')
-  
-  res.redirect(`/users/${id}`);
+    res.redirect(`/users/${id}`);
 }));
 
 // ---- UPDATE PASSWORD ----
@@ -163,7 +179,7 @@ router.get('/password/reset/request', (req,res) => {
 
 // Update password - forgot password
 router.get('/password/reset/update',
-isValidLink,
+isValidLinkReset,
 (req, res) => {
   const { ulc } = req.query;
   res.render('auth/update', {ulc});
@@ -172,43 +188,40 @@ isValidLink,
 router.post('/password/reset',
   validEmail,
   catchAsync( async(req, res, next) => {
-  const user = await User.findOne({email: req.body.email});
+    const user = await User.findOne({email: req.body.email});
 
-  if(!user || !user.verified || user.googleID) {
-    const msg = 'Cannot reset password.  Email is not registered, or is associated with an alternative login method.';
-    throw new ExpressError(msg, 400, '/auth/login');
-  }
+    if(!user || !user.verified || user.googleID) {
+      const msg = 'Cannot reset password.  Email is not registered, or is associated with an alternative login method.';
+      throw new ExpressError(msg, 400, '/auth/login');
+    }
 
-  const details = await sendEmailLink(user, 'reset');
-  const newLink = new Link(details);
-  await newLink.save();
+    const details = await sendEmailLink(user, 'resetRequest');
+    const newLink = new Link(details);
+    await newLink.save();
 
-  req.flash('success', 'A message has been sent to the provided email.  Please check your spam folder if you do not see it in your inbox.');
+    req.flash('success', 'A message has been sent to the email address.  Please check your spam folder if you do not see it in your inbox.');
 
-  res.redirect('/auth/login');
+    res.redirect('/auth/login');
 }));
 
 router.put(
   '/password/reset/update',
-  isValidLink, validPassReset,
+  isValidLinkReset, validPassReset,
   catchAsync( async(req, res, next) => {
-  const link = await Link.findOne({ code: req.body.ulc });
-
-  link.valid = false;
-  link.expireAt = Date.now();
-  await link.save();
+    const code = req.body.ulc;
+    const link = await Link.findOneAndUpdate({ code }, {valid: false, expireAt: Date.now()});
   
-  const user = await User.findById( link.referenceID );
-  if(!user) {
-    const msg = 'Unable to update password.'
-    throw new ExpressError(msg, 400, '/auth/login')
-  }
-  
-  await user.setPassword(req.body.password);
-  await user.save();
+    const user = await User.findById( link.referenceID );
+    if(!user) {
+      const msg = 'Unable to update password.'
+      throw new ExpressError(msg, 400, '/auth/login')
+    }
+    
+    await user.setPassword(req.body.password);
+    await user.save();
 
-  req.flash('success', 'Successfully updated password');
-  res.redirect('/auth/login');
+    req.flash('success', 'Successfully updated password');
+    res.redirect('/auth/login');
 }));
 
 

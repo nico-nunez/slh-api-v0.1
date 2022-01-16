@@ -7,9 +7,9 @@ const linkSchema = new Schema({
     required: true,
     unique: true
   },
-  subject: {
+  type: {
     type: String,
-    enum: ['confirmation', 'invitation', 'reset'],
+    enum: ['emailConfirm', 'invitation', 'resetRequest'],
     required: true
   },
   referenceID: {
@@ -29,8 +29,8 @@ const linkSchema = new Schema({
 
 
 linkSchema.pre('save', async function() {
-  const { referenceID, subject } = this;
-  await Link.deleteMany({referenceID, subject});
+  const { referenceID, type } = this;
+  await Link.deleteMany({ referenceID, type});
 })
 
 const Link = mongoose.model('Link', linkSchema);

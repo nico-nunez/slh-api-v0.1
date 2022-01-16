@@ -20,6 +20,13 @@
 				width: 100vw;
 				background-color: rgb(230, 200, 200);
 			}
+      .header {
+				padding: 20px 0;
+				background-color: #165b33;
+				color: aliceblue;
+				font-size: 1.2rem;
+				margin-bottom: 20px;
+			}
 			.container {
 				position: relative;
 				max-width: 600px;
@@ -28,26 +35,19 @@
 				background-color: white;
         text-align: center;
 			}
-      .header {
-				padding: 20px 0;
-				background-color: #165b33;
-				color: aliceblue;
-				font-size: 1.2rem;
-				margin-bottom: 20px;
-			}
 			.title {
 				font-size: 2.5rem;
+        margin-bottom: 50px;
+        text-align: center;
 			}
-			.content-main {
+			.content {
 				padding: 20px 50px;
-				margin-top: 20px;
         text-align: left;
 			}
 			.btn-action {
 				margin: 40px 0;
         text-align: center;
 			}
-
 			.btn-action-link {
 				display: inline-block;
 				padding: 10px 40px;
@@ -58,30 +58,29 @@
 				color: aliceblue;
 				background-color: #ea4630;
 			}
+      .content-closing :nth-child(1) {
+        margin: 50px 0 40px 0;
+      }
 			.footer {
 				position: absolute;
 				bottom: 0;
 				color: aliceblue;
 				text-transform: uppercase;
-				height: 120px;
+				height: 100px;
 				width: 100%;
 				font-size: 0.9rem;
 				background-color: #146b3a;
-        padding-top: 25px;
+        padding-top: 20px;
 			}
-      .footer p {margin-bottom: 25px;}
-			.footer a {
-				color: aliceblue;
-				text-decoration: none;
-				border-bottom: 1px solid white;
-			}
+      .footer p {margin-bottom: 20px;}
+			.footer a {color: aliceblue;}
       .footer a:hover {color: aliceblue;}
 			@media screen and (max-width: 450px) {
 				.container {width: 100%;}
         .title{font-size: 2rem;}
-        .content-main{padding: 0 10px 120px 10px;}
+        .content{padding: 0 10px 120px 10px;}
         .verify{margin: 30px;}
-        .footer{height: 100px; padding-top: 15px;}
+        .footer{height: 100px; padding-top: 25px;}
 			}
 		</style>
 	</head>
@@ -90,30 +89,20 @@
 			<div class="header">
 				<h2>SANTA'S LIL' HELPER</h2>
 			</div>
-			<h1 class="title">Verify Your Email Address</h1>
-			<div class="content-main">
-				<p>Welcome, and thank you for joining!</p>
-				<p>Please verify your email address by clicking the link below.</p>
-				<div class="btn-action">
-					<a href="" class="btn-action-link">verify email</a>
-				</div>
-				<p>
-					This link is valid for 7 days and is only to confirm your account.
-        </p>
-        <p>
-          We will not send any other messages unless specifically requested.
-				</p>
-				<p>
-					If you did not sign up, or feel you've recieved this in error, please
-					<a href="mailto: santas.lil.helper.app@gmail.com">contact us</a>.
-				</p>
-        <br>
-        <p>Regards,</p>
-        <p>The Lil' Helpers : ) </p>
-			</div>
+			<div class="content">
+        <div class="content-main"></div>
+        <div class="content-closing">
+          <p>
+            If you did not sign up, or feel you've recieved this in error, please
+            <a href="mailto: santas.lil.helper.app@gmail.com">contact us</a>.
+          </p>
+          <p>Regards,</p>
+          <p>The Lil' Helpers : ) </p>
+        </div>
+      </div>
 			<footer class="footer">
-        <p><a href="mailto: santas.lil.helper.app@gmail.com">contact</a></p>
 				<p><a href="">santa's lil' helper</a></p>
+        <p><a href="mailto: santas.lil.helper.app@gmail.com">contact</a></p>
 			</footer>
 		</div>
 	</body>

@@ -1,29 +1,27 @@
 const nodemailer = require('nodemailer');
-const fs = require('fs').promises;
-const path = require('path');
-const cheerio = require('cheerio');
 
-const Link = require('../models/Link');
 const { generateCode } = require('../helpers/utils');
-const { getConfirmText, getResetText } = require('./messages/messagesTxt');
+const Email = require('./messages/Email');
 
-const msgTypes = {
-  confirmation: {
-    len: 150,
-    html: 'confirmation.html',
-    text: getConfirmText,
-    path: '/confirmation/email',
-    subject: 'Verify Email Address',
-    validFor: 1000 * 60 * 60 * 24 * 7
-  },
-  reset: {
-    len: 200,
-    html: 'reset.html',
-    text: getResetText,
-    path: '/password/reset/update',
-    subject: 'Password Reset',
-    validFor: 1000 * 60 * 60
-  }
+const emailConfirmData = {
+  codeLen: 150,
+  type: 'emailConfirm',
+  subject: 'Verify Email Address',
+  route: '/auth/confirmation/email',
+  expireAt: 1000 * 60 * 60 * 24 * 7
+}
+
+const resetRequestData = {
+  codeLen: 200,
+  type: 'resetRequest',
+  subject: 'Password Reset Request',
+  route: '/auth/password/reset/update',
+  expireAt: 1000 * 60 * 60 
+}
+
+const allMsgTypes = {
+  emailConfirm: new Email(emailConfirmData),
+  resetRequest: new Email(resetRequestData),
 }
 
 const transporter = nodemailer.createTransport({
@@ -40,40 +38,25 @@ const transporter = nodemailer.createTransport({
 })
 
 
-
-const getMsgContent = async ( msgObj ) => {
-  const code = generateCode(msgObj.len, 'alphaNumeric', 'mixed');
-  const msgLink = `http://localhost:8080/auth${msgObj.path}?ulc=${code}`;
-
-  const filePath = path.join(__dirname, 'messages', msgObj.html);
-  const fileHTML = await fs.readFile(filePath, 'utf-8')
-  const $ = cheerio.load(fileHTML);
-  $('.btn-action-link').prop('href', msgLink);
-  
-  const msgHTML = $.html();
-  const msgText = msgObj.text(msgLink);
-  
-  return {msgHTML, msgText, code};
-}
-
 const sendEmailLink = async (user, msgType) => {
-  const msgObj = msgTypes[msgType];
-  const { msgHTML, msgText, code } = await getMsgContent(msgObj);
-  const msg = {
+  const msg = allMsgTypes[msgType];
+  const code = msg.generateLinkCode();
+  const { msgHTML, msgText } = await msg.getMsgContent(code);
+  const message = {
     from: '"Santas Lil Helper" santas.lil.helper.app@gmail.com',
     to: user.email,
-    subject: msgObj.subject,
+    subject: msg.subject,
     text: msgText,
     html: msgHTML
   }
   const details = {
     code,
-    subject: msgType,
+    type: msgType,
     referenceID: user.id,
-    expireAt: Date.now() + msgObj.validFor
+    expireAt: Date.now() + msg.expireAt
   }
 
-  transporter.sendMail(msg);
+  transporter.sendMail(message);
 
   return details;
 }
