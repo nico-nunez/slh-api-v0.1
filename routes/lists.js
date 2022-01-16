@@ -4,61 +4,18 @@ const List = require('../models/List');
 const { catchAsync } = require('../helpers/errors');
 const { validList } = require('../middleware/joiSchemas');
 const { isLoggedIn, isCreatorList } = require('../middleware/validators');
+const lists = require('../controllers/lists');
 
-router.get('/', catchAsync( async (req, res, next) => {
-    const lists = await List.find({}).populate('creator');
-    res.render('lists/index', {lists});
-}));
+router.get('/', lists.showPublicLists);
 
-router.post('/', isLoggedIn, validList, catchAsync( async (req, res, next) => {
-    const { list } = req.body;
-    const newList = new List({...list});
-    newList.creator = req.user._id;
-    newList.parties = []
-    await newList.save();
-    req.flash('success', 'Success! New List created.');
-    res.redirect(`lists/${newList._id}`);
-}));
+router.get('/new', isLoggedIn, lists.createListForm);
+router.post('/', isLoggedIn, validList, lists.createList);
 
-router.get('/new', isLoggedIn, (req, res) => {
-    res.render('lists/new');
-});
+router.get('/:id', isLoggedIn, lists.showList);
+router.get('/:id/edit', isLoggedIn, isCreatorList, lists.updateListForm);
+router.put('/:id', isLoggedIn, isCreatorList, validList, lists.updateList);
 
-router.get('/:id/edit', isLoggedIn, isCreatorList, catchAsync( async (req, res, next) => {
-    const list = await List.findById(req.params.id);
-    if(!list) {
-        req.flash('error', "Sorry, coud not find that list");
-        return res.redirect('/parties');
-    }
-    res.render('lists/edit', { list });
-}));
-
-router.get('/:id', isLoggedIn, catchAsync( async (req, res, next) => {
-    const list = await List.findById(req.params.id).populate('creator');
-    if(!list) {
-        req.flash('error', "Sorry, coud not find that list");
-        return res.redirect('/parties');
-    }
-    res.render('lists/show', {list});
-}));
-
-router.put('/:id', isLoggedIn, isCreatorList, validList, catchAsync( async(req, res, next) => {
-    const { id } = req.params;
-    const list = await List.findByIdAndUpdate(id, {...req.body.list}, {new: true, runValidators: true});
-    if(!list) {
-        req.flash('error', "Sorry, coud not find that list");
-        return res.redirect('/parties');
-    }
-    req.flash('success', 'Success! List has been updated.')
-    res.redirect(`/lists/${id}`);
-}));
-
-router.delete('/:id', isLoggedIn, isCreatorList, catchAsync( async (req, res, next) => {
-    const { id } = req.params;
-    await List.findByIdAndDelete(id);
-    req.flash('success', 'Success! List has been deleted.');
-    res.redirect('/lists');
-}));
+router.delete('/:id', isLoggedIn, isCreatorList, lists.deleteList);
 
 module.exports = router;
 

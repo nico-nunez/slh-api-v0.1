@@ -1,7 +1,7 @@
 <% layout('layouts/boilerplate') %> 
 
 <div class="col-md-10 ms-auto me-auto">    
-  <% if(user.verified) { %>
+  <% if(!user.verified) { %>
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
       <p>Please verify your email by clicking the link that was sent to the address used at registration.</p>
       <p>You can request another under 'Update profile', if didn't receive or can't find it in your inbox or spam folders.</p> Thank you!
