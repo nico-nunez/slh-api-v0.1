@@ -1,10 +1,9 @@
 <% layout('layouts/boilerplate') %> 
 
 <div class="col-md-10 ms-auto me-auto">    
-  <% if(!user.verified) { %>
+  <% if(!user.email.verified) { %>
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
-      <p>Please verify your email by clicking the link that was sent to the address used at registration.</p>
-      <p>You can request another under 'Update profile', if didn't receive or can't find it in your inbox or spam folders.</p> Thank you!
+      <p>Please verify your email address.</p>
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
   <% } %> 
@@ -22,8 +21,8 @@
     </div>
   </div>
 	<div class="col-lg-6 col-md-8 ms-auto me-auto card py-4 px-4">
-    <% if (!user.verified) { %> 
-    <form action="/auth/confirmation/email" method="POST" id="confirm">
+    <% if (!user.email.verified) { %> 
+    <form action="/auth/verification/email" method="POST" id="verify">
       <input type="hidden" id="user" value="<%= user.id %>" name="id" required>
     </form>
     <% } %> 
@@ -47,22 +46,25 @@
         >
       </div>
       <div class="input-group mb-3">
-        <span class="input-group-text">Email:</span>
-        <span class="form-control">
-          <% if (!user.verified) { %>
-            <span class="send-confirm link">send confirmation<span>
-          <% } else { %> 
-            <span class="email-update link">update</span>
+        <span class="input-group-text">
+          Email:
+          <% if (!user.email.verified) { %>
+            <span id="email-verify" class="link">verify</span>
           <% } %> 
         </span>
-        <input 
-          type="hidden"
-          class="form-control email-input"
-          aria-label="email"
-          name="profile[email]"
-          value="<%= user.email %>"
-          required
-        >
+        <span class="form-control edit-text" id="email-options">
+          <input 
+            type="text"
+            id="email-input"
+            class="form-control email-text"
+            aria-label="email"
+            name="profile[email]"
+            value="<%= user.email.address %>"
+            disabled
+            required
+          >
+          <span id="email-update" class="link">update</span>
+        </span>
       </div>
       <div class="input-group mb-3">
         <span class="input-group-text">Password:</span>

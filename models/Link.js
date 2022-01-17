@@ -1,5 +1,10 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const allowedTypes = [
+  'emailVerify',
+  'emailUpdate',
+  'resetRequest'
+]
 
 const linkSchema = new Schema({
   code: {
@@ -9,7 +14,7 @@ const linkSchema = new Schema({
   },
   type: {
     type: String,
-    enum: ['emailConfirm', 'invitation', 'resetRequest'],
+    enum: [...allowedTypes],
     required: true
   },
   referenceID: {

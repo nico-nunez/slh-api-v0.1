@@ -35,7 +35,6 @@ const confirmSchema = Joi.string()
   });
 
 const nameSchema = Joi.string()
-  .alphanum()
   .max(30)
   .trim()
   .required()

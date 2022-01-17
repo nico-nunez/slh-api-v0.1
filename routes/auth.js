@@ -48,9 +48,9 @@ router.get("/google/callback",
 router.get("/logout", auth.logout);
 
 
-// --- Email Confirmation ---
-router.get('/confirmation/email', isLoggedIn, auth.confirmEmailConfirm);
-router.post('/confirmation/email', isLoggedIn, auth.confirmEmailSend);
+// --- Email Verification ---
+router.get('/verification/email', isLoggedIn, auth.verifyEmailVerification);
+router.post('/verification/email', isLoggedIn, auth.verifyEmailSend);
 
 
 // ---- UPDATE PASSWORD ----

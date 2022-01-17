@@ -1,19 +1,22 @@
-const updateEmail = document.querySelector('.email-update');
-const sendConfirm = document.querySelector('.send-confirm');
+const emailOptions = document.querySelector('#email-options');
 
 
-const handleUpdateClick = evt => {
-  evt.target.parentElement.classList.add('hidden');
-  document.querySelector('.email-input').type = 'email';
-  document.querySelector('.email-input').focus();
+const handleOptionsClick = evt => {
+  if (evt.target.id === 'email-verify') {
+    document.querySelector('#verify').submit();
+  }
+  if (evt.target.id === 'email-update') {
+    const emailInput = document.querySelector('#email-input')
+    emailOptions.classList.remove('form-control');
+    evt.target.classList.add('hidden');
+    emailInput.classList.remove('email-text')
+    emailInput.disabled = false;
+    emailInput.focus();
+  }
 }
 
-const handleConfirmClick = () => {
-  document.querySelector('#confirm').submit();
+const handleVerifyClick = () => {
+
 };
 
-if(updateEmail)
-  updateEmail.addEventListener('click', handleUpdateClick);
-
-if(sendConfirm)
-  sendConfirm.addEventListener('click', handleConfirmClick);
+emailOptions.addEventListener('click', handleOptionsClick);
