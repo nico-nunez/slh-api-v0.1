@@ -38,6 +38,34 @@ function getMainConent(msgType, link) {
 
     },
 
+    emailUpdated: {
+      html:
+        `<h1 class="title">Email Address Updated</h1>
+        <p>Hello,</p>
+        <p>The message is to notify you that the email address associated with your account has been changed.</p>
+        <p>A verification message has be sent to the updated email address.</p>
+        <p>Please check your inbox/spam and click the link within to verify the change.</p>`,
+      
+      test:
+        `SANTA'S LIL' HELPER \n
+          
+        Email Updated
+        
+        Hello,
+
+        This message is to notify you that the email address associated with your account has been changed.
+        A verification message has be sent to the updated email address.
+        Please check your inbox/spam and click the link within to verify the change.
+
+          
+        If you did not make this request/change, or feel you've recieved this in error, please contact us at the below email address.
+        
+        Regards,
+        The Lil' Helpers :)
+        
+        santas.lil.helper.app@gmail.com`
+    },
+
     //---- RESET REQUEST ----
     resetRequest: {
       html:
@@ -77,11 +105,9 @@ function getMainConent(msgType, link) {
 
     emailUpdated: {
       html:
-        `<h1 class="title">Email Address Updated</h1>
+        `<h1 class="title">Password Reset Complete</h1>
         <p>Hello,</p>
-        <p>The message is to notify you that the email address associated with your account has been changed.</p>
-        <p>A verification message has be sent to the updated email address.</p>
-        <p>Please check your inbox/spam and click the link within to verify the change.</p>`,
+        <p>This message is to notify you that your password reset has been successfully completed.</p>`,
       
       test:
         `SANTA'S LIL' HELPER \n
@@ -90,9 +116,7 @@ function getMainConent(msgType, link) {
         
         Hello,
 
-        The message is to notify you that the email address associated with your account has been changed.
-        A verification message has be sent to the updated email address.
-        Please check your inbox/spam and click the link within to verify the change.
+        This message is to notify you that your password reset has been successfully completed.
 
           
         If you did not make this request/change, or feel you've recieved this in error, please contact us at the below email address.

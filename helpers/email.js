@@ -20,15 +20,23 @@ const dataEmailUpdated = {
 const dataResetRequest = {
   codeLen: 200,
   type: 'resetRequest',
-  subject: 'Password Reset Request',
+  subject: 'Reset Password Requested',
   route: '/auth/password/reset/update',
   expireAt: 1000 * 60 * 60 
+}
+const dataResetUpdated = {
+  codeLen: null,
+  type: 'emailUpdated',
+  subject: 'Password Reset Complete',
+  route: null,
+  expireAt: null
 }
 
 const allMsgTypes = {
   emailVerify: new Email(dataEmailVerify),
+  emailUpdated: new Email(dataEmailUpdated),
   resetRequest: new Email(dataResetRequest),
-  emailUpdated: new Email(dataEmailUpdated)
+  resetUpdated: new Email(dataResetUpdated)
 }
 
 const transporter = nodemailer.createTransport({

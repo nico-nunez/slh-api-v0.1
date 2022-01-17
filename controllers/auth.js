@@ -133,17 +133,18 @@ module.exports.resetPassUpdateForm = (req, res) => {
 
 
 module.exports.resetPassRequestResult = catchAsync(async (req, res, next) => {
-  const user = await User.findOne({ email: req.body.email });
+  const user = await User.findOne({ 'email.address': req.body.email });
   if (!user || !user.verified || user.googleID) {
     const msg =
-      "Cannot reset password.  Email is not registered, or is associated with an alternative login method.";
+      "Email is either not regitered, verified, or is associated with an alternative login method.";
     throw new ExpressError(msg, 400, "/auth/login");
   }
-  await sendEmailLink(user, "resetRequest");
   req.flash(
     "success",
     "A message has been sent to the email address.  Please check your spam folder if you do not see it in your inbox."
   );
+  await sendEmailLink(user, "resetRequest");
+
   res.redirect("/auth/login");
 });
 
@@ -161,7 +162,7 @@ module.exports.resetPassUpdateResult = catchAsync(async (req, res, next) => {
   }
   await user.setPassword(req.body.password);
   await user.save();
-
+  await sendEmailLink(user, 'resetUpdated');
   req.flash("success", "Successfully updated password");
   res.redirect("/auth/login");
 });

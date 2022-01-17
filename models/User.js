@@ -53,6 +53,7 @@ userSchema.plugin(passportLocalMongoose, {
   });
 
 userSchema.pre('save', function(next){
+  console.log(this);
   if(this.isNew) {
     sendEmailLink(this, 'emailVerify');
   }
