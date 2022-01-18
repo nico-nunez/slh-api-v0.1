@@ -7,49 +7,98 @@
 	<div class="col-lg-5 col-md-6 ms-auto me-auto">
 		<form action="/parties" method="POST" novalidate class="validate-form">
 			<div class="mb-3 form-group">
-				<label class="form-label" for="name">Name</label>
+				<label class="form-label" for="name">
+          Name:
+          <span class="text-muted text-xsmall ms-2">
+            required
+          </span>
+        </label>
 				<input
 					class="form-control"
 					type="text"
 					name="party[name]"
 					id="party-name"
 					placeholder="party name"
+          minlength="3"
+          maxlength="50"
 					required
 				/>
 			</div>
+      <div class="mb-3 form-group">
+				<label class="form-label" for="secret-code">
+          Secret Code: 
+          <span class="text-muted text-xsmall label-aside">
+            optional**
+          </span>
+        </label>
+        <div class="password-input-group">
+          <input
+					class="form-control password-input"
+					type="password"
+					name="party[secretCode]"
+					id="secretCode"
+					placeholder="code to join"
+          minlength="4"
+          maxlength="30"
+					required
+				/>
+        <i class="far fa-eye password-eye-con text-muted"></i>
+        </div>
+      </div>
 			<div class="mb-3 form-group">
-				<label class="form-label" for="party-start">Starts:</label>
+				<label class="form-label" for="party-start">
+          Join by:
+          <span class="text-muted text-xsmall ms-2">
+            required
+          </span>
+        </label>
 				<input
 					type="date"
 					class="form-control"
 					id="party-start"
-					name="party[startsOn]"
+					name="party[joinBy]"
 					required
 				/>
 			</div>
 			<div class="mb-3 form-group">
-				<label class="form-label" for="party-end">Ends:</label>
+				<label class="form-label" for="party-end">
+          Exchange gifts: 
+          <span class="text-muted text-xsmall ms-2">
+            required
+          </span>
+        </label>
 				<input
 					type="date"
 					class="form-control"
 					id="party-end"
-					name="party[endsOn]"
+					name="party[exchangeOn]"
 					required
 				/>
 			</div>
-			<div class="form-check form-switch">
+			<div class="form-check form-switch mb-3">
 				<input
 					class="form-check-input"
 					type="checkbox"
 					role="switch"
 					id="flexSwitchCheckDefault"
-					name="party[isPublic]"
+					name="party[public]"
+          checked
 				/>
-				<label class="form-check-label" for="private">Public</label>
+				<label class="form-check-label" for="private">
+          Public <span class="text-muted">*</span>
+        </label>
 			</div>
-			<a href="/parties" class="btn btn-secondary">Back</a>
 			<button class="btn btn-primary" type="submit">Create</button>
+      <a href="/parties" class="btn btn-danger ms-3">Cancel</a>
 		</form>
+    <div class="mt-5">
+      <p class="text-muted text-xsmall mb-0">
+        * Dictates whether your party can be seen by non members.
+      </p>
+      <p class="text-muted text-xsmall">
+        ** Must be a min. of 8 letters and/or numbers. This will be used to allow people to join, and can be changed at any time. One will be automaticly assigned if you chose not to create your own. 
+      </p>
+    </div>
 	</div>
 </div>
 

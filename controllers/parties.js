@@ -1,4 +1,4 @@
-const { catchAsync, formatDate } = require("../helpers/errors");
+const { catchAsync, formatDate, ExpressError } = require("../helpers/errors");
 const dayjs = require("dayjs");
 const { getSelections } = require("../helpers/utils");
 const Party = require("../models/Party");
@@ -14,37 +14,35 @@ module.exports.createPartyForm = (req, res) => {
 
 module.exports.createParty = catchAsync(async (req, res, next) => {
   const { party } = req.body;
-  party.isPublic = Boolean(party.isPublic);
+  party.public = Boolean(party.public);
   party.creator = req.user._id;
   const newParty = new Party({ ...party });
-  newParty.members.push(req.user._id);
-  await newParty.save();
+  newParty.members.addToSet(req.user._id);
+  const savedParty = await newParty.save();
+  console.log(savedParty);
   req.flash("success", "Success! Your party has been created.");
-  res.redirect(`/parties/${newParty.id}`);
+  res.redirect(`/parties/${savedParty.id}`);
 });
 
 module.exports.showParty = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   const party = await Party.findById(id).populate("creator members lists");
   if (!party) {
-    req.flash("error", "Sorry, coud not find that party");
-    return res.redirect("/parties");
+    throw new ExpressError('Sorry, party could not be found.', 400, '/parties');
   }
+  console.log(party)
   res.render("parties/show", { party });
 });
 
 module.exports.updatePartyForm = catchAsync(async (req, res, next) => {
   const { id } = req.params;
-  const foundParty = await Party.findById(id).populate("creator members lists");
-  if (!foundParty) {
-    req.flash("error", "Sorry, coud not find that party");
-    return res.redirect("/parties");
+  const party = await Party.findById(id).populate("creator members lists");
+  if (!party) {
+    throw new ExpressError('Sorry, party could not be found.', 400, '/parties');
   }
-  
-  const party = foundParty.toObject();
-  party.startsOn = formatDate(foundParty.startsOn);
-  party.endsOn = formatDate(foundParty.endsOn);
-
+  // const party = foundParty.toObject();
+  // party.startsOn = formatDate(foundParty.startsOn);
+  // party.endsOn = formatDate(foundParty.endsOn);
   res.render("parties/edit", { party });
 });
 

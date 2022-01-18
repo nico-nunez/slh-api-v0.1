@@ -39,6 +39,29 @@ const nameSchema = Joi.string()
   .trim()
   .required()
 
+const partyNameSchema = Joi.string()
+  .min(3)
+  .max(50)
+  .alphanum()
+  .trim()
+  .required()
+  .messages({
+    "any.required": "Name is required.",
+    "string.min": "Name must contain at least 3 characters",
+    "string.max": "Name can contain a max of 50 characters.",
+    "string.alphanum": "Name may only contain only letters and/or numbers."
+  });
+
+const partySecretSchema = Joi.string()
+  .min(8)
+  .max(30)
+  .alphanum()
+  .trim()
+  .messages({
+    "string.min": "Secret must contain at least 8 characters",
+    "string.max": "Secret can contain a max of 30 characters.",
+    "string.alphanum": "Secret may only contain only letters and/or numbers."
+  });
 
 function validateInput(joiSchema, req, redirect=null) {
   const redirectURL = redirect || req.originalUrl;
@@ -81,7 +104,7 @@ function validList(req, res, next) {
 		}).required(),
 	});
 
-	validateInput(listSchema, req.body);
+	validateInput(listSchema, req);
 
 	return next();
 }
@@ -89,13 +112,15 @@ function validList(req, res, next) {
 function validParty(req, res, next) {
 	const partySchema = Joi.object({
 		party: Joi.object({
-			name: Joi.string().min(3).max(30).required(),
-			startsOn: Joi.date().required(),
-			endsOn: Joi.date().required(),
-			isPublic: Joi.string(),
-		}).required(),
+			name: partyNameSchema,
+      secretCode: partySecretSchema,
+			joinBy: Joi.date().required(),
+			exchangeOn: Joi.date().required(),
+			public: Joi.string(),
+		})
+    .required()
 	});
-	validateInput(partySchema, req.body);
+	validateInput(partySchema, req, '/parties/new');
 	return next();
 }
 

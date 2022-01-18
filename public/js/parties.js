@@ -14,9 +14,11 @@
   const maxEnd = new Date(minStart);
   maxEnd.setFullYear(maxEnd.getFullYear() + 2);
 
+  startDate.value = formatDate(minStart);
   startDate.setAttribute('min', formatDate(minStart));
   startDate.setAttribute('max', formatDate(maxStart));
 
+  endDate.value = formatDate(minEnd);
   endDate.setAttribute('min', formatDate(minEnd));
   endDate.setAttribute('max', formatDate(maxEnd));
   
@@ -28,8 +30,9 @@
     const newMinEnd = new Date(dateStr);
 
     newMinEnd.setDate(newMinEnd.getDate() + 1);
+    
+    endDate.value = formatDate(newMinEnd);
     endDate.setAttribute('min', formatDate(newMinEnd));
-    endDate.setAttribute('value', '');
   }
 
   function formatDate(dateObj) {

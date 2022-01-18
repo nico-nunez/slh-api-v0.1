@@ -6,13 +6,19 @@ const partySchema = new Schema(
 		name: {
 			type: String,
 			required: true,
+      trim: true,
 			unique: true,
 		},
-		startsOn: {
+    secretCode: {
+      type: String,
+      trim: true,
+      required: true
+    },
+		joinBy: {
 			type: Date,
 			required: true,
 		},
-		endsOn: {
+		exchangeOn: {
 			type: Date,
 			required: true,
 		},
@@ -26,10 +32,10 @@ const partySchema = new Schema(
 		lists: [
       { type: Schema.Types.ObjectId, ref: "List" }
     ],
-		isPublic: {
+		public: {
 			type: Boolean,
 			required: true,
-			default: false,
+			default: true,
 		},
 	},
 	{ timestamps: true }

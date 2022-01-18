@@ -119,3 +119,9 @@ form :invalid {
   right: 30px;
   transform:translateY(-50%)
 }
+
+.form-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
