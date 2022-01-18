@@ -36,28 +36,34 @@
 			</div>
 			<div class="mb-3 form-group">
 				<label class="form-label" for="password">Password</label>
-				<input
-					class="form-control"
+        <div class="password-input-group">
+          <input
+					class="form-control password-input"
 					type="password"
 					name="newUser[password]"
 					id="password"
 					placeholder="password"
 					required
 				/>
+        <i class="far fa-eye password-eye-con text-muted"></i>
+        </div>
         <p class="text-muted text-xsmall mt-1 mb-0">Must be a minimum of 8 characters and contain at least:</p>
         <p class="text-muted text-xsmall mb-0">- an uppercase and a lowercase letter.</p>
         <p class="text-muted text-xsmall mb-0">- a number and a special charcter [!@$%&*?].</p>
       </div>
 			<div class="mb-3 form-group">
 				<label class="form-label" for="confirmPass">Confirm</label>
-				<input
-					class="form-control"
-					type="password"
-					name="newUser[confirmPass]"
-					id="confirmPass"
-					placeholder="re-type password"
-					required
-				/>
+        <div class="password-input-group">
+          <input
+            class="form-control password-input"
+            type="password"
+            name="newUser[confirmPass]"
+            id="confirmPass"
+            placeholder="re-type password"
+            required
+          />
+          <i class="far fa-eye password-eye-con text-muted"></i>
+        </div>
 			</div>
 			<div class="d-flex align-items-end">
 				<button class="btn btn-primary me-3">Register</button>

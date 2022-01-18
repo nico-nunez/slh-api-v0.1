@@ -109,3 +109,13 @@ form :invalid {
 .hidden {
 	display: none;
 }
+
+.password-input-group {
+  position: relative;
+}
+.password-eye-con {
+  position: absolute;
+  top: 50%;
+  right: 30px;
+  transform:translateY(-50%)
+}
