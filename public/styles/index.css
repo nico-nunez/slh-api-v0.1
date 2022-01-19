@@ -1,11 +1,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Petemoss&display=swap");
 
+
 form :invalid {
   border: 2px solid lightgray;
 }
 
+.btn {
+  min-width: 75px;
+}
+
 .card {
-	border-color: slategrey;
+	border-color: #BBB;
 }
 
 .date-full {
@@ -98,7 +103,6 @@ form :invalid {
   cursor: pointer;
   color: #0d6efd;
   text-decoration: underline;
-  float: right;
 }
 
 #email-options.hidden {

@@ -1,6 +1,11 @@
 formatDates(); // format MM-DD-YYYY
 formatLastUpdated();
 const passIcons = document.querySelectorAll('.password-eye-con');
+const passwordText= document.querySelectorAll('.password-text');
+
+function obscureText(elem) {
+  elem.textContent = elem.textContent.replaceAll('', '*');
+}
 
 function formatDates() {
     const datesFull =  document.querySelectorAll('.date-full');

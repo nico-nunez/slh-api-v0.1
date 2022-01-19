@@ -42,7 +42,6 @@ const nameSchema = Joi.string()
 const partyNameSchema = Joi.string()
   .min(3)
   .max(50)
-  .alphanum()
   .trim()
   .required()
   .messages({

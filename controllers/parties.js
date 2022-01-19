@@ -19,18 +19,21 @@ module.exports.createParty = catchAsync(async (req, res, next) => {
   const newParty = new Party({ ...party });
   newParty.members.addToSet(req.user._id);
   const savedParty = await newParty.save();
-  console.log(savedParty);
   req.flash("success", "Success! Your party has been created.");
   res.redirect(`/parties/${savedParty.id}`);
 });
 
 module.exports.showParty = catchAsync(async (req, res, next) => {
   const { id } = req.params;
-  const party = await Party.findById(id).populate("creator members lists");
+  const party = await Party.findById(id)
+    .populate("creator", "displayName")
+    .populate("members", "displayName")
+    .populate("lists", "title")
+    .lean();
+  console.log(party);
   if (!party) {
     throw new ExpressError('Sorry, party could not be found.', 400, '/parties');
   }
-  console.log(party)
   res.render("parties/show", { party });
 });
 
