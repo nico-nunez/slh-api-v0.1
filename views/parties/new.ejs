@@ -24,30 +24,9 @@
 					required
 				/>
 			</div>
-      <div class="mb-3 form-group">
-				<label class="form-label" for="secret-code">
-          Secret Code: 
-          <span class="text-muted text-xsmall label-aside">
-            optional**
-          </span>
-        </label>
-        <div class="password-input-group">
-          <input
-					class="form-control password-input"
-					type="password"
-					name="party[secretCode]"
-					id="secretCode"
-					placeholder="code to join"
-          minlength="4"
-          maxlength="30"
-					required
-				/>
-        <i class="far fa-eye password-eye-con text-muted"></i>
-        </div>
-      </div>
 			<div class="mb-3 form-group">
 				<label class="form-label" for="party-start">
-          Join by:
+          Join Before:
           <span class="text-muted text-xsmall ms-2">
             required
           </span>
@@ -62,7 +41,7 @@
 			</div>
 			<div class="mb-3 form-group">
 				<label class="form-label" for="party-end">
-          Exchange gifts: 
+          Exchange Gifts: 
           <span class="text-muted text-xsmall ms-2">
             required
           </span>
@@ -75,6 +54,26 @@
 					required
 				/>
 			</div>
+      <div class="mb-3 form-group">
+				<label class="form-label" for="party-secret">
+          Secret Code: 
+          <span class="text-muted text-xsmall label-aside">
+            optional**
+          </span>
+        </label>
+        <div class="password-input-group">
+          <input
+					class="form-control password-input"
+					type="password"
+					name="party[secret]"
+					id="join-code"
+					placeholder="code to join"
+          minlength="8"
+          maxlength="30"
+				/>
+        <i class="far fa-eye password-eye-con text-muted"></i>
+        </div>
+      </div>
 			<div class="form-check form-switch mb-3">
 				<input
 					class="form-check-input"
@@ -96,7 +95,7 @@
         * Dictates whether your party can be seen by non members.
       </p>
       <p class="text-muted text-xsmall">
-        ** Must be a min. of 8 letters and/or numbers. This will be used to allow people to join, and can be changed at any time. One will be automaticly assigned if you chose not to create your own. 
+        ** Must be a min. of 8 letters and/or numbers. This wil be used as a method to allow people to join, and can be changed anytime. One will be automaticly generated if left blank.
       </p>
     </div>
 	</div>

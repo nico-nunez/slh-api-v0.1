@@ -36,12 +36,9 @@ const userSchema = new Schema(
       type: String,
       trim: true
     },
-    listsFollowing: [ 
-      {type: Schema.Types.ObjectId, ref: 'List'}
+    memberOf: [
+      {type: Schema.Types.ObjectId, ref: 'Party'}
     ],
-		selections: [
-      {type: Schema.Types.ObjectId, ref: 'Selection'}
-		],
 	},
 	{ timestamps: true }
 );
@@ -53,7 +50,6 @@ userSchema.plugin(passportLocalMongoose, {
   });
 
 userSchema.pre('save', function(next){
-  console.log(this);
   if(this.isNew) {
     sendEmailLink(this, 'emailVerify');
   }

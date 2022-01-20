@@ -9,7 +9,7 @@ const partySchema = new Schema(
       trim: true,
 			unique: true,
 		},
-    secretCode: {
+    secret: {
       type: String,
       trim: true,
       required: true

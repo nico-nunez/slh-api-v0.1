@@ -53,13 +53,14 @@ const partyNameSchema = Joi.string()
 
 const partySecretSchema = Joi.string()
   .min(8)
-  .max(30)
+  .max(32)
   .alphanum()
   .trim()
+  .allow('')
   .messages({
-    "string.min": "Secret must contain at least 8 characters",
-    "string.max": "Secret can contain a max of 30 characters.",
-    "string.alphanum": "Secret may only contain only letters and/or numbers."
+    "string.min": "Code must contain at least 8 characters",
+    "string.max": "Code can contain a max of 32 characters.",
+    "string.alphanum": "Code may only contain only letters and/or numbers."
   });
 
 function validateInput(joiSchema, req, redirect=null) {
@@ -112,7 +113,7 @@ function validParty(req, res, next) {
 	const partySchema = Joi.object({
 		party: Joi.object({
 			name: partyNameSchema,
-      secretCode: partySecretSchema,
+      secret: partySecretSchema,
 			joinBy: Joi.date().required(),
 			exchangeOn: Joi.date().required(),
 			public: Joi.string(),

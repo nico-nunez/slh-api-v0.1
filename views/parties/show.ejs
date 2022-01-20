@@ -8,13 +8,13 @@
 				<div class="card-body text-center pb-0">
 					<h5 class="mb-0">Started By:</h5>
           <p class="fw-bold"><%= party.creator.displayName %></p>
-          <div class="d-flex justify-content-between">
+          <div class="d-flex justify-content-around">
             <div>
               <h5 class="mb-0">Join By:</h5>
               <p class="date-full mb-0"><%= party.joinBy %></p>
             </div>
             <div>
-              <h5 class="mb-0">Exchange Gifts:</h5>
+              <h5 class="mb-0">Gift Exchange:</h5>
               <p class="date-full mb-0"><%= party.exchangeOn %></p>
             </p>
             </div>
@@ -24,9 +24,9 @@
           <div class="party-secret-content text-center mt-0 mb-3">
             <h5>
               Secret Code:
-              <span class="link fs-6" id="party-secret-show">show</span>
+              <span class="link text-small" id="party-secret-show">show</span>
             </h5>
-            <h3 class="hidden" id="party-secret"><%= party.secretCode %></h3>
+            <h3 class="hidden" id="party-secret"><%= party.secret %></h3>
           </div>
           <div class="text-center mb-3 d-flex justify-content-center">
             <a href="/parties/<%= party._id %>/edit" class="btn btn-primary">
@@ -36,26 +36,29 @@
               type="button"
               class="btn btn-danger ms-3"
               data-bs-toggle="modal"
-              data-bs-target="#staticBackdrop"
+              data-bs-target="#delete-party"
             >
               Delete
             </button>
 
             <!-- Modal Confirm Delete -->
-            <%- include('../partials/modals/delete') %> 
-            <form 
-              action="/parties/<%= party._id %>?_method=DELETE" 
-              method="POST"
-              class="hidden"
-              id="delete-item"
-            >
-              <button type="submit" class="btn btn-danger">Confirm</button>
-            </form>
+            <%- include('./partials/modals/delete') %> 
           </div>
 				<% } else { %>
-          <form action="/parties/<%= party._id %>" method="POST">
-            <button class="btn btn-primary" type="submit">Join</button>
-          </form>
+          <div class="text-center mb-3">
+            <button
+            type="button"
+            class="btn btn-primary ms-3"
+            data-bs-toggle="modal"
+            data-bs-target="#party-join"
+            <% if(party.disableJoin) { %> 
+              disabled
+            <% } %>
+            >
+              Join
+            </button>
+          </div>
+          <%- include('./partials/modals/join') %> 
         <% } %> 
 			</div>
 		</div>
@@ -65,24 +68,31 @@
       <div class="col-lg-6 col-md-8 ms-auto me-auto mb-3">
         <div class="card p-4">
           <div class="card-title row text-center">
-              <h2 class="col-6">Member</h2>
-              <h2 class="col-6">List</h2>
+              <h2 class="col-6">Members</h2>
+              <h2 class="col-6">Lists</h2>
           </div>
           <div class="card-bodyp-0">
             <ul class="list-group text-center">
-              <% for (const member of party.members) { %>
+              <% for (const member of members) { %>
               <li class="list-group-item p-2">
                 <div class="row">
                   <div class="col-6">
-                    <a
-                      href="/users/<%= member._id %>/public_profile"
-                      class="link-secondary"
-                    >
+                    <a href="/users/<%= member._id %>/public_profile">
                       <%= member.displayName %>
                     </a>
                   </div>
                   <div class="col-6">
-                    
+                    <% if (lists[member._id]) { %> 
+                      <a href="/users/<%= member._id %>/public_profile">
+                        <%= lists[member._id].title %>
+                      </a>
+                    <% } else { %>
+                      <% if(loggedInUser.id === String(member._id)) { %>
+                        <a href="">Add List</a>
+                      <% } else { %>
+                        <span class="text-muted">n/a</span>
+                      <% } %>
+                    <% } %> 
                   </div>
                 </div>
               </li>
