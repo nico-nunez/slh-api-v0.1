@@ -18,8 +18,8 @@ const errorHandler = (err, req, res, next) => {
   const defaultURL = req.user ? `/users/${req.user.id}` : '/lists';
 	const { status = 500, redirectURL = defaultURL } = err;
 	if (!err.message) err.message = "Oops! Something went wrong with the server.";
-    req.flash('error', err.message);
-    // req.flash('error', err.stack);
+    // req.flash('error', err.message);
+    req.flash('error', err.stack);
     return res.status(status).redirect(redirectURL);
 };
 

@@ -26,11 +26,11 @@ const partySchema = new Schema(
 			type: Schema.Types.ObjectId,
 			ref: "User",
 		},
+    lists: [
+      {type: Schema.Types.ObjectId, ref: 'List'}
+    ],
 		members: [
       { type: Schema.Types.ObjectId, ref: "User" }
-    ],
-		lists: [
-      { type: Schema.Types.ObjectId, ref: "List" }
     ],
 		public: {
 			type: Boolean,
@@ -40,5 +40,7 @@ const partySchema = new Schema(
 	},
 	{ timestamps: true }
 );
+
+partySchema.index({name: 'text', creator: 'text', members: 'text'});
 
 module.exports = mongoose.model("Party", partySchema);

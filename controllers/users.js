@@ -5,18 +5,18 @@ const User = require('../models/User');
 const Party = require('../models/Party')
 
 module.exports.showDashboard = catchAsync(async (req, res, next) => {
-  const currentUser = await User.findById( req.user.id).populate('memberOf', 'name').lean();
+  const currentUser = await User.findById( req.user.id).lean();
+  const parties = await Party.find({members: req.user.id});
   const lists = await List.find({'creator': req.user._id});
-  res.render('users/index', {currentUser, lists});
+  res.render('users/index', {user: currentUser, lists, parties});
 });
 
 
-module.exports.showPublicProfile = catchAsync( async (req, res, next) => {
+module.exports.showProfile = catchAsync( async (req, res, next) => {
   const { id } = req.params;
-  const user = await User.findById(id).populate(memberOf, 'name').lean();
-  const lists = await List.find({ 'creator': id });
-  console.log(user);
-  res.render('users/show', { user, lists});
+  const user = await User.findById(id).lean();
+  const lists = await List.find({ 'creator': id }).lean();
+  res.render('users/profile', { user, lists});
 });
 
 

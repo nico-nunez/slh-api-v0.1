@@ -6,6 +6,7 @@ const parties = require('../controllers/parties');
 
 router.get("/", parties.showPublicParties);
 router.get("/new", isLoggedIn, parties.createPartyForm);
+router.get("/search", isLoggedIn, parties.searchPublicParties);
 
 router.post("/", isLoggedIn, validParty, parties.createParty);
 

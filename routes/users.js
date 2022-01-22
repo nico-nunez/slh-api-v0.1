@@ -14,7 +14,7 @@ const users = require('../controllers/users');
 
 router.get('/:id', isLoggedIn, users.showDashboard);
 
-router.get('/:id/public_profile', isLoggedIn, users.showPublicProfile);
+router.get('/:id/profile', isLoggedIn, users.showProfile);
 
 router.get('/:id/lists', isLoggedIn, isUser, users.showUserLists);
 router.get('/:id/parties', isLoggedIn, isUser, users.showUserParties);

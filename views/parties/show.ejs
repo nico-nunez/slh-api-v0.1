@@ -6,16 +6,22 @@
 		<div class="col-md-6 ms-auto me-auto">
 			<div class="card mb-3">
 				<div class="card-body text-center pb-0">
-					<h5 class="mb-0">Started By:</h5>
-          <p class="fw-bold"><%= party.creator.displayName %></p>
+					<h6 class="mb-0">Started By:</h6>
+          <h5>
+            <a href="/users/<%= party.creator._id %>/profile">
+              <%= party.creator.displayName %>
+            </a>
+          </h5>
           <div class="d-flex justify-content-around">
             <div>
-              <h5 class="mb-0">Join By:</h5>
-              <p class="date-full mb-0"><%= party.joinBy %></p>
+              <h6 class="mb-0">Join</h6>
+              <h6 class="mb-0">Before:</h6>
+              <h5 class="date-full mb-0"><%= party.joinBy %></h5>
             </div>
             <div>
-              <h5 class="mb-0">Gift Exchange:</h5>
-              <p class="date-full mb-0"><%= party.exchangeOn %></p>
+              <h6 class="mb-0">Gift</h6>
+              <h6 class="mb-0">Exchange:</h6>
+              <h5 class="date-full mb-0"><%= party.exchangeOn %></h5>
             </p>
             </div>
           </div>
@@ -42,7 +48,7 @@
             </button>
 
             <!-- Modal Confirm Delete -->
-            <%- include('./partials/modals/delete') %> 
+            <%- include('./modals/delete') %> 
           </div>
 				<% } else { %>
           <div class="text-center mb-3">
@@ -58,7 +64,7 @@
               Join
             </button>
           </div>
-          <%- include('./partials/modals/join') %> 
+          <%- include('./modals/join') %> 
         <% } %> 
 			</div>
 		</div>
@@ -73,7 +79,7 @@
           </div>
           <div class="card-bodyp-0">
             <ul class="list-group text-center">
-              <% for (const member of members) { %>
+              <% for (const member of party.members) { %>
               <li class="list-group-item p-2">
                 <div class="row">
                   <div class="col-6">
@@ -82,7 +88,7 @@
                     </a>
                   </div>
                   <div class="col-6">
-                    <% if (lists[member._id]) { %> 
+                    <% if (memberLists[member._id]) { %> 
                       <a href="/users/<%= member._id %>/public_profile">
                         <%= lists[member._id].title %>
                       </a>

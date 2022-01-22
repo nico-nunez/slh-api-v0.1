@@ -5,6 +5,16 @@ form :invalid {
   border: 2px solid lightgray;
 }
 
+.text-ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.input-select {
+  display: inline-block;
+}
+
 .btn {
   min-width: 75px;
 }

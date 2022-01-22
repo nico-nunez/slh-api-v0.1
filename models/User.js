@@ -36,12 +36,11 @@ const userSchema = new Schema(
       type: String,
       trim: true
     },
-    memberOf: [
-      {type: Schema.Types.ObjectId, ref: 'Party'}
-    ],
 	},
 	{ timestamps: true }
 );
+
+userSchema.index({email: 'text', displayName: 'text'});
 
 userSchema.plugin(passportLocalMongoose, {
   usernameField: 'email.address',

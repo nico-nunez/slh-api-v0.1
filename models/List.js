@@ -27,9 +27,6 @@ const listSchema = new Schema({
     type: Schema.Types.ObjectId, 
     ref: 'User'
   },
-  addedTo: [
-    {type: Schema.Types.ObjectId, ref: 'Party'}
-  ],
   public: {
     type: Boolean,
     required: true,

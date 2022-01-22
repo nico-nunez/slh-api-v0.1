@@ -6,10 +6,28 @@ const User = require("../models/User");
 const List = require("../models/List");
 const { generateCode } = require('../helpers/utils');
 
+
 module.exports.showPublicParties = catchAsync(async (req, res, next) => {
-  const parties = await Party.find().populate("creator", "displayName").lean();
-  res.render("parties/index", { parties });
+  const parties = await Party.aggregate().sample(4);
+  const populated = await Party.populate(parties, {path: 'creator', select: 'displayName'});
+  res.render("parties/index", { parties: populated });
 });
+
+module.exports.searchPublicParties = catchAsync(async (req, res, next) => {
+  const { searchBy, searchString } = req.query;
+  let results = [];
+  if (searchBy === 'creator') {
+    const users = await User.find({$text: {$search: searchString}}).distinct('_id').lean();
+    results = await Party.find({creator: {$in: users}, public: true}).populate('creator', 'displayName').lean();
+  }
+  if (searchBy === 'title') {
+    results = await Party.find({
+      name: {$regex: searchString, $options: 'i'}, public: true
+    }).populate('creator', 'displayName').lean();
+  }
+  
+  res.render("parties/index", { parties: results, search: true });
+})
 
 module.exports.createPartyForm = (req, res) => {
 	res.render("parties/new");
@@ -21,25 +39,25 @@ module.exports.createParty = catchAsync(async (req, res, next) => {
   party.creator = req.user.id;
   party.secret = party.secret || generateCode(16, 'alphaNumeric');
   const newParty = new Party({ ...party });
+  newParty.members.addToSet(req.user.id);
   const savedParty = await newParty.save();
-  await User.updateOne({_id: req.user._id}, {$addToSet: {'memberOf': savedParty.id}});
   req.flash("success", "Success! Your party has been created.");
   res.redirect(`/parties/${savedParty.id}`);
 });
 
 module.exports.showParty = catchAsync(async (req, res, next) => {
-  const party = await Party.findById(req.params.id)
-    .populate('creator', 'displayName').lean();
-  const members = await User.find({memberOf: party._id}, 'displayName').lean();
-  const partyLists = await List.find({addedTo: party.id},'title').lean();
-  const lists = {}
-  partyLists.forEach(list => lists[list.id] = list);
-  if (!party) {
+  const foundParty = await Party.findById(req.params.id)
+    .populate('creator', 'displayName')
+    .populate('members', 'displayName')
+    .populate('lists', 'creator.displayName').lean();
+  if (!foundParty) {
     throw new ExpressError('Sorry, party could not be found.', 400, '/parties');
   }
-  const isMember = members.filter(member => String(member._id) === req.user.id)
-  party.disableJoin = isMember.length || isPastJoinDate(party.joinBy);
-  res.render("parties/show", { party, members, lists });
+  const memberLists = {}
+  foundParty.lists.forEach(list => memberLists[list.id] = list);
+  const isMember = foundParty.members.filter(member => String(member._id) === req.user.id)
+  foundParty.disableJoin = isMember.length || isPastJoinDate(foundParty.joinBy);
+  res.render("parties/show", { party: foundParty, memberLists });
 });
 
 module.exports.updatePartyForm = catchAsync(async (req, res, next) => {
@@ -103,7 +121,7 @@ module.exports.joinParty = catchAsync(async (req, res, next) => {
   if (foundParty.secretCode !== joinCode) {
     throw new ExpressError('Join request denied. Invalid code.', 403, `/parties/${id}`);
   }
-  await User.updateOne({_id: req.user.id}, {$addToSet: {memberOf: foundParty._id}});
+  foundParty.members.addedTo(req.user.id);
   req.flash('success', 'Sucessfully joined party.');
   res.redirect(`/parties/${foundParty._id}`);
 });
