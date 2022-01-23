@@ -1,52 +1,53 @@
-<% layout('layouts/boilerplate') %> 
+<% layout('layouts/boilerplate') %>
 
 <div class="row">
-    <div class="text-center">
-        <h1><%= list.title %></h1>
-        <p class="text-muted"> 
-            <a href="/users/<%= list.creator._id %>/public_profile" class="link-secondary">
-                - <%= list.creator.profileName %> 
-            </a>
-        </p>
-    </div>
-    <div class="col-lg-4 col-md-6 ms-auto me-auto">
+	<div class="text-center">
+		<h1><%= list.title %></h1>
+		<div>
+			<% if (loggedInUser) { %>
+
+			<% } else { %>
+			<p class="text-muted">
+				<a href="/users/<%= list.creator._id %>/profile" class="link-secondary">
+					- <%= list.creator.displayName %>
+				</a>
+			</p>
+			<% } %>
+		</div>
+	</div>
+	<div class="col-lg-4 col-md-6 m-auto mt-4">
 		<div class="card mb-3">
 			<div class="card-body">
-                <ul class="list-group mb-3">
-                    <% for (const item of list.items) { %> 
-                        <li class="list-group-item">
-                            <img src="/assets/icons8-present-60.png" class="icon-present"/>
-                            <% if (item.link) { %>
-                                <a href="<%= item.link %>" target="_blank">
-                                   <%= item.description %>
-                                </a>
-                            <% } else { %>
-                                <span> <%= item.description %></span>
-                            <% } %> 
-                        </li>
-                    <% } %>
-                </ul>
-                <div class="text-muted text-small text-center">
-                    <p class="mb-0">
-                        updated - 
-                        <span class="updatedAt">
-                            <%= list.updatedAt %>
-                        </span>
-                    </p>
-                </div>
+				<ul class="list-group mb-3">
+					<% for (const item of list.items) { %>
+					<li class="list-group-item">
+						<img src="/assets/icons8-present-60.png" class="icon-present" />
+						<% if (item.link) { %>
+						<a href="<%= item.link %>" target="_blank">
+							<%= item.description %>
+						</a>
+						<% } else { %>
+						<span> <%= item.description %></span>
+						<% } %>
+					</li>
+					<% } %>
+				</ul>
+				<div class="text-muted text-small text-center">
+					<p class="mb-0">
+						updated -
+						<span class="updatedAt"> <%= list.updatedAt %> </span>
+					</p>
+				</div>
 			</div>
 		</div>
-        <% if (loggedInUser && list.creator.equals(loggedInUser._id)) { %> 
-            <div class="d-flex justify-content-between mb-3">
-                <a href="/lists/<%= list._id %>/edit" class="btn btn-secondary">Edit</a>
-                <form action="/lists/<%= list._id %>?_method=DELETE" method="POST">
-                    <button type="submit" class="btn btn-danger">
-                        Delete
-                    </button>
-                </form>
-            </div>
-        <% } %> 
-        <a href="/lists" class="">Back</a>
+		<% if (loggedInUser && list.creator.equals(loggedInUser._id)) { %>
+		<div class="d-flex justify-content-between mb-3">
+			<a href="/lists/<%= list._id %>/edit" class="btn btn-secondary">Edit</a>
+			<form action="/lists/<%= list._id %>?_method=DELETE" method="POST">
+				<button type="submit" class="btn btn-danger">Delete</button>
+			</form>
+		</div>
+		<% } %>
+		<a href="/lists" class="">Back</a>
 	</div>
 </div>
-

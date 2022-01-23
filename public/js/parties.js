@@ -1,6 +1,6 @@
 (function() {
-  const startDate = document.querySelector('#party-start');
-  const endDate = document.querySelector('#party-end');
+  const joinDate = document.querySelector('#party-join');
+  const exchangeDate = document.querySelector('#party-exchange');
   const showSecret = document.querySelector('#party-secret-show');
 
   // --- PARTIES/NEW ---
@@ -13,38 +13,41 @@
       return `${dateObj.getFullYear()}-${monthFormatted}-${dateFormatted}`
     }
 
-    const minStart = new Date();
-    minStart.setDate(minStart.getDate() + 1);
+    if(!joinDate.value && !exchangeDate.value) {
+      const minJoin = new Date();
+      minJoin.setDate(minJoin.getDate() + 1);
 
-    const maxStart = new Date();
-    maxStart.setFullYear(maxStart.getFullYear() + 2);
+      const maxJoin = new Date();
+      maxJoin.setFullYear(maxJoin.getFullYear() + 2);
 
-    const minEnd = new Date(minStart);
-    minEnd.setDate(minEnd.getUTCDate() + 1);
+      const minExchange = new Date(minJoin);
+      minExchange.setDate(minExchange.getUTCDate() + 1);
 
-    const maxEnd = new Date(minStart);
-    maxEnd.setFullYear(maxEnd.getFullYear() + 2);
+      const maxExchange = new Date(minJoin);
+      maxExchange.setFullYear(maxExchange.getFullYear() + 2);
 
-    startDate.value = formatDate(minStart);
-    startDate.setAttribute('min', formatDate(minStart));
-    startDate.setAttribute('max', formatDate(maxStart));
+      joinDate.value = formatDate(minJoin);
+      joinDate.setAttribute('min', formatDate(minJoin));
+      joinDate.setAttribute('max', formatDate(maxJoin));
 
-    endDate.value = formatDate(minEnd);
-    endDate.setAttribute('min', formatDate(minEnd));
-    endDate.setAttribute('max', formatDate(maxEnd));
+      exchangeDate.value = formatDate(minExchange);
+      exchangeDate.setAttribute('min', formatDate(minExchange));
+      exchangeDate.setAttribute('max', formatDate(maxExchange));
+    }
     
     const handleDateChange = evt => {
+      console.log('ran')
       const dateArr = evt.target.value.split('-');
       const dateStr = dateArr.join('/')
-      const newMinEnd = new Date(dateStr);
+      const newMinExchange = new Date(dateStr);
 
-      newMinEnd.setDate(newMinEnd.getDate() + 1);
+      newMinExchange.setDate(newMinExchange.getDate() + 1);
       
-      endDate.value = formatDate(newMinEnd);
-      endDate.setAttribute('min', formatDate(newMinEnd));
+      exchangeDate.value = formatDate(newMinExchange);
+      exchangeDate.setAttribute('min', formatDate(newMinExchange));
     }
 
-    startDate.addEventListener('change', handleDateChange);
+    joinDate.addEventListener('change', handleDateChange);
   }
 
 
@@ -57,7 +60,7 @@
   }
 
   // --- PARTIES/NEW ---
-  if(startDate && endDate)
+  if(joinDate && exchangeDate)
     setDateInputs();
 
   // --- PARTIES/SHOW ---

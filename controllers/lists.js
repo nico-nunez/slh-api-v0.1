@@ -23,7 +23,7 @@ module.exports.createList = catchAsync( async (req, res, next) => {
 
 
 module.exports.showList = catchAsync( async (req, res, next) => {
-  const list = await List.findById(req.params.id).populate('creator');
+  const list = await List.findById(req.params.id).populate('creator', 'displayName').lean();
   if(!list) {
     req.flash('error', "Sorry, coud not find that list");
     return res.redirect('/parties');

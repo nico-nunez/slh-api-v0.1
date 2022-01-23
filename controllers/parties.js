@@ -25,7 +25,6 @@ module.exports.searchPublicParties = catchAsync(async (req, res, next) => {
       name: {$regex: searchString, $options: 'i'}, public: true
     }).populate('creator', 'displayName').lean();
   }
-  
   res.render("parties/index", { parties: results, search: true });
 })
 
@@ -53,39 +52,35 @@ module.exports.showParty = catchAsync(async (req, res, next) => {
   if (!foundParty) {
     throw new ExpressError('Sorry, party could not be found.', 400, '/parties');
   }
-  const memberLists = {}
-  foundParty.lists.forEach(list => memberLists[list.id] = list);
+  const lists = {}
+  foundParty.lists.forEach(list => lists[String(list.creator._id)] = list);
   const isMember = foundParty.members.filter(member => String(member._id) === req.user.id)
   foundParty.disableJoin = isMember.length || isPastJoinDate(foundParty.joinBy);
-  res.render("parties/show", { party: foundParty, memberLists });
+  res.render("parties/show", { party: foundParty, lists });
 });
 
 module.exports.updatePartyForm = catchAsync(async (req, res, next) => {
   const { id } = req.params;
-  const party = await Party.findById(id).populate("creator members lists");
+  const party = await Party.findById(id).lean();
   if (!party) {
     throw new ExpressError('Sorry, party could not be found.', 400, '/parties');
   }
-  // const party = foundParty.toObject();
-  // party.startsOn = formatDate(foundParty.startsOn);
-  // party.endsOn = formatDate(foundParty.endsOn);
+  party.joinBy = formatDate(party.joinBy);
+  party.exchangeOn = formatDate(party.exchangeOn);
   res.render("parties/edit", { party });
 });
 
-module.exports.updateParty = catchAsync(async (req, res, next) => {
+module.exports.updatePartyDetails = catchAsync(async (req, res, next) => {
   const { id } = req.params;
-  const party = await Party.findById(id);
-  if (!party) {
-    req.flash("error", "Sorry, coud not find that party");
+  const { party } = req.body;
+  party.secret = party.secret || generateCode(16, 'alphaNumeric');
+  party.public = Boolean(party.public);
+  const updatedParty = await Party.findByIdAndUpdate(id, party).lean();
+  if (!updatedParty) {
+    req.flash("error", "Party not found.");
     return res.redirect("/parties");
   }
-  if (party.members.includes(req.user._id)) {
-    req.flash("error", "Already a member.");
-  } else {
-    party.members.push(req.user._id);
-    await party.save();
-  }
-  res.redirect(party._id);
+  res.redirect(`/parties/${updatedParty._id}`);
 });
 
 module.exports.deleteParty = catchAsync(async (req, res, next) => {
@@ -94,6 +89,53 @@ module.exports.deleteParty = catchAsync(async (req, res, next) => {
   req.flash("success", "Success! Party has been deleted.");
   res.redirect("/parties");
 });
+
+
+module.exports.addMember = catchAsync(async (req, res, next) => {
+  const { id } = req.params
+  const foundParty = await Party.findById(id);
+  if (!foundParty) {
+    throw new ExpressError('Sorry, party could not be found.', 400, '/parties');
+  }
+  if (isPastJoinDate(foundParty.joinBy)) {
+    throw new ExpressError('Deadline to join has passed.', 403, `/parties/${id}`);
+  }
+  if (foundParty.secret !== req.body.secret ) {
+    throw new ExpressError('Join request denied. Invalid code.', 403, `/parties/${id}`);
+  }
+  foundParty.members.addToSet(req.user.id);
+  await foundParty.save();
+  req.flash('success', 'Sucessfully joined party.');
+  res.redirect(`/parties/${foundParty._id}`);
+});
+
+module.exports.removeMembersForm = catchAsync(async (req, res, next) => {
+  const foundParty = await Party.findById(req.params.id).populate('members', 'displayName').lean();
+  if (!foundParty) {
+    throw new ExpressError('Sorry, party could not be found.', 400, '/parties');
+  }
+  res.render('parties/editMembers', {party: foundParty})
+})
+
+module.exports.editMembers = catchAsync(async (req, res, next) => {
+  const { id } = req.params
+  const { secret=undefined, members=undefined } = req.body
+  const foundParty = await Party.findById(id);
+  if (!foundParty) {
+    throw new ExpressError('Sorry, party could not be found.', 400, '/parties');
+  }
+  if (secret) {
+    const err = await addMember(foundParty, secret, req.user.id);
+    if (err) throw err;
+    req.flash('success', 'Sucessfully joined party.');
+  }
+  if(members) {
+    await Party.updateOne({_id: id},{$pull: {members: {$in: members}}});
+  }
+  res.redirect(`/parties/${foundParty._id}`);
+})
+
+
 
 module.exports.startParty = catchAsync(async (req, res, next) => {
   const party = await Party.findById(req.params.id).populate("members");
@@ -108,24 +150,6 @@ module.exports.startParty = catchAsync(async (req, res, next) => {
   res.redirect(`/parties/${party._id}`);
 });
 
-module.exports.joinParty = catchAsync(async (req, res, next) => {
-  const { joinCode } = req.body;
-  const { id } = req.params
-  const foundParty = await Party.findById(id).lean();
-  if (!foundParty) {
-    throw new ExpressError('Sorry, party could not be found.', 400, '/parties');
-  }
-  if (isPastJoinDate(foundParty.joinBy)) {
-    throw new ExpressError('Deadline to join has passed.', 403, `/parties/${id}`);
-  }
-  if (foundParty.secretCode !== joinCode) {
-    throw new ExpressError('Join request denied. Invalid code.', 403, `/parties/${id}`);
-  }
-  foundParty.members.addedTo(req.user.id);
-  req.flash('success', 'Sucessfully joined party.');
-  res.redirect(`/parties/${foundParty._id}`);
-});
-
 
 function isPastJoinDate(joinDate) {
   const now = Date.now();
@@ -133,4 +157,19 @@ function isPastJoinDate(joinDate) {
   const current = now - offset;
   const end = joinDate.getTime();
   return end - current <= 0;
+}
+
+async function addMember(party, secret, userID) {
+  if (isPastJoinDate(party.joinBy)) {
+    return new ExpressError('Deadline to join has passed.', 403, `/parties/${party._id}`);
+  }
+  if (party.secret !== secret ) {
+    return new ExpressError('Join request denied. Invalid code.', 403, `/parties/${party._id}`);
+  }
+  party.members.addToSet(userID);
+  await party.save();
+}
+
+async function removeMembers(party, members) {
+
 }

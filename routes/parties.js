@@ -12,8 +12,9 @@ router.post("/", isLoggedIn, validParty, parties.createParty);
 
 router.get("/:id", isLoggedIn, parties.showParty);
 router.get("/:id/edit", isLoggedIn, isCreatorParty, parties.updatePartyForm);
-router.put("/:id",	isLoggedIn, parties.updateParty);
-router.put("/:id/join",	isLoggedIn, parties.joinParty);
+router.put("/:id",	isLoggedIn, isCreatorParty, validParty, parties.updatePartyDetails);
+router.get("/:id/members/edit", isLoggedIn, isCreatorParty, parties.removeMembersForm);
+router.put("/:id/members",	isLoggedIn, parties.editMembers);
 
 router.delete("/:id", isLoggedIn, isCreatorParty, parties.deleteParty);
 router.get("/:id/start",isLoggedIn,	isCreatorParty, parties.startParty);

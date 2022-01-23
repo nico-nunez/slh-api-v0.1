@@ -24,11 +24,11 @@
         <h5><%= party.name %></h5>
         <p>Enter party code:</p>
         <form 
-          action="/parties/<%= party._id %>/join?_method=PUT"
+          action="/parties/<%= party._id %>/members?_method=PUT"
           method="POST"
           id="party-join-form"
         >
-          <input type="text" class="form-control" name="joinCode">
+          <input type="text" class="form-control" name="secret">
         </form>
       </div>
       <div class="modal-footer">

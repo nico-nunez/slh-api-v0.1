@@ -3,7 +3,7 @@
 <h1 class="text-center"><%= party.name %></h1>
 <div class="col-md-12">
 	<div class="row">
-		<div class="col-md-6 ms-auto me-auto">
+		<div class="col-md-6 m-auto">
 			<div class="card mb-3">
 				<div class="card-body text-center pb-0">
 					<h6 class="mb-0">Started By:</h6>
@@ -71,38 +71,67 @@
 	</div>
 	<div class="row">
     <div class="col-12">
-      <div class="col-lg-6 col-md-8 ms-auto me-auto mb-3">
+      <div class="col-lg-8 col-md-10 m-auto mb-3">
         <div class="card p-4">
           <div class="card-title row text-center">
-              <h2 class="col-6">Members</h2>
-              <h2 class="col-6">Lists</h2>
-          </div>
-          <div class="card-bodyp-0">
-            <ul class="list-group text-center">
-              <% for (const member of party.members) { %>
-              <li class="list-group-item p-2">
-                <div class="row">
-                  <div class="col-6">
-                    <a href="/users/<%= member._id %>/public_profile">
-                      <%= member.displayName %>
-                    </a>
-                  </div>
-                  <div class="col-6">
-                    <% if (memberLists[member._id]) { %> 
-                      <a href="/users/<%= member._id %>/public_profile">
-                        <%= lists[member._id].title %>
-                      </a>
-                    <% } else { %>
-                      <% if(loggedInUser.id === String(member._id)) { %>
-                        <a href="">Add List</a>
-                      <% } else { %>
-                        <span class="text-muted">n/a</span>
-                      <% } %>
-                    <% } %> 
-                  </div>
+            <div class="col-sm-6">
+              <h2>Members</h2>
+              <% if (loggedInUser && party.creator._id.equals(loggedInUser._id)) { %>
+                <div class="mb-3">
+                  <a href="/parties/<%= party._id %>/members/edit" class="btn btn-danger">
+                    Edit
+                  </a>
                 </div>
-              </li>
               <% } %>
+            </div>
+            <div class="col-sm-6">
+              <h2>Lists</h2>
+            </div>
+          </div>
+          <div class="card-body p-0">
+            <ul class="list-group text-center">
+              <% if (party.members.filter(member => String(member._id) === loggedInUser.id).length > 0) { %>
+                <li class="list-group-item p-2">
+                  <div class="row">
+                    <div class="col-6">
+                        <a href="/users/<%= loggedInUser.id %>">
+                          <%= loggedInUser.displayName %>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                      <% if (lists[loggedInUser.id]) { %> 
+                        <a href="/lists/<%= lists[loggedInUser.id]._id %>">
+                          <%= lists[member._id].title %>
+                        </a>
+                      <% } else { %>
+                        <a href="">Add List</a>
+                      <% } %> 
+                    </div>
+                  </div>
+                </li>
+              <% } %>
+              <% for (const member of party.members) { %>
+                <% if (String(member._id) !== loggedInUser.id) { %>
+                  <li class="list-group-item p-2">
+                    <div class="row">
+                      <div class="col-6">
+                        <a href="/users/<%= member._id %>/profile">
+                          <%= member.displayName %>
+                        </a>
+                      </div>
+                      <div class="col-6">
+                        <% if (lists[String(member._id)]) { %> 
+                          <a href="/users/<%= member._id %>/profile">
+                            <%= lists[member._id].title %>
+                          </a>
+                          <% } else { %>
+                            <span class="text-muted">n/a</span>
+                          <% } %>
+                      </div>
+                    </div>
+                  </li>
+              <% } %>
+            <% } %>
             </ul>
           </div>
         </div>
@@ -110,5 +139,6 @@
     </div>
 	</div>
 </div>
+
 
 <script src="/js/parties.js"></script>
