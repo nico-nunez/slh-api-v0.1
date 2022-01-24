@@ -5,6 +5,10 @@ form :invalid {
   border: 2px solid lightgray;
 }
 
+.pointer:hover {
+  cursor: pointer;
+}
+
 .text-ellipsis {
   overflow: hidden;
   white-space: nowrap;

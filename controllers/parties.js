@@ -22,7 +22,7 @@ module.exports.searchPublicParties = catchAsync(async (req, res, next) => {
   }
   if (searchBy === 'title') {
     results = await Party.find({
-      name: {$regex: searchString, $options: 'i'}, public: true
+      title: {$regex: searchString, $options: 'i'}, public: true
     }).populate('creator', 'displayName').lean();
   }
   res.render("parties/index", { parties: results, search: true });

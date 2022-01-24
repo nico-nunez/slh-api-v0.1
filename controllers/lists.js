@@ -3,7 +3,11 @@ const { catchAsync } = require('../helpers/errors');
 
 
 module.exports.showPublicLists = catchAsync( async (req, res, next) => {
-  const lists = await List.find({}).populate('creator');
+  const allLists = await List.find().populate('creator', 'displayName').limit(6).sort({updatedAt: -1}).lean();
+  const lists = allLists.map(list => {
+    list.showThreeItems = list.items.slice(0,3);
+    return list;
+  });
   res.render('lists/index', {lists});
 });
 
@@ -13,9 +17,13 @@ module.exports.createListForm = (req, res) => {
 
 module.exports.createList = catchAsync( async (req, res, next) => {
   const { list } = req.body;
-  const newList = new List({...list});
-  newList.creator = req.user._id;
-  newList.parties = []
+  const items = list.items.filter(item => item.description);
+  const newList = new List({
+    title: list.title,
+    items,
+    public: Boolean(list.public)
+  });
+  newList.creator = req.user.id;
   await newList.save();
   req.flash('success', 'Success! New List created.');
   res.redirect(`lists/${newList._id}`);
@@ -23,7 +31,7 @@ module.exports.createList = catchAsync( async (req, res, next) => {
 
 
 module.exports.showList = catchAsync( async (req, res, next) => {
-  const list = await List.findById(req.params.id).populate('creator', 'displayName').lean();
+  const list = await List.findById(req.params.id).populate('creator', 'displayName');
   if(!list) {
     req.flash('error', "Sorry, coud not find that list");
     return res.redirect('/parties');

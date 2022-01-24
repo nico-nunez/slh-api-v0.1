@@ -1,61 +1,94 @@
-<% layout('layouts/boilerplate') %> 
+<% layout('layouts/boilerplate') %>
 
-<link rel="stylesheet" href="/styles/lists.css">
+<link rel="stylesheet" href="/styles/lists.css" />
 
 <div class="row">
-    <h1 class="text-center">Add a new list</h1>
-    <div class="col-lg-5 col-md-6 ms-auto me-auto">
-        <form action="/lists" method="POST" novalidate class="validate-form">
-            <div class="mb-3 form-group">
-                <label class="form-label" for="title">Title</label>
-                <input 
-                class="form-control" 
-                type="text" 
-                name="list[title]" 
-                id="title"
-                placeholder="List Title"
-                required
-            >
-            </div>
-            <p class="mb-1">Items:</p>
-            <div class="card mb-3">
-                <div class="card-body items-input-content">
-                    <div class="item-input-group">
-                        <label class="form-label" for="item">Name or Description</label>
-                        <input 
-                            type="text" 
-                            name="list[items][0][description]" 
-                            id="item"
-                            class="form-control"
-                            placeholder="enter description"
-                            required
-                        >
-                        <label class="form-label mt-3" for="link">Link</label>
-                        <input 
-                            type="text" 
-                            name="list[items][0][link]" 
-                            id="link"
-                            class="form-control"
-                            placeholder="enter link"
-                        >
-                    </div>
-                </div>
-                <div class="mb-3 item-btns">
-                    <a href="#" class="btn btn-secondary ms-3 mt-2 add-item">
-                        Add Another
-                    </a>
-                    <a href="#" class="btn btn-danger ms-3 mt-2 cancel-item hidden">
-                        Cancel
-                    </a>
-                </div>
-            </div>
-            <div>
-                <button type="submit" class="btn btn-primary">Create List</button>
-                <a href="/lists" class="btn btn-danger">Cancel</a>
-            </div>
-        </form>
-    </div>
+	<h1 class="text-center">Add a new list</h1>
+	<div class="col-lg-5 col-md-6 ms-auto me-auto">
+		<form action="/lists" method="POST" novalidate class="validate-form">
+			<div class="mb-3 form-group">
+				<label class="form-label" for="name">
+					Title:
+					<span class="text-muted text-xsmall ms-2"> required </span>
+				</label>
+				<input
+					class="form-control"
+					type="text"
+					name="list[title]"
+					id="title"
+					placeholder="List Title"
+					required
+				/>
+			</div>
+			<p class="mb-1">Items:</p>
+      <div class="card mb-3">
+        <div class="card-body" id="list-items-added">
+          <p class="text-muted mb-0" id="list-items-none">-- no items added --</p>
+        </div>
+      </div>
+			<div class="card mb-3">
+				<div class="card-body items-input-content">
+					<div id="list-item-add">
+						<div class="item-input-group">
+							<label class="form-label" for="list-item-description">
+								Description:
+								<span class="text-muted text-xsmall ms-2"> required </span>
+							</label>
+							<input
+								type="text"
+								name="list[items][0][description]"
+								id="list-item-description"
+								class="form-control"
+								placeholder="enter description"
+								required
+							/>
+							<label class="form-label mt-3" for="list-item-link">
+								Link:
+								<span class="text-muted text-xsmall ms-2"> optional </span>
+							</label>
+							<input
+								type="text"
+								name="list[items][0][link]"
+								id="list-item-link"
+								class="form-control"
+								placeholder="enter link"
+							/>
+						</div>
+					</div>
+				</div>
+				<div class="mb-3 item-btns">
+					<a href="#" class="btn btn-secondary ms-3 mt-2 add-item">
+						Add Item
+					</a>
+					<a href="#" class="btn btn-danger ms-3 mt-2 cancel-item hidden">
+						Cancel
+					</a>
+				</div>
+			</div>
+			<div class="form-check form-switch mb-3">
+				<input
+					class="form-check-input"
+					type="checkbox"
+					role="switch"
+					id="flexSwitchCheckDefault"
+					name="list[public]"
+					checked
+				/>
+				<label class="form-check-label" for="private">
+					Public <span class="text-muted">*</span>
+				</label>
+			</div>
+			<div>
+				<button type="submit" class="btn btn-primary">Create List</button>
+				<a href="/lists" class="btn btn-danger">Cancel</a>
+			</div>
+		</form>
+		<div class="mt-5">
+			<p class="text-muted text-xsmall mb-0">
+				* Dictates whether your list can be seen by others.
+			</p>
+		</div>
+	</div>
 </div>
 
 <script src="/js/lists.js"></script>
-

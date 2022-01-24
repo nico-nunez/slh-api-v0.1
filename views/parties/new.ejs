@@ -3,12 +3,12 @@
 <link rel="stylesheet" href="/styles/lists.css" />
 
 <div class="row">
-	<h1 class="text-center">Get The Party Started!</h1>
-	<div class="col-lg-5 col-md-6 ms-auto me-auto">
+	<h1 class="text-center">Secret Santa Party</h1>
+	<div class="col-lg-5 col-md-6 m-auto">
 		<form action="/parties" method="POST" novalidate class="validate-form">
 			<div class="mb-3 form-group">
 				<label class="form-label" for="name">
-          Name:
+          Title:
           <span class="text-muted text-xsmall ms-2">
             required
           </span>
@@ -16,9 +16,9 @@
 				<input
 					class="form-control"
 					type="text"
-					name="party[name]"
-					id="party-name"
-					placeholder="party name"
+					name="party[title]"
+					id="party-title"
+					placeholder="party title"
           minlength="3"
           maxlength="50"
 					required

@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const partySchema = new Schema(
 	{
-		name: {
+		title: {
 			type: String,
 			required: true,
       trim: true,
@@ -41,6 +41,6 @@ const partySchema = new Schema(
 	{ timestamps: true }
 );
 
-partySchema.index({name: 'text', creator: 'text', members: 'text'});
+partySchema.index({title: 'text', creator: 'text', members: 'text'});
 
 module.exports = mongoose.model("Party", partySchema);

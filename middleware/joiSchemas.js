@@ -39,7 +39,7 @@ const nameSchema = Joi.string()
   .trim()
   .required()
 
-const partyNameSchema = Joi.string()
+const partyTitleSchema = Joi.string()
   .min(3)
   .max(50)
   .trim()
@@ -93,7 +93,7 @@ function validRegistration(req, res, next) {
 
 function validList(req, res, next) {
 	const itemSchema = Joi.object({
-		description: Joi.string().min(3).max(30).required(),
+		description: Joi.string().max(50).allow(""),
 		link: Joi.string().allow(""),
 	});
 
@@ -101,6 +101,7 @@ function validList(req, res, next) {
 		list: Joi.object({
 			title: Joi.string().min(3).max(50).required(),
 			items: Joi.array().items(itemSchema),
+      public: Joi.string().allow('')
 		}).required(),
 	});
 
@@ -112,7 +113,7 @@ function validList(req, res, next) {
 function validParty(req, res, next) {
 	const partySchema = Joi.object({
 		party: Joi.object({
-			name: partyNameSchema,
+			title: partyTitleSchema,
       secret: partySecretSchema,
 			joinBy: Joi.date().required(),
 			exchangeOn: Joi.date().required(),

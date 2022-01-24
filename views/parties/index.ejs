@@ -1,14 +1,14 @@
 <% layout('layouts/boilerplate') %>
 
 <div class="text-center mb-3">
-    <h1 class="">Party Central</h1>
+    <h2 class="">Secret Santa Parties</h2>
     <form action="/parties/search" method="GET" id="search-parties">
       <div class="form-group row justify-content-center">
         <div class="col-sm-5 p-1">
           <input 
             type="text"
             class="form-control border-info"
-            placeholder="search..."
+            placeholder="search parties"
             name="searchString"
           >
         </div>
@@ -19,11 +19,11 @@
           class="form-check-input ms-3"
           type="radio"
           name="searchBy"
-          id="flexRadioDefault1"
+          id="party-title"
           checked
           value="title"
         >
-        <label class="form-check-label" for="flexRadioDefault1">
+        <label class="form-check-label" for="party-title">
           Title
         </label>
       </div>
@@ -32,21 +32,22 @@
           class="form-check-input"
           type="radio"
           name="searchBy"
-          id="flexRadioDefault2"
+          id="party-creator"
+          value="creator"
         >
-        <label class="form-check-label" for="flexRadioDefault2">
+        <label class="form-check-label" for="party-creator">
           Creator
         </label>
       </div>
     </form>
     <div class="row">
       <div class="col-md-4 m-auto d-flex justify-content-around mt-3">
-        <button form="search-parties" type="submit" class="btn btn-primary">Search</button>
-        <a href="/parties/new" class="btn btn-secondary">Create</a>
+        <button form="search-parties" type="submit" class="btn btn-success">Search</button>
+        <a href="/parties/new" class="btn btn-primary">New Party</a>
       </div>
     </div>
 </div>
-<div class="col-md-12">
+<div class="col-md-10 m-auto">
     <div class="row">
       <% if (typeof(search) !== 'undefined') { %> 
       <p class="fst-italic text-center text-muted">Search Results:</p>
@@ -54,10 +55,10 @@
       <p class="fst-italic text-center text-muted">Recently created:</p>
       <% } %> 
         <% for (const party of parties) { %>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="card mb-3">
                     <div class="card-body text-center">
-                        <h2 class="card-title text-ellipsis"><%= party.name %></h2>
+                        <h2 class="card-title text-ellipsis"><%= party.title %></h2>
                         <div class="d-flex justify-content-around text-muted fst-italic">
                           <p class="text-muted fs-6">
                             Creator:                           
@@ -70,7 +71,7 @@
                           </p>
                           <p>Members: <%= party.members.length %></p>
                         </div>
-                        <a href="/parties/<%= party._id %>" class="btn btn-primary">View</a>
+                        <a href="/parties/<%= party._id %>" class="btn btn-danger">View</a>
                     </div>
                 </div>
             </div>
