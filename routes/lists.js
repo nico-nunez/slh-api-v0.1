@@ -7,7 +7,7 @@ const { isLoggedIn, isCreatorList } = require('../middleware/validators');
 const lists = require('../controllers/lists');
 
 router.get('/', lists.showPublicLists);
-
+router.get('/search', lists.searchPublicLists);
 router.get('/new', isLoggedIn, lists.createListForm);
 router.post('/', isLoggedIn, validList, lists.createList);
 

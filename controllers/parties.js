@@ -25,7 +25,7 @@ module.exports.searchPublicParties = catchAsync(async (req, res, next) => {
       title: {$regex: searchString, $options: 'i'}, public: true
     }).populate('creator', 'displayName').lean();
   }
-  res.render("parties/index", { parties: results, search: true });
+  res.render("parties/index", { parties: results, searchBy });
 })
 
 module.exports.createPartyForm = (req, res) => {

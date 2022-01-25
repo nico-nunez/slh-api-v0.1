@@ -2,10 +2,10 @@
 
 
 <div class="row text-center">
-	<h2 class="">Lists</h2>
-	<form action="" method="GET" id="search-lists">
+	<h2 class="">Holiday Lists</h2>
+	<form action="/lists/search" method="GET" id="search-lists">
 		<div class="form-group row justify-content-center">
-			<div class="col-sm-5 p-1">
+			<div class="col-sm-8 col-md-6 px-2 mb-2">
 				<input
 					type="text"
 					class="form-control border-info"
@@ -21,7 +21,11 @@
 				type="radio"
 				name="searchBy"
 				id="list-title"
-				checked
+        <% if ( typeof(searchBy) === 'undefined' ) { %>
+          checked
+        <% } else if (searchBy === 'title') { %> 
+          checked
+        <% } %> 
 				value="title"
 			/>
 			<label class="form-check-label" for="list-title"> Title </label>
@@ -33,6 +37,9 @@
 				name="searchBy"
 				id="list-creator"
 				value="creator"
+        <% if (typeof(searchBy) !== 'undefined' && searchBy === 'creator' ) { %>
+          checked
+        <% } %> 
 			/>
 			<label class="form-check-label" for="list-creator"> Creator </label>
 		</div>
@@ -43,13 +50,16 @@
 				name="searchBy"
 				id="list-items"
 				value="items"
+        <% if (typeof(searchBy) !== 'undefined' && searchBy === 'items' ) { %>
+          checked
+        <% } %> 
 			/>
 			<label class="form-check-label" for="list-items"> Items </label>
 		</div>
 	</form>
 	<div class="row">
-		<div class="col-md-4 m-auto d-flex justify-content-around mt-3">
-			<button form="search-parties" type="submit" class="btn btn-success">
+		<div class="col-md-4 col-sm-6 m-auto d-flex justify-content-around mt-3">
+			<button form="search-lists" type="submit" class="btn btn-success">
 				Search
 			</button>
 			<a href="/lists/new" class="btn btn-primary">New List</a>
@@ -57,55 +67,75 @@
 	</div>
 </div>
 
-
-<div class="row justify-content-center mt-3">
-	<% if (typeof(search) !== 'undefined') { %>
+<div class="col-sm-12 col-md-11 m-auto">
+<div class="row justify-content-between mt-3">
+	<% if (typeof(searchBy) !== 'undefined') { %>
 	<p class="fst-italic text-center text-muted">Search Results:</p>
 	<% } else { %>
 	<p class="fst-italic text-center text-muted">Recently created:</p>
 	<% } %> <% for (const list of lists) { %>
-	<div class="col-md-5">
-		<div class="card mb-3">
+	<div class="col-sm-6">
+		<div class="card mb-3 list-summary d-flex">
+      <div class="text-center">
+        <h4 class="card-title mt-3 mb-1"><%= list.title %></h4>
+        <p>
+          <a
+            href="/users/<%= list.creator._id %>/profile"
+            class="link-secondary"
+          >
+            - <%= list.creator.displayName %>
+          </a>
+        </p>
+      </div>
 			<div class="card-body py-0">
-				<h4 class="card-title mt-3"><%= list.title %></h4>
-				<p>
-					<a
-						href="/users/<%= list.creator._id %>/profile"
-						class="link-secondary"
-					>
-						- <%= list.creator.displayName %>
-					</a>
-				</p>
-				<ul class="list-group mb-3">
-					<% for (const item of list.showThreeItems) { %>
-					<li class="list-group-item">
-						<img src="/assets/icons8-present-60.png" class="icon-present" />
-						<% if (item.link) { %>
-						<a href="<%= item.link %>" target="_blank">
-							<%= item.description %>
-						</a>
-						<% } else { %>
-						<span> <%= item.description %></span>
-						<% } %>
-					</li>
-
+				<ul class="list-group">
+					<% for (const [ i, item ] of list.items.entries()) { %>
+            <% if (i < 2 ) {%> 
+            <li class="list-group-item">
+              <img src="/assets/icons8-present-60.png" class="icon-present" />
+              <% if (item.link) { %>
+              <a href="<%= item.link %>" target="_blank">
+                <%= item.description %>
+              </a>
+              <% } else { %>
+                <span> <%= item.description %></span>
+              <% } %>
+            </li>
+            <% } else { %>  
+              <li class="list-group-item d-none">
+                <img src="/assets/icons8-present-60.png" class="icon-present" />
+                <% if (item.link) { %>
+                <a href="<%= item.link %>" target="_blank">
+                  <%= item.description %>
+                </a>
+                <% } else { %>
+                  <span> <%= item.description %></span>
+                <% } %>
+              </li>
+            <% } %>
 					<% } %>
 				</ul>
-				<div class="d-flex justify-content-between align-items-center">
-					<% if (list.items.length > 2) { %>
-					<a href="/lists/<%= list._id %>" class="btn btn-danger mb-3"
-						>More...
-					</a>
-					<% } else { %>
-					<a href="/lists/<%= list._id %>" class="btn btn-danger mb-3">View</a>
-					<% } %>
-					<div class="text-muted text-small text-center">
-						<p class="mb-0">updated</p>
-						<p class="updatedAt"><%= list.updatedAt %></p>
-					</div>
-				</div>
-			</div>
+      </div>
+      <% if (list.items.length > 2) { %>
+        <p class="ps-2 fst-italic text-center my-1">
+          <span class="fst-italic link show-items show-more" >show more</span>
+        </p>
+      <% } %> 
+      <div class="col-12 px-4">
+        <div class="row align-self-end">
+          <div class="d-flex justify-content-between align-items-center">
+            <a href="/lists/<%= list._id %>" class="btn btn-danger mb-3">View</a>
+            <div class="text-muted text-small text-center">
+              <p class="mb-0">updated</p>
+              <p class="updatedAt"><%= list.updatedAt %></p>
+            </div>
+          </div>
+        </div>
+      </div>
 		</div>
 	</div>
 	<% } %>
 </div>
+</div>
+
+<script src="/js/listsIndex.js"></script>

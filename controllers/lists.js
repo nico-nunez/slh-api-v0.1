@@ -1,15 +1,35 @@
 const List = require('../models/List');
+const User = require('../models/User');
 const { catchAsync } = require('../helpers/errors');
 
 
 module.exports.showPublicLists = catchAsync( async (req, res, next) => {
-  const allLists = await List.find().populate('creator', 'displayName').limit(6).sort({updatedAt: -1}).lean();
-  const lists = allLists.map(list => {
-    list.showThreeItems = list.items.slice(0,3);
-    return list;
-  });
+  const lists = await List.find({public: true}).populate('creator', 'displayName').limit(6).sort({createdAt: -1}).lean();
   res.render('lists/index', {lists});
 });
+
+module.exports.searchPublicLists = catchAsync(async (req, res, next) => {
+  const { searchBy, searchString } = req.query;
+  let results = [];
+  if (searchBy === 'creator') {
+    const users = await User.find({$text: {$search: searchString}})
+      .distinct('_id').lean();
+    results = await List.find({creator: {$in: users}, public: true})
+      .populate('creator', 'displayName').lean();
+  }
+  if (searchBy === 'title') {
+    results = await List.find({
+      title: {$regex: searchString, $options: 'i'}, public: true
+    }).populate('creator', 'displayName').lean();
+  }
+  if (searchBy === 'items') {
+    results = await List.find({
+     'items.description': {$regex: searchString, $options: 'i'}, public: true
+    }).populate('creator', 'displayName').lean();
+  }
+
+  res.render("lists/index", { lists: results, searchBy });
+})
 
 module.exports.createListForm = (req, res) => {
   res.render('lists/new');
@@ -73,5 +93,5 @@ module.exports.deleteList = catchAsync( async (req, res, next) => {
   const { id } = req.params;
   await List.findByIdAndDelete(id);
   req.flash('success', 'Success! List has been deleted.');
-  res.redirect('/lists');
+  res.redirect(`/users/${req.user.id}`);
 });

@@ -2,11 +2,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const dayjs = require('dayjs');
 
-const imageSchema = new Schema({
-  url: String,
-  filename: String
-});
-
 const itemSchema = new Schema({
   description: {
     type: String,
@@ -33,5 +28,8 @@ const listSchema = new Schema({
     default: false
   }
 },{timestamps: true});
+
+listSchema.index({title: 'text', creator: 'text', items: 'text'});
+itemSchema.index({description: 'text'});
 
 module.exports = mongoose.model('List', listSchema);

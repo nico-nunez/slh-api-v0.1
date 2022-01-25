@@ -124,7 +124,7 @@
 					role="switch"
 					id="flexSwitchCheckDefault"
 					name="list[public]"
-					checked
+					<%= list.public ? 'checked' : '' %> 
 				/>
 				<label class="form-check-label" for="private">
 					Public <span class="text-muted">*</span>
@@ -132,7 +132,7 @@
 			</div>
 			<div>
 				<button type="submit" class="btn btn-primary">Update</button>
-				<a href="/lists" class="btn btn-danger">Cancel</a>
+				<a href="/users/<%= list.creator._id %>" class="btn btn-danger">Cancel</a>
 			</div>
 		</form>
 		<div class="mt-5">

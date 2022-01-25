@@ -143,3 +143,7 @@ form :invalid {
   justify-content: space-between;
   align-items: center;
 }
+
+.list-summary {
+  min-height: 270px;
+}
