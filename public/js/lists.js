@@ -78,22 +78,25 @@
   // Add new list-item
   const handleAddItemClick = () => {
     const inputGroup = document.querySelector('.item-input-group');
-    const displayItemsAdded = document.querySelector('#list-items-added');
-    const numItems = displayItemsAdded.childElementCount;
-
-    if(!inputGroup.childNodes[3].value) return;
-    const noItemsMsg = document.querySelector('#list-items-none').classList.add('hidden');
-
-    const listItem = createNewItemGroup(inputGroup);
-    displayItemsAdded.appendChild(listItem);
-
+    const displayAddedItems = document.querySelector('#list-items-added');
+    const numItems = displayAddedItems.childElementCount;
     const descInput = inputGroup.childNodes[3];
     const linkInput = inputGroup.childNodes[7];
 
+    if(!descInput.value) {
+      descInput.classList.add('border', 'border-danger', 'border-2');
+      return;
+    }
+    document.querySelector('#list-items-none').classList.add('d-none');
+    
+    const listItem = createNewItemGroup(inputGroup);
+    displayAddedItems.appendChild(listItem);
+    
     // Reset input values
     descInput.value = '';
     descInput.name = `list[items][${numItems}][description]`
     descInput.required = false;
+    descInput.classList.remove('border-danger');
     linkInput.value = '';
     linkInput.name = `list[items][${numItems}][link]`
   }
@@ -148,14 +151,25 @@
     const btnContainer = target.parentElement;
     const inputGroup = btnContainer.parentElement;
     const displayItem = inputGroup.previousElementSibling;
+    const inputDesc = inputGroup.childNodes[3];
+    const inputLink = inputGroup.childNodes[7];
     const displayItemDesc = displayItem.children[0].children[0];
-    const descInput = inputGroup.childNodes[3];
-    if (!descInput.value) {
-      descInput.classList.add('border', 'border-danger', 'border-2');
+
+    if (!inputDesc.value) {
+      inputDesc.classList.add('border', 'border-danger', 'border-2');
       return;
     }
-    displayItemDesc.textContent = descInput.value;
-    descInput.classList.remove('border-danger');
+    if (!originalItemVals.link && inputLink.value) {
+      const link = document.createElement('a');
+      link.href = inputLink.value;
+      link.target = '_blank';
+      link.classList.add('mb-0', 'text-ellipsis');
+      link.textContent = inputDesc.value;
+      displayItem.children[0].replaceChild(link, displayItemDesc);
+    } else {
+      displayItemDesc.textContent = inputDesc.value;
+    }
+    inputDesc.classList.remove('border-danger');
     btnContainer.remove();
     inputGroup.classList.add('d-none');
     originalItemVals.description = '';

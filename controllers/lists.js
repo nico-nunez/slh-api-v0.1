@@ -50,8 +50,18 @@ module.exports.updateListForm = catchAsync( async (req, res, next) => {
 
 module.exports.updateList = catchAsync( async(req, res, next) => {
   const { id } = req.params;
-  const list = await List.findByIdAndUpdate(id, {...req.body.list}, {new: true, runValidators: true});
-  if(!list) {
+  const { list } = req.body;
+  const items = list.items.filter(item => item.description);
+  const foundList = await List.findByIdAndUpdate(
+    id,
+    {
+      title: list.title,
+      items,
+      public: Boolean(list.public)
+    },
+    {runValidators: true})
+    .lean();
+  if(!foundList) {
     req.flash('error', "Sorry, coud not find that list");
     return res.redirect('/parties');
   }

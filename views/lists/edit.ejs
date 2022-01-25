@@ -3,96 +3,149 @@
 <link rel="stylesheet" href="/styles/lists.css" />
 
 <div class="row">
-	<h1 class="text-center">Edit List</h1>
-	<div class="col-lg-4 col-md-6 ms-auto me-auto">
-		<form
-			action="/lists/<%= list._id %>?_method=PUT"
-			method="POST"
-			novalidate
-			class="validate-form"
-		>
-    <div>
-			<label class="form-label" for="title">Title:</label>
-			<input
-				class="form-control mb-3"
-				type="text"
-				name="list[title]"
-				id="title"
-				value="<%= list.title %>"
-				required
-			/>
-    </div>
-			<div>
-				<p class="mb-1">Items:</p>
-				<div class="card mb-3">
-					<div class="card-body items-input-content">
-						<% for (const [i, item] of list.items.entries()) { %>
-						<div class="d-flex justify-content-between align-items-center">
-							<p class="card-text mb-0 item-description">
-								<%= item.description %>
-							</p>
-							<div class="item-input-group hidden col-sm-12">
-								<label class="form-label" for="item">Name or Description</label>
-								<input
-									type="text"
-									name="list[items][<%= i %>][description]"
-									id="item"
-									class="form-control"
-									placeholder="enter description"
-									value="<%= item.description %>"
-									required
-								/>
-								<label class="form-label mt-3" for="link">Link</label>
-								<input
-									type="text"
-									name="list[items][<%= i %>][link]"
-									id="link"
-									class="form-control"
-									placeholder="enter link"
-									value="<%= item.link %>"
-								/>
-							</div>
-							<div class="edit-item-icons">
-								<a href="#" class="btn edit-item px-1">
-									<img
-										class="edit-item"
-										src="https://img.icons8.com/ios-glyphs/50/000000/edit.png"
-										height="16"
-									/>
-								</a>
-								<a href="#" class="btn remove-item px-1">
-									<img
-										class="remove-item"
-										src="https://img.icons8.com/external-kiranshastry-solid-kiranshastry/64/000000/external-delete-miscellaneous-kiranshastry-solid-kiranshastry.png"
-										height="20"
-									/>
-								</a>
-							</div>
+	<h1 class="text-center">Update list</h1>
+	<div class="col-lg-5 col-md-6 ms-auto me-auto">
+		<form action="/lists/<%= list._id %>?_method=PUT" method="POST" novalidate class="validate-form">
+			<div class="mb-3 form-group">
+				<label class="form-label" for="name">
+					Title:
+					<span class="text-muted text-xsmall ms-2"> required </span>
+				</label>
+				<input
+					class="form-control"
+					type="text"
+					name="list[title]"
+					id="title"
+					placeholder="List Title"
+          value="<%= list.title %>"
+					required
+				/>
+			</div>
+			<p class="mb-1">Items:</p>
+      <div class="card mb-3">
+        <div class="card-body" id="list-items-added">
+          <p 
+            class="text-muted mb-0 <%= list.items.length ? 'd-none' : '' %>"
+            id="list-items-none"
+          >
+            -- no items added --
+          </p>
+          <% for (const [i,item] of list.items.entries()) { %>
+            <div class="list-item">
+              <div class="d-flex justify-content-between">
+                <div class="w-75">
+                  <% if (item.link) { %>
+                    <a href="<%= item.link %>" target="_blank" class="mb-0 text-ellipsis">
+                      <%= item.description %>
+                    </a>
+                  <% } else { %>
+                    <p class="mb-0 text-ellipsis"><%= item.description %></p>
+                  <% } %>   
+                </div>
+                <div class="item-icons">
+                  <i class="fas fa-pen pe-2 pointer" id="item-edit"></i>
+                  <i class="fas fa-trash-alt pointer" id="item-delete"></i>
+                </div>
+              </div>
+              <div class="d-none mt-2">
+                <label class="form-label" for="list-item-description">
+                  Description:
+                  <span class="text-muted text-xsmall ms-2"> required </span>
+                </label>
+                <input 
+                  type="text" 
+                  name="list[items][<%= i %>][description]"
+                  id="list-item-description"
+                  class="form-control"
+                  placeholder="enter description"
+                  value="<%= item.description %>"
+                  required
+                >
+                <label class="form-label mt-3" for="list-item-link">
+                  Link:
+                  <span class="text-muted text-xsmall ms-2"> optional </span>
+                </label>
+                <input 
+                  type="text" 
+                  name="list[items][<%= i %>][link]" 
+                  id="list-item-link" 
+                  class="form-control" 
+                  placeholder="enter link"
+                  value="<%= item.link %>"
+                >
+              </div>
+            </div>
+          <% } %>  
 
-							<div class="edit-item-btns hidden row mt-3">
-								<div class="col-sm-12">
-									<a href="/lists/<%= list._id %>/edit" class="btn btn-warning">
-										Cancel
-									</a>
-								</div>
-							</div>
+        </div>
+      </div>
+			<div class="card mb-3">
+				<div class="card-body items-input-content">
+					<div id="list-item-add">
+						<div class="item-input-group">
+							<label class="form-label" for="list-item-description">
+								Description:
+								<span class="text-muted text-xsmall ms-2"> required </span>
+							</label>
+							<input
+								type="text"
+								name="list[items][<%= list.items.length %>][description]"
+								id="list-item-description"
+								class="form-control"
+								placeholder="enter description"
+							/>
+							<label class="form-label mt-3" for="list-item-link">
+								Link:
+								<span class="text-muted text-xsmall ms-2"> optional </span>
+							</label>
+							<input
+								type="text"
+								name="list[items][<%= list.items.length %>][link]"
+								id="list-item-link"
+								class="form-control"
+								placeholder="enter link"
+							/>
 						</div>
-						<% } %>
-					</div>
-					<div class="mb-3 item-btns">
-						<a href="#" class="btn btn-secondary ms-3 mt-2 add-item">
-							Add Item
-						</a>
-						<a href="#" class="btn btn-danger ms-3 mt-2 cancel-item hidden">
-							Cancel
-						</a>
 					</div>
 				</div>
+				<div class="mb-3 item-btns">
+					<a href="#" class="btn btn-secondary ms-3 mt-2 add-item">
+						Add Item
+					</a>
+					<a href="#" class="btn btn-danger ms-3 mt-2 cancel-item d-none">
+						Cancel
+					</a>
+				</div>
 			</div>
-			<button type="submit" class="btn btn-primary">Save Changes</button>
-			<a href="/lists/<%= list._id %>" class="btn btn-warning"> Cancel </a>
+			<div class="form-check form-switch mb-3">
+				<input
+					class="form-check-input"
+					type="checkbox"
+					role="switch"
+					id="flexSwitchCheckDefault"
+					name="list[public]"
+					checked
+				/>
+				<label class="form-check-label" for="private">
+					Public <span class="text-muted">*</span>
+				</label>
+			</div>
+			<div>
+				<button type="submit" class="btn btn-primary">Update</button>
+				<a href="/lists" class="btn btn-danger">Cancel</a>
+			</div>
 		</form>
+		<div class="mt-5">
+			<p class="text-muted text-xsmall mb-0">
+				* Dictates whether your list can be seen by others.
+			</p>
+		</div>
 	</div>
 </div>
 
 <script src="/js/lists.js"></script>
+
+
+
+
+
