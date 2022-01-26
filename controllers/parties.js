@@ -5,6 +5,7 @@ const Party = require("../models/Party");
 const User = require("../models/User");
 const List = require("../models/List");
 const { generateCode } = require('../helpers/utils');
+const { ObjectId } = require('mongoose').Types;
 
 
 module.exports.showPublicParties = catchAsync(async (req, res, next) => {
@@ -48,15 +49,20 @@ module.exports.showParty = catchAsync(async (req, res, next) => {
   const foundParty = await Party.findById(req.params.id)
     .populate('creator', 'displayName')
     .populate('members', 'displayName')
-    .populate('lists', 'creator.displayName').lean();
+    .populate('lists', 'title creator').lean();
   if (!foundParty) {
     throw new ExpressError('Sorry, party could not be found.', 400, '/parties');
   }
+  let userLists = [];
   const lists = {}
   foundParty.lists.forEach(list => lists[String(list.creator._id)] = list);
-  const isMember = foundParty.members.filter(member => String(member._id) === req.user.id)
-  foundParty.disableJoin = isMember.length || isPastJoinDate(foundParty.joinBy);
-  res.render("parties/show", { party: foundParty, lists });
+  const isMember = await Party.exists({_id: req.params.id, members: {$in: req.user.id}});
+  if (isMember) {
+    userLists = await List.find({creator: req.user.id}, {title: 1}).lean();
+  }
+  foundParty.isMember = isMember;
+  foundParty.disableJoin = isMember || isPastJoinDate(foundParty.joinBy);
+  res.render("parties/show", { party: foundParty, lists, userLists });
 });
 
 module.exports.updatePartyForm = catchAsync(async (req, res, next) => {
@@ -69,6 +75,24 @@ module.exports.updatePartyForm = catchAsync(async (req, res, next) => {
   party.exchangeOn = formatDate(party.exchangeOn);
   res.render("parties/edit", { party });
 });
+
+module.exports.addListToParty = catchAsync(async (req, res, next) => {
+  const { listID } = req.body; 
+  const partyID = req.params.id;
+  const foundParty = await Party.findById(partyID).populate('lists');
+  if (!foundParty) {
+    throw new ExpressError('Unable to find party.', 400, '/parties');
+  }
+  if (!ObjectId.isValid(listID)) {
+    throw new ExpressError('Please select a valid list.', 400, `/parties/${req.params.id}`)
+  }
+  const list = await List.findOne({_id: listID, creator: req.user.id});
+  const filteredLists = foundParty.lists.filter(list => String(list.creator._id) !== req.user.id);
+  filteredLists.push(list);
+  foundParty.lists = filteredLists;
+  await foundParty.save();
+  res.redirect(`/parties/${req.params.id}`);
+})
 
 module.exports.updatePartyDetails = catchAsync(async (req, res, next) => {
   const { id } = req.params;

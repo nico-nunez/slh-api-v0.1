@@ -35,7 +35,7 @@
             <h3 class="hidden" id="party-secret"><%= party.secret %></h3>
           </div>
           <div class="text-center mb-3 d-flex justify-content-center">
-            <a href="/parties/<%= party._id %>/edit" class="btn btn-primary">
+            <a href="/parties/<%= party._id %>/edit" class="btn btn-warning">
               Edit
             </a>
             <button
@@ -78,8 +78,8 @@
               <h2>Members</h2>
               <% if (loggedInUser && party.creator._id.equals(loggedInUser._id)) { %>
                 <div class="mb-3">
-                  <a href="/parties/<%= party._id %>/members/edit" class="btn btn-danger">
-                    Edit
+                  <a href="/parties/<%= party._id %>/members/edit" class="btn btn-secondary">
+                    Remove
                   </a>
                 </div>
               <% } %>
@@ -90,22 +90,47 @@
           </div>
           <div class="card-body p-0">
             <ul class="list-group text-center">
-              <% if (party.members.filter(member => String(member._id) === loggedInUser.id).length > 0) { %>
+              <% if (party.isMember) { %>
                 <li class="list-group-item p-2">
                   <div class="row">
                     <div class="col-6">
                         <a href="/users/<%= loggedInUser.id %>">
                           <%= loggedInUser.displayName %>
                         </a>
+                        <div class="mt-2">
+                          <button
+                          type="button" 
+                          class="btn btn-danger"
+                          data-bs-toggle="modal"
+                          data-bs-target="#add-list"
+                          >
+                          Leave
+                          </button>
+                        </div>
                     </div>
                     <div class="col-6">
                       <% if (lists[loggedInUser.id]) { %> 
-                        <a href="/lists/<%= lists[loggedInUser.id]._id %>">
-                          <%= lists[member._id].title %>
+                        <a 
+                          href="/lists/<%= lists[loggedInUser.id]._id %>"
+                          class="text-ellipsis"
+                        >
+                          <%= lists[loggedInUser._id].title %>
                         </a>
-                      <% } else { %>
-                        <a href="">Add List</a>
-                      <% } %> 
+                        <% } else { %>
+                          <span class="text-muted">n/a</span>    
+                        <% } %>                  
+                        <div class="mt-2">
+                          <button
+                          type="button" 
+                          class="btn btn-primary"
+                          data-bs-toggle="modal"
+                          data-bs-target="#add-list"
+                          >
+                          <%= lists[loggedInUser.id] ? 'Change' : 'Add' %>
+                          </button>
+                        </div>
+                        <!-- Modal Add List -->
+                        <%- include('./modals/addList') %> 
                     </div>
                   </div>
                 </li>

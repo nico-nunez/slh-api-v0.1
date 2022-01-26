@@ -54,11 +54,20 @@ const isValidLinkReset = catchAsync( async(req, res, next) => {
 	next();
 });
 
+const isPartyMember = catchAsync(async (req, res, next) => {
+  const isMember = await Party.exists({_id: req.params.id, members: {$in: req.user.id}});
+  if(!isMember) {
+    throw new ExpressError('Permission denied. Not a member.', 403, `/parties/${req.params.id}`)
+  }
+  next();
+})
+
 module.exports = {
 	isLoggedIn,
 	isCreatorList,
 	isCreatorParty,
 	isUser,
   isVerified,
-  isValidLinkReset
+  isValidLinkReset,
+  isPartyMember
 };
