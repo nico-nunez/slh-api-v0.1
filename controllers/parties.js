@@ -4,6 +4,7 @@ const { getSelections } = require("../helpers/utils");
 const Party = require("../models/Party");
 const User = require("../models/User");
 const List = require("../models/List");
+const Selection = require("../models/Selection");
 const { generateCode } = require('../helpers/utils');
 const { ObjectId } = require('mongoose').Types;
 
@@ -61,8 +62,9 @@ module.exports.showParty = catchAsync(async (req, res, next) => {
     userLists = await List.find({creator: req.user.id}, {title: 1}).lean();
   }
   foundParty.isMember = isMember;
-  foundParty.disableJoin = isMember || isPastJoinDate(foundParty.joinBy);
-  res.render("parties/show", { party: foundParty, lists, userLists });
+  foundParty.disableJoin = isMember || foundParty.joinStatus === 'closed' || isPastJoinDate(foundParty.joinBy);
+  const selections = await Selection.find({party: foundParty._id}).populate('selector', 'displayName').populate('recipient', 'displayName').lean();
+  res.render("parties/show", { party: foundParty, lists, userLists, selections });
 });
 
 module.exports.updatePartyForm = catchAsync(async (req, res, next) => {
@@ -161,17 +163,22 @@ module.exports.editMembers = catchAsync(async (req, res, next) => {
 
 
 
-module.exports.startParty = catchAsync(async (req, res, next) => {
-  const party = await Party.findById(req.params.id).populate("members");
-  const members = party.members;
-  const selections = getSelections(members, party._id);
+module.exports.getMemberSelections = catchAsync(async (req, res, next) => {
+  const foundParty = await Party.findById(req.params.id).populate("members");
+  if(!foundParty) throw new ExpressError('Unable to find party.', 400, '/parties');
+  const members = foundParty.members;
+  const selections = getSelections(members);
+  const formatted = []
   for (const selection of selections) {
-    const { selector } = selection;
-    selector.selections.push(selection);
-    await selection.save();
-    await selector.save();
+    await new Selection({
+      selector: selection.selector._id,
+      recipient: selection.recipient._id,
+      party: foundParty._id
+    }).save();
   }
-  res.redirect(`/parties/${party._id}`);
+  const now = new Date().getTime
+  await Party.updateOne({_id: foundParty._id }, { joinBy: Date.now(), joinStatus: 'closed'});
+  res.redirect(`/parties/${foundParty._id}`);
 });
 
 

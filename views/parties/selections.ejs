@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="col-lg-8 col-md-10 col-sm-12 m-auto">
+    <div class="card text-center">
+      <h2>Selections</h2>
+      <div class="card-body">
+        <ul class="list-group">
+          <% for (const selection of selections) { %> 
+            <li class="list-group-item">
+              <p>gifter: <%= selection.selector.displayName %></p>
+              <p>recipient: <%= selection.recipient.displayName %></p>
+            </li>
+          <% } %> 
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

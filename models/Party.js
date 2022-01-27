@@ -37,6 +37,10 @@ const partySchema = new Schema(
 			required: true,
 			default: true,
 		},
+    joinStatus: {
+      type: String,
+      enum: ['open', 'closed']
+    }
 	},
 	{ timestamps: true }
 );

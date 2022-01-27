@@ -18,6 +18,6 @@ router.get("/:id/members/edit", isLoggedIn, isCreatorParty, parties.removeMember
 router.put("/:id/members",	isLoggedIn, parties.editMembers);
 
 router.delete("/:id", isLoggedIn, isCreatorParty, parties.deleteParty);
-router.get("/:id/start",isLoggedIn,	isCreatorParty, parties.startParty);
+router.get("/:id/start",isLoggedIn,	isCreatorParty, parties.getMemberSelections);
 
 module.exports = router;

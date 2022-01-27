@@ -1,0 +1,60 @@
+<div
+  class="modal fade"
+  id="add-list"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">
+          Add a List
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <h6 class="mb-3">Choose an existing list, or create a new one:</h6>
+        <form action="/parties/<%= party._id %>/lists?_method=PUT" method="POST" id="add-list-party">
+          <div class="form-group row">
+            <div class="col-sm-6 m-auto">
+              <select class="form-select text-center" name="listID">
+                <option selected value="">-- Select List --</option>
+                <% for (const list of userLists) { %>
+                  <option value="<%= list._id %>">
+                    <%= list.title %> 
+                  </option>
+                <% } %>  
+              </select>
+              <p class="text-center my-2">or</p>
+              <a href="/lists/new" class="btn btn-secondary" type="submit">New List</a>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button 
+          type="submit" 
+          class="btn btn-primary"
+          form="add-list-party"
+        >
+          Add List
+        </button>
+        <button
+          type="button"
+          class="btn btn-warning"
+          data-bs-dismiss="modal"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

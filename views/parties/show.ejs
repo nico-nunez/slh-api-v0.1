@@ -94,32 +94,23 @@
                 <li class="list-group-item p-2">
                   <div class="row">
                     <div class="col-6">
+                      <div class="mb-2">
+                        <button
+                        type="button" 
+                        class="btn btn-danger"
+                        data-bs-toggle="modal"
+                        data-bs-target="#add-list"
+                        >
+                        Leave
+                        </button>
+                      </div>
                         <a href="/users/<%= loggedInUser.id %>">
                           <%= loggedInUser.displayName %>
                         </a>
-                        <div class="mt-2">
-                          <button
-                          type="button" 
-                          class="btn btn-danger"
-                          data-bs-toggle="modal"
-                          data-bs-target="#add-list"
-                          >
-                          Leave
-                          </button>
-                        </div>
                     </div>
                     <div class="col-6">
                       <% if (lists[loggedInUser.id]) { %> 
-                        <a 
-                          href="/lists/<%= lists[loggedInUser.id]._id %>"
-                          class="text-ellipsis"
-                        >
-                          <%= lists[loggedInUser._id].title %>
-                        </a>
-                        <% } else { %>
-                          <span class="text-muted">n/a</span>    
-                        <% } %>                  
-                        <div class="mt-2">
+                        <div class="mb-2">
                           <button
                           type="button" 
                           class="btn btn-primary"
@@ -131,6 +122,15 @@
                         </div>
                         <!-- Modal Add List -->
                         <%- include('./modals/addList') %> 
+                        <a 
+                          href="/lists/<%= lists[loggedInUser.id]._id %>"
+                          class="text-ellipsis"
+                        >
+                          <%= lists[loggedInUser._id].title %>
+                        </a>
+                        <% } else { %>
+                          <span class="text-muted">n/a</span>    
+                        <% } %>                  
                     </div>
                   </div>
                 </li>
@@ -163,6 +163,9 @@
       </div>
     </div>
 	</div>
+  <% if (typeof(selections) !== 'undefined') { %>
+    <%- include('./selections') %> 
+  <% } %>  
 </div>
 
 
