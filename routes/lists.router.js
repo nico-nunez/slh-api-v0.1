@@ -4,7 +4,7 @@ const List = require('../models/List');
 const { catchAsync } = require('../helpers/errors');
 const { validList } = require('../middleware/joiSchemas');
 const { isLoggedIn, isCreatorList } = require('../middleware/validators');
-const lists = require('../controllers/lists');
+const lists = require('../controllers/lists.controller');
 
 router.get('/', lists.showPublicLists);
 router.get('/search', lists.searchPublicLists);

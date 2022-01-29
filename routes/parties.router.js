@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { validParty } = require("../middleware/joiSchemas");
 const { isLoggedIn, isCreatorParty, isPartyMember} = require("../middleware/validators");
-const parties = require('../controllers/parties');
+const parties = require('../controllers/parties.controller');
 
 router.get("/", parties.showPublicParties);
 router.get("/new", isLoggedIn, parties.createPartyForm);

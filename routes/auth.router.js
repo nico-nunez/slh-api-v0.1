@@ -13,7 +13,7 @@ const {
   validPassReset
 } = require("../middleware/joiSchemas");
 
-const auth = require('../controllers/auth');
+const auth = require('../controllers/auth.controller');
 
 // --- Register ---
 router.get("/register", auth.registerForm);

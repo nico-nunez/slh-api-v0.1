@@ -10,7 +10,7 @@ const User = require('../models/User');
 const Party = require('../models/Party')
 
 const { validProfile } = require('../middleware/joiSchemas');
-const users = require('../controllers/users');
+const users = require('../controllers/users.controller');
 
 router.get('/:id', isLoggedIn, users.showDashboard);
 

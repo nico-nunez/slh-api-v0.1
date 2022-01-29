@@ -21,10 +21,10 @@ const { ExpressError, errorHandler } = require('./helpers/errors');
 connectDB();
 
 // Routes
-const listsRoutes = require('./routes/lists');
-const partiesRoutes = require('./routes/parties');
-const usersRoutes = require('./routes/users');
-const authRoutes = require('./routes/auth');
+const listsRoutes = require('./routes/lists.router');
+const partiesRoutes = require('./routes/parties.router');
+const usersRoutes = require('./routes/users.router');
+const authRoutes = require('./routes/auth.router');
 
 
 app.engine('ejs', ejsMate);
