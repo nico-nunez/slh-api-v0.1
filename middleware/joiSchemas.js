@@ -84,8 +84,6 @@ function validRegistration(req, res, next) {
       avatar: avatarSchema,
 			password: passwordSchema,
 			confirmPass: confirmSchema,
-
-
 		})
 	});
 
@@ -162,7 +160,8 @@ function validProfile(req, res, next) {
   const profileSchema = Joi.object({
     profile: Joi.object({
       displayName: nameSchema,
-      email: emailSchema
+      email: emailSchema,
+      avatar: avatarSchema
     })
   })
   validateInput(profileSchema, req, `/users/${req.user.id}/update` );

@@ -33,6 +33,25 @@
 			class="validate-form"
       id="update-profile"
 		>
+      <div class="mb-3 form-group avatar-options">
+        <label for="avatars" class="form-label">Avatar:</label>
+        <% for (const [i, avatar] of avatars.entries()) { %>
+          <input 
+            type="radio"
+            class="btn-check avatar-input"
+            name="profile[avatar]"
+            id="avatar<%= i %>"
+            autocomplete="off"
+            value="<%= avatar.srcURL %>"
+            <% if (typeof(user.avatar) !== 'undefined' && user.avatar === avatar.srcURL) { %>
+              checked
+            <% } %>  
+          >
+          <label class="btn avatar-label" for="avatar<%= i %>">
+            <img src="<%= avatar.srcURL %> " alt="<%= avatar.description %>" class="avatar-registration avatar-label-img">
+          </label>
+        <% } %>  
+      </div>
       <div class="input-group mb-3">
         <span class="input-group-text">Display Name:</span>
         <input 

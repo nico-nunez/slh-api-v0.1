@@ -162,4 +162,9 @@ form :invalid {
 
 .list-summary {
   min-height: 270px;
+  transition: .2s;
+}
+
+.alert p {
+  margin: 0;
 }

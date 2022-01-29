@@ -34,13 +34,14 @@ module.exports.showUserParties = catchAsync(async (req, res) => {
 
 
 module.exports.updateUserForm = catchAsync( async (req, res, next) => {
-    const user = await User.findById( req.user.id );
-    res.render('users/update', { user })
+  const { avatars } = require("../helpers/utils");
+  const user = await User.findById( req.user.id );
+  res.render('users/update', { user, avatars });
 });
 
 
 module.exports.updateUser = catchAsync( async (req, res, next) => {
-  const { displayName, email } = req.body.profile;
+  const { displayName, email, avatar } = req.body.profile;
   const user = await User.findById(req.user.id)
 
   if (!user) throw new ExpressError('User not found', 400);
@@ -56,6 +57,7 @@ module.exports.updateUser = catchAsync( async (req, res, next) => {
   }
   user.displayName = displayName;
   user.email.address = email;
+  user.avatar = avatar;
   await user.save();
   
   res.redirect(`/users/${user.id}`);
