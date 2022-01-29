@@ -39,6 +39,9 @@ const nameSchema = Joi.string()
   .trim()
   .required()
 
+const avatarSchema = Joi.string()
+  .trim()
+
 const partyTitleSchema = Joi.string()
   .min(3)
   .max(50)
@@ -77,12 +80,12 @@ function validRegistration(req, res, next) {
 	const userSchema = Joi.object({
 		newUser: Joi.object({
 			email: emailSchema,
-
 			displayName: nameSchema,
-
+      avatar: avatarSchema,
 			password: passwordSchema,
-
 			confirmPass: confirmSchema,
+
+
 		})
 	});
 

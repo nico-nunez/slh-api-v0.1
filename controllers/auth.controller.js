@@ -8,13 +8,14 @@ const Link = require("../models/Link");
 
 // --- REGISTER ----
 module.exports.registerForm = (req, res) => {
-	res.render("auth/register");
+  const { avatars } = require("../helpers/utils");
+	res.render("auth/register", { avatars });
 };
 
 
 module.exports.registerUser = catchAsync(async (req, res, next) => {
-	const { email, displayName, password } = req.body.newUser;
-	const newUser = new User({displayName, email: {address: email}});
+	const { email, displayName, avatar, password } = req.body.newUser;
+	const newUser = new User({displayName, email: {address: email}, avatar});
 	const user = await User.register(newUser, password);
 	req.login(user, async (err) => {
 		if (err) return next(err);

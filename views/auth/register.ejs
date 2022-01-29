@@ -34,6 +34,23 @@
 					required
 				/>
 			</div>
+      <div class="mb-3 form-group">
+        <label for="avatars" class="form-label">Avatar:</label>
+        <% for (const [i, avatar] of avatars.entries()) { %>
+          <input 
+            type="radio"
+            class="btn-check avatar-input"
+            name="newUser[avatar]"
+            id="avatar<%= i %>"
+            autocomplete="off"
+            <%= i===0 ? 'checked' : '' %>
+            value="<%= avatar.srcURL %>"
+          >
+          <label class="btn avatar-label" for="avatar<%= i %>">
+            <img src="<%= avatar.srcURL %> " alt="<%= avatar.description %>" class="avatar-registration">
+          </label>
+        <% } %>  
+      </div>
 			<div class="mb-3 form-group">
 				<label class="form-label" for="password">Password</label>
         <div class="password-input-group">

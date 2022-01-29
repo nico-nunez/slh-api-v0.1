@@ -50,10 +50,26 @@ form :invalid {
   border-radius: 50%;
   background-color: cyan;
 }
-#avatar-profile {
-  height: 150px;
+
+.avatar-profile {
+  height: 200px;
 }
 
+.avatar-registration {
+  height: 60px;
+  border-radius: 50%;
+  padding: 5px;
+  background-color: cyan;
+}
+
+.avatar-label {
+  border: 1px solid lightgray;
+  margin: 2px;
+}
+
+.avatar-input:checked + .avatar-label {
+  box-shadow: 0 0 5px 2px rgb(77, 120, 240);
+}
 
 /* ------- LOGIN -------- */
 .login-local {
