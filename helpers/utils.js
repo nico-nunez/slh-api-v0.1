@@ -1,5 +1,7 @@
+const crypto = require('crypto');
+
 function randomRecipient(selector, members, exceptions=[]) {
-  const randIndex = Math.floor(Math.random() * members.length);
+  const randIndex = Math.floor(crypto.randomInt(members.length));
   let recipient = members[randIndex];
   const isSameUser = recipient.id === selector.id;
   if (members.length === 1 && isSameUser) {
@@ -33,9 +35,6 @@ function getSelections(members) {
 }
 
 // -------------- Code Generator ------------
-const randInt = (maxNum, minNum = 0) => {
-	return Math.floor(Math.random() * maxNum + minNum);
-};
 
 const alphaCode = (len, codeCase = "upper") => {
 	const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -43,8 +42,8 @@ const alphaCode = (len, codeCase = "upper") => {
 	let code = "";
 
 	for (let i = 0; i < len; i++) {
-		const randCase = Boolean(randInt(2));
-		let randChar = chars[randInt(chars.length)];
+		const randCase = Boolean(crypto.randomInt(2));
+		let randChar = chars[crypto.randomInt(chars.length)];
 		isLowerCase = codeCase === "mixed" ? randCase : isLowerCase;
 		randChar = isLowerCase ? randChar.toLowerCase() : randChar;
 		code += randChar;
@@ -56,7 +55,7 @@ const numericCode = (len) => {
 	const digits = "0123456789";
 	let code = "";
 	for (let i = 0; i < len; i++) {
-		code += digits[randInt(digits.length)];
+		code += digits[crypto.randomInt(digits.length)];
 	}
 	return code;
 };
@@ -64,7 +63,7 @@ const numericCode = (len) => {
 const alphaNumCode = (len, codeCase = "upper") => {
 	let code = "";
 	for (let i = 0; i < len; i++) {
-		const randChar = randInt(2) ? alphaCode(1, codeCase) : numericCode(1);
+		const randChar = crypto.randomInt(2) ? alphaCode(1, codeCase) : numericCode(1);
 		code += randChar;
 	}
 	return code;
@@ -77,6 +76,7 @@ const generateCode = (len, codeType, alphaCase = "upper") => {
 	if (codeType === "numeric") return numericCode(actualLength);
 	if (codeType === "alphaNumeric") return alphaNumCode(actualLength, alphaCase);
 };
+
 
 module.exports = {
 	getSelections,
