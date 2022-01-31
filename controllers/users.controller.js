@@ -15,7 +15,7 @@ module.exports.showDashboard = catchAsync(async (req, res, next) => {
 module.exports.showProfile = catchAsync( async (req, res, next) => {
   const { id } = req.params;
   const user = await User.findById(id).lean();
-  const lists = await List.find({ 'creator': id }).lean();
+  const lists = await List.find({ 'creator': id, 'public': true }).lean();
   res.render('users/profile', { user, lists});
 });
 

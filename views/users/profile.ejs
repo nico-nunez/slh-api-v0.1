@@ -1,6 +1,15 @@
 <% layout('layouts/boilerplate') %>
 
-<h1 class="mb-0 text-center"><%= user.displayName %></h1>
+<div class="text-center mb-3">
+	<div id="avatar-box">    
+    <% if (typeof(user.avatar) !== 'undefined') { %> 
+    <img class="avatar-profile" src="<%= user.avatar %>" alt="avatar" />
+    <% } else { %>
+      <img class="avatar-profile" src="/assets/defaultAvatar.png" alt="avatar" />
+    <% } %> 
+  </div>
+	<h1 class="mb-0"><%= user.displayName %></h1>
+</div>
 
 <div class="row d-flex justify-content-between px-1">
 	<div class="col-md-5 col-lg-4 ms-auto me-auto mt-3">
@@ -14,6 +23,22 @@
 							<a href="/lists/<%= list._id %>"> <%= list.title %> </a>
 						</li>
 						<% } %>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row d-flex justify-content-between px-1">
+	<div class="col-md-5 col-lg-4 ms-auto me-auto mt-3">
+		<div class="row">
+			<div class="card py-3">
+				<h4 class="card-title text-center">Coming Soon...</h4>
+				<div class="card-body text-center">
+					<ul class="list-group">
+            <li class="list-group-item fst-italic">Message user</li>
+            <li class="list-group-item fst-italic">Like/Favorite user</li>
+            <li class="list-group-item fst-italic">More user profile info</li>
 					</ul>
 				</div>
 			</div>

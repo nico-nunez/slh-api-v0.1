@@ -5,7 +5,7 @@
   <% if (user.avatar) { %> 
 		<img class="avatar-profile" src="<%= user.avatar %>" alt="avatar" />
   <% } else { %>
-    <img class="avatar-profile" src="assets/defaultAvatar" alt="avatar" />
+    <img class="avatar-profile" src="/assets/defaultAvatar" alt="avatar" />
   <% } %> 
 	</div>
 	<h1 class="mb-0"><%= user.displayName %></h1>
@@ -48,15 +48,13 @@
 		</div>
 	</div>
   <div class="col-md-4 col-sm-6 mt-3">
-		<div class="card py-2 px-4 text-center">
-      <h2 class="card-title m-0">Favourites</h2>
+		<div class="card py-2 px-4">
+      <h2 class="card-title m-0 text-center">Coming Soon...</h2>
       <div class="card-body p-0">
-				<ul class="list-group">
-					<% for (const party of parties) { %>
-					<li class="list-group-item border-0 text-ellipsis">
-						<a href="/parties/<%= party._id %>"> <%= party.title %> </a>
-					</li>
-					<% } %>
+        <ul class="list-group pt-2">
+          <li class="fst-italic list-group-item text-small">- Show liked/favorited lists & users</li>
+          <li class="fst-italic list-group-item text-small">- Show messages from users</li>
+          <li class="fst-italic list-group-item text-small">- Show notifications of updates to parties & lists</li>
 				</ul>
 			</div>
 		</div>

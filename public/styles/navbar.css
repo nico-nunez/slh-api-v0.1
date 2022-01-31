@@ -31,3 +31,17 @@ nav {
   transform: scaleX(1);
   color: aliceblue;
 }
+
+.avatar-nav {
+  height: 50px;
+  border-radius: 50%;
+  background-color: cyan;
+}
+
+.nav-item.dropdown .dropdown-menu a.nav-link {
+  color: black;
+}
+
+.dropdown-menu {
+  transform: translateX(-25%);
+}

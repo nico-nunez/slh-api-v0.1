@@ -47,6 +47,7 @@ module.exports.createParty = catchAsync(async (req, res, next) => {
 });
 
 module.exports.showParty = catchAsync(async (req, res, next) => {
+  const examplePartyID = "61f17ad6cac18a2ca6cb75f9"
   const foundParty = await Party.findById(req.params.id)
     .populate('creator', 'displayName')
     .populate('members', 'displayName')
@@ -56,6 +57,7 @@ module.exports.showParty = catchAsync(async (req, res, next) => {
   }
   let userLists = [];
   const lists = {}
+  let selections;
   foundParty.lists.forEach(list => lists[String(list.creator._id)] = list);
   const isMember = await Party.exists({_id: req.params.id, members: {$in: req.user.id}});
   if (isMember) {
@@ -63,7 +65,10 @@ module.exports.showParty = catchAsync(async (req, res, next) => {
   }
   foundParty.isMember = isMember;
   foundParty.disableJoin = isMember || foundParty.joinStatus === 'closed' || isPastJoinDate(foundParty.joinBy);
-  const selections = await Selection.find({party: foundParty._id}).populate('selector', 'displayName').populate('recipient', 'displayName').lean();
+  if(String(foundParty._id) === examplePartyID) {
+    selections = await Selection.find({party: foundParty._id}).populate('selector', 'displayName').populate('recipient', 'displayName').lean();
+    await Selection.deleteMany({party: foundParty._id});
+  }
   res.render("parties/show", { party: foundParty, lists, userLists, selections });
 });
 
@@ -166,6 +171,7 @@ module.exports.editMembers = catchAsync(async (req, res, next) => {
 module.exports.getMemberSelections = catchAsync(async (req, res, next) => {
   const foundParty = await Party.findById(req.params.id).populate("members");
   if(!foundParty) throw new ExpressError('Unable to find party.', 400, '/parties');
+  await Selection.deleteMany({party: foundParty.id});
   const members = foundParty.members;
   const selections = getSelections(members);
   const formatted = []
