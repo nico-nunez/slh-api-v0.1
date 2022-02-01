@@ -5,7 +5,12 @@ body {
 }
 
 .title {
-  margin-top: 50px;
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+
   font-size: 64px;
   font-weight: bold;
   letter-spacing: 4px;
@@ -19,9 +24,15 @@ body {
 	font-weight: bold;
 	background-color: aliceblue;
 	border-radius: 25px;
-	box-shadow: inset 0px 0px 15px rgb(102, 76, 161);
-	border: 1px solid rgba(102, 76, 161, 0.418);
-	color: #502a86;
+	box-shadow: inset 0px 0px 15px #146B3A;
+	border: 1px solid #146B3A;
+	color: darkslategrey;
+  transition: .2s;
+}
+
+.btn-login:hover {
+  box-shadow: inset 0px 0px 35px #146B3A;
+  color: darkslategrey;
 }
 
 .countdown-content {
