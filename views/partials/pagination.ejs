@@ -2,43 +2,47 @@
   <div class="col-12 d-flex justify-content-center">
     <nav aria-label="...">
       <ul class="pagination">
-        <% if (pagination.currentPage === 0) { %>
+        <% if (pages.current === 0) { %>
           <li class="page-item disabled">
             <span class="page-link">Previous</span>  
           </li>
           <% } else { %> 
             <li class="page-item">
               <a 
-                class="page-link" 
-                href="/lists?page=<%= pagination.currentPage - 1 %>"
+                class="page-link"
+                <% if (searchBy) { %>
+                  href="<%= pages.baseURL %><%= pages.current-1 %>&searchBy=<%= searchBy %>&searchString=<%= searchString %>"
+                <% } else { %>
+                  href="<%= pages.baseURL %><%= pages.current - 1 %>"
+                <% } %>   
               >
                 Previous
               </a>
             </li>
           <% } %> 
-        <% for (let i=0; i < pagination.numPages; i++) { %> 
+        <% for (let i=0; i < pages.numPages; i++) { %> 
           <li 
-            class="page-item <%= i === pagination.currentPage ? 'active' : '' %>"
+            class="page-item <%= i === pages.current ? 'active' : '' %>"
           > 
             <a 
               class="page-link" 
               <% if (searchBy) { %> 
-                href="/lists?page=<%= i %>&searchBy=<%= searchBy %>&searchString=<%= searchString %>"
+                href="<%= pages.baseURL %><%= i %>&searchBy=<%= searchBy %>&searchString=<%= searchString %>"
               <% } else { %> 
-                href="/lists?page=<%= i %>"
+                href="<%= pages.baseURL %><%= i %>"
               <% } %> 
               >
                 <%= i + 1 %>
               </a>
           </li>
         <% } %> 
-        <% if (pagination.currentPage === pagination.numPages - 1) { %> 
+        <% if (!pages.numPages || pages.current === pages.numPages - 1) { %> 
           <li class="page-item disabled">
             <span class="page-link">Next</span>
           </li>
           <% } else { %> 
           <li class="page-item">
-            <a class="page-link" href="/lists?page=<%= pagination.currentPage + 1 %>">Next</a>
+            <a class="page-link" href="<%= pages.baseURL %><%= pages.current + 1 %>">Next</a>
           </li>
           <% } %> 
         </li>

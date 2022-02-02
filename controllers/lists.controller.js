@@ -36,9 +36,14 @@ module.exports.showPublicLists = catchAsync( async (req, res, next) => {
       ]
     }},
   ])
-  const numPages = Math.ceil(numFound[0].total / docLimit);
-  const pagination = {numPages, currentPage: Number(page)};
-  res.render('lists/index', {lists, pagination, searchBy, searchString});
+  const totalFound = numFound.length ? numFound[0].total : 0;
+  const numPages = Math.ceil(totalFound / docLimit);
+  const pages = {
+    numPages,
+    current: Number(page),
+    baseURL: '/lists?page='
+  };
+  res.render('lists/index', {lists, pages, searchBy, searchString});
 });
 
 
