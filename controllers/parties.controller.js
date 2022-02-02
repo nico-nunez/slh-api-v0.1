@@ -7,55 +7,32 @@ const List = require("../models/List");
 const Selection = require("../models/Selection");
 const { generateCode } = require('../helpers/utils');
 const { ObjectId } = require('mongoose').Types;
+const helpers = require('../helpers/parties.helpers');
 
 
 module.exports.showPublicParties = catchAsync(async (req, res, next) => {
-  const { page = 0, searchBy='', searchString='' } = req.query;
+  const { searchBy='', searchString='' } = req.query;
+  const page = Number(req.query.page) || 0;
   const docLimit = 9;
   const searchQuery = {};
   if(searchBy) {
     searchQuery[searchBy] = {$regex: searchString, $options: 'i'};
   }
-  const [{parties, numFound}] = await Party.aggregate([
-    {$lookup: {
-        from: 'users',
-        localField: 'creator',
-        foreignField: '_id',
-        as: 'creator'
-    }},
-    {$unwind: '$creator'},
-    {$match: {...searchQuery, public:true}},
-    {$facet: {
-      'parties': [
-        {$skip: Number(page) * docLimit},
-        {$limit: docLimit},
-        {$project: {
-          title: 1,
-          numMembers: {$size: "$members"},
-          updatedAt: 1,
-          joinStatus: 1,
-          'creator.id': '$creator._id',
-          'creator.displayName': '$creator.displayName'
-        }}
-      ],
-      'numFound': [
-        {$count: 'total'}
-      ]
-    }},
-  ])
-  const totalFound = numFound.length ? numFound[0].total : 0;
-  const numPages = Math.ceil(totalFound / docLimit);
+  const {parties, totalMatches} = await helpers.findParties(searchQuery, page, docLimit);
+  const numPages = Math.ceil(totalMatches / docLimit);
   const pages = {
     numPages,
-    current: Number(page),
+    current: page,
     baseURL: '/paries?page='
   };
   res.render("parties/index", { parties, pages, searchBy, searchString });
 });
 
+
 module.exports.createPartyForm = (req, res) => {
 	res.render("parties/new");
 };
+
 
 module.exports.createParty = catchAsync(async (req, res, next) => {
   const { party } = req.body;
@@ -69,12 +46,14 @@ module.exports.createParty = catchAsync(async (req, res, next) => {
   res.redirect(`/parties/${savedParty.id}`);
 });
 
+
 module.exports.showParty = catchAsync(async (req, res, next) => {
-  const examplePartyID = "61f17ad6cac18a2ca6cb75f9"
+  const examplePartyID = "61f17ad6cac18a2ca6cb75f9";
   const foundParty = await Party.findById(req.params.id)
     .populate('creator', 'displayName')
     .populate('members', 'displayName')
-    .populate('lists', 'title creator').lean();
+    .populate('lists', 'title creator')
+    .lean();
   if (!foundParty) {
     throw new ExpressError('Sorry, party could not be found.', 400, '/parties');
   }
@@ -95,6 +74,7 @@ module.exports.showParty = catchAsync(async (req, res, next) => {
   res.render("parties/show", { party: foundParty, lists, userLists, selections });
 });
 
+
 module.exports.updatePartyForm = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   const party = await Party.findById(id).lean();
@@ -105,6 +85,7 @@ module.exports.updatePartyForm = catchAsync(async (req, res, next) => {
   party.exchangeOn = formatDate(party.exchangeOn);
   res.render("parties/edit", { party });
 });
+
 
 module.exports.addListToParty = catchAsync(async (req, res, next) => {
   const { listID } = req.body; 
@@ -194,7 +175,6 @@ module.exports.editMembers = catchAsync(async (req, res, next) => {
 module.exports.getMemberSelections = catchAsync(async (req, res, next) => {
   const foundParty = await Party.findById(req.params.id).populate("members");
   if(!foundParty) throw new ExpressError('Unable to find party.', 400, '/parties');
-  await Selection.deleteMany({party: foundParty.id});
   const members = foundParty.members;
   const selections = getSelections(members);
   const formatted = []
@@ -233,3 +213,5 @@ async function addMember(party, secret, userID) {
 async function removeMembers(party, members) {
 
 }
+
+
