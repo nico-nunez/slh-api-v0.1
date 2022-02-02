@@ -4,7 +4,7 @@ const { catchAsync } = require('../helpers/errors');
 
 
 module.exports.showPublicLists = catchAsync( async (req, res, next) => {
-  const { page=0, searchBy, searchString } = req.query;
+  const { page=0, searchBy='', searchString='' } = req.query;
   const docLimit = 9;
   const searchQuery = {}
   if(searchBy) {
@@ -37,8 +37,8 @@ module.exports.showPublicLists = catchAsync( async (req, res, next) => {
     }},
   ])
   const numPages = Math.ceil(numFound[0].total / docLimit);
-  const pagination = {numPages, currentPage: Number(page)}
-  res.render('lists/index', {lists, pagination, searchBy});
+  const pagination = {numPages, currentPage: Number(page)};
+  res.render('lists/index', {lists, pagination, searchBy, searchString});
 });
 
 
