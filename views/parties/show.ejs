@@ -146,7 +146,7 @@
                       </div>
                       <div class="col-6">
                         <% if (lists[String(member._id)]) { %> 
-                          <a href="/users/<%= member._id %>/profile">
+                          <a href="/lists/<%= lists[String(member._id)]._id %>">
                             <%= lists[member._id].title %>
                           </a>
                           <% } else { %>
