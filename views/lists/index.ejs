@@ -3,7 +3,7 @@
 
 <div class="row text-center">
 	<h2 class="">Holiday Lists</h2>
-	<form action="/lists/search" method="GET" id="search-lists">
+	<form action="/lists" method="GET" id="search-lists">
 		<div class="form-group row justify-content-center">
 			<div class="col-sm-8 col-md-6 px-2 mb-2">
 				<input
@@ -11,6 +11,7 @@
 					class="form-control border-info"
 					placeholder="search lists"
 					name="searchString"
+          value="<%= searchString %>"
 				/>
 			</div>
 		</div>
@@ -21,11 +22,9 @@
 				type="radio"
 				name="searchBy"
 				id="list-title"
-        <% if ( typeof(searchBy) === 'undefined' ) { %>
+        <% if ( !searchBy || searchBy === 'title' ) { %>
           checked
-        <% } else if (searchBy === 'title') { %> 
-          checked
-        <% } %> 
+        <% } %>
 				value="title"
 			/>
 			<label class="form-check-label" for="list-title"> Title </label>
@@ -36,8 +35,8 @@
 				type="radio"
 				name="searchBy"
 				id="list-creator"
-				value="creator"
-        <% if (typeof(searchBy) !== 'undefined' && searchBy === 'creator' ) { %>
+				value="creator.displayName"
+        <% if (searchBy === 'creator.displayName' ) { %>
           checked
         <% } %> 
 			/>
@@ -49,8 +48,8 @@
 				type="radio"
 				name="searchBy"
 				id="list-items"
-				value="items"
-        <% if (typeof(searchBy) !== 'undefined' && searchBy === 'items' ) { %>
+				value="items.description"
+        <% if (searchBy === 'items.description' ) { %>
           checked
         <% } %> 
 			/>
@@ -69,7 +68,7 @@
 
 <div class="col-sm-12 col-md-11 col-lg-12 m-auto">
   <div class="row mt-3">
-    <% if (typeof(searchBy) !== 'undefined') { %>
+    <% if (searchBy) { %>
     <p class="fst-italic text-center text-muted">Search Results:</p>
     <% } else { %>
     <p class="fst-italic text-center text-muted">Recently created:</p>

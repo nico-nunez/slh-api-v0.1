@@ -2,7 +2,7 @@
 
 <div class="row text-center mb-3">
   <h2 class="">Secret Santa Parties</h2>
-  <form action="/parties/search" method="GET" id="search-parties">
+  <form action="/parties" method="GET" id="search-parties">
     <div class="form-group row justify-content-center">
       <div class="col-sm-8 col-md-6 px-2 mb-2">
         <input 
@@ -10,6 +10,7 @@
           class="form-control border-info"
           placeholder="search parties"
           name="searchString"
+          value="<%= searchString %>"
         >
       </div>
     </div>
@@ -21,9 +22,7 @@
         name="searchBy"
         id="party-title"
         value="title"
-        <% if ( typeof(searchBy) === 'undefined' ) { %>
-          checked
-        <% } else if (searchBy === 'title') { %> 
+        <% if ( !searchBy || searchBy === 'title' ) { %>
           checked
         <% } %> 
       >
@@ -38,9 +37,7 @@
         name="searchBy"
         id="party-creator"
         value="creator"
-        <% if (typeof(searchBy) !== 'undefined' && searchBy === 'creator' ) { %>
-          checked
-        <% } %> 
+        <%= searchBy === 'creator.displayName' ? checked : '' %> 
       >
       <label class="form-check-label" for="party-creator">
         Creator
@@ -56,7 +53,7 @@
 </div>
 <div class="col-md-11 col-sm-12 col-lg-12 m-auto">
   <div class="row">
-    <% if (typeof(searchBy) !== 'undefined') { %> 
+    <% if (searchBy) { %> 
       <p class="fst-italic text-center text-muted">Search Results:</p>
     <% } else { %> 
       <p class="fst-italic text-center text-muted">Recently created:</p>
@@ -76,8 +73,9 @@
                         <%= party.creator.displayName %> 
                       </a>
                     </p>
-                    <p>Members: <%= party.members.length %></p>
+                    <p>Members: <%= party.numMembers %></p>
                   </div>
+                  <p class="text-muted">Status: <%= party.joinStatus %></p>
                   <a href="/parties/<%= party._id %>" class="btn btn-danger">View</a>
               </div>
           </div>

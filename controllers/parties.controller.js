@@ -10,34 +10,48 @@ const { ObjectId } = require('mongoose').Types;
 
 
 module.exports.showPublicParties = catchAsync(async (req, res, next) => {
-  const { page = 0 } = req.query;
+  const { page = 0, searchBy='', searchString='' } = req.query;
   const docLimit = 9;
-  const parties = await Party.find({public: true})
-    .populate('creator', 'displayName')
-    .skip(Number(page) * docLimit)
-    .limit(docLimit)
-    .sort({createdAt: -1})
-    .lean();
-  const totalNumLists = await Party.count({public: true});
-  const numPages = Math.ceil(totalNumLists / docLimit);
-  const pagination = {numPages, currentPage: Number(page)}
-  res.render("parties/index", { parties, pagination });
+  const searchQuery = {};
+  if(searchBy) {
+    searchQuery[searchBy] = {$regex: searchString, $options: 'i'};
+  }
+  const [{parties, numFound}] = await Party.aggregate([
+    {$lookup: {
+        from: 'users',
+        localField: 'creator',
+        foreignField: '_id',
+        as: 'creator'
+    }},
+    {$unwind: '$creator'},
+    {$match: {...searchQuery, public:true}},
+    {$facet: {
+      'parties': [
+        {$skip: Number(page) * docLimit},
+        {$limit: docLimit},
+        {$project: {
+          title: 1,
+          numMembers: {$size: "$members"},
+          updatedAt: 1,
+          joinStatus: 1,
+          'creator.id': '$creator._id',
+          'creator.displayName': '$creator.displayName'
+        }}
+      ],
+      'numFound': [
+        {$count: 'total'}
+      ]
+    }},
+  ])
+  const totalFound = numFound.length ? numFound[0].total : 0;
+  const numPages = Math.ceil(totalFound / docLimit);
+  const pages = {
+    numPages,
+    current: Number(page),
+    baseURL: '/paries?page='
+  };
+  res.render("parties/index", { parties, pages, searchBy, searchString });
 });
-
-module.exports.searchPublicParties = catchAsync(async (req, res, next) => {
-  const { searchBy, searchString } = req.query;
-  let results = [];
-  if (searchBy === 'creator') {
-    const users = await User.find({$text: {$search: searchString}}).distinct('_id').lean();
-    results = await Party.find({creator: {$in: users}, public: true}).populate('creator', 'displayName').lean();
-  }
-  if (searchBy === 'title') {
-    results = await Party.find({
-      title: {$regex: searchString, $options: 'i'}, public: true
-    }).populate('creator', 'displayName').lean();
-  }
-  res.render("parties/index", { parties: results, searchBy });
-})
 
 module.exports.createPartyForm = (req, res) => {
 	res.render("parties/new");
