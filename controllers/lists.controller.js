@@ -4,42 +4,43 @@ const { catchAsync } = require('../helpers/errors');
 
 
 module.exports.showPublicLists = catchAsync( async (req, res, next) => {
-  const { page = 0 } = req.query;
+  const { page=0, searchBy, searchString } = req.query;
   const docLimit = 9;
-  const lists = await List.find({public: true})
-    .populate('creator', 'displayName')
-    .skip(Number(page) * docLimit)
-    .limit(docLimit)
-    .sort({createdAt: -1})
-    .lean();
-  const totalNumLists = await List.count({public: true});
-  const numPages = Math.ceil(totalNumLists / docLimit);
+  const searchQuery = {}
+  if(searchBy) {
+    searchQuery[searchBy] = {$regex: searchString, $options: 'i'};
+  }
+  const [{lists, numFound}] = await List.aggregate([
+    {$lookup: {
+        from: 'users',
+        localField: 'creator',
+        foreignField: '_id',
+        as: 'creator'
+    }},
+    {$unwind: '$creator'},
+    {$match: {...searchQuery, public:true}},
+    {$facet: {
+      'lists': [
+        {$skip: Number(page) * docLimit},
+        {$limit: docLimit},
+        {$project: {
+          title: 1,
+          items: 1,
+          updatedAt: 1,
+          'creator.id': '$creator._id',
+          'creator.displayName': '$creator.displayName'
+        }}
+      ],
+      'numFound': [
+        {$count: 'total'}
+      ]
+    }},
+  ])
+  const numPages = Math.ceil(numFound[0].total / docLimit);
   const pagination = {numPages, currentPage: Number(page)}
-  res.render('lists/index', {lists, pagination});
+  res.render('lists/index', {lists, pagination, searchBy});
 });
 
-module.exports.searchPublicLists = catchAsync(async (req, res, next) => {
-  const { searchBy, searchString } = req.query;
-  let results = [];
-  if (searchBy === 'creator') {
-    const users = await User.find({$text: {$search: searchString}})
-      .distinct('_id').lean();
-    results = await List.find({creator: {$in: users}, public: true})
-      .populate('creator', 'displayName').lean();
-  }
-  if (searchBy === 'title') {
-    results = await List.find({
-      title: {$regex: searchString, $options: 'i'}, public: true
-    }).populate('creator', 'displayName').lean();
-  }
-  if (searchBy === 'items') {
-    results = await List.find({
-     'items.description': {$regex: searchString, $options: 'i'}, public: true
-    }).populate('creator', 'displayName').lean();
-  }
-
-  res.render("lists/index", { lists: results, searchBy });
-})
 
 module.exports.createListForm = (req, res) => {
   res.render('lists/new');

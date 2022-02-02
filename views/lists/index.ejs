@@ -3,7 +3,7 @@
 
 <div class="row text-center">
 	<h2 class="">Holiday Lists</h2>
-	<form action="/lists/search" method="GET" id="search-lists">
+	<form action="/lists" method="GET" id="search-lists">
 		<div class="form-group row justify-content-center">
 			<div class="col-sm-8 col-md-6 px-2 mb-2">
 				<input
@@ -36,8 +36,8 @@
 				type="radio"
 				name="searchBy"
 				id="list-creator"
-				value="creator"
-        <% if (typeof(searchBy) !== 'undefined' && searchBy === 'creator' ) { %>
+				value="creator.displayName"
+        <% if (typeof(searchBy) !== 'undefined' && searchBy === 'creator.displayName' ) { %>
           checked
         <% } %> 
 			/>
@@ -49,8 +49,8 @@
 				type="radio"
 				name="searchBy"
 				id="list-items"
-				value="items"
-        <% if (typeof(searchBy) !== 'undefined' && searchBy === 'items' ) { %>
+				value="items.description"
+        <% if (typeof(searchBy) !== 'undefined' && searchBy === 'items.description' ) { %>
           checked
         <% } %> 
 			/>
