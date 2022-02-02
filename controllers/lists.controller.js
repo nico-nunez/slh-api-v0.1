@@ -4,8 +4,18 @@ const { catchAsync } = require('../helpers/errors');
 
 
 module.exports.showPublicLists = catchAsync( async (req, res, next) => {
-  const lists = await List.find({public: true}).populate('creator', 'displayName').limit(6).sort({createdAt: -1}).lean();
-  res.render('lists/index', {lists});
+  const { page = 0 } = req.query;
+  const docLimit = 9;
+  const lists = await List.find({public: true})
+    .populate('creator', 'displayName')
+    .skip(Number(page) * docLimit)
+    .limit(docLimit)
+    .sort({createdAt: -1})
+    .lean();
+  const totalNumLists = await List.count({public: true});
+  const numPages = Math.ceil(totalNumLists / docLimit);
+  const pagination = {numPages, currentPage: Number(page)}
+  res.render('lists/index', {lists, pagination});
 });
 
 module.exports.searchPublicLists = catchAsync(async (req, res, next) => {

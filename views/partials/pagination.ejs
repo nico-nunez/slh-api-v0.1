@@ -1,0 +1,34 @@
+<div class="row mt-3">
+  <div class="col-12 d-flex justify-content-center">
+    <nav aria-label="...">
+      <ul class="pagination">
+        <% if (pagination.currentPage === 0) { %>
+          <li class="page-item disabled">
+            <span class="page-link">Previous</span>  
+          </li>
+          <% } else { %> 
+            <li class="page-item">
+              <a class="page-link" href="/lists?page=<%= pagination.currentPage - 1 %>">Previous</a>
+            </li>
+          <% } %> 
+        <% for (let i=0; i < pagination.numPages; i++) { %> 
+          <li 
+            class="page-item <%= i === pagination.currentPage ? 'active' : '' %>"
+          >
+            <a class="page-link" href="/lists?page=<%= i %>"><%= i + 1 %></a>
+          </li>
+        <% } %> 
+        <% if (pagination.currentPage === pagination.numPages - 1) { %> 
+          <li class="page-item disabled">
+            <span class="page-link">Next</span>
+          </li>
+          <% } else { %> 
+          <li class="page-item">
+            <a class="page-link" href="/lists?page=<%= pagination.currentPage + 1 %>">Next</a>
+          </li>
+          <% } %> 
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

@@ -10,9 +10,18 @@ const { ObjectId } = require('mongoose').Types;
 
 
 module.exports.showPublicParties = catchAsync(async (req, res, next) => {
-  const parties = await Party.aggregate().sample(4);
-  const populated = await Party.populate(parties, {path: 'creator', select: 'displayName'});
-  res.render("parties/index", { parties: populated });
+  const { page = 0 } = req.query;
+  const docLimit = 9;
+  const parties = await Party.find({public: true})
+    .populate('creator', 'displayName')
+    .skip(Number(page) * docLimit)
+    .limit(docLimit)
+    .sort({createdAt: -1})
+    .lean();
+  const totalNumLists = await Party.count({public: true});
+  const numPages = Math.ceil(totalNumLists / docLimit);
+  const pagination = {numPages, currentPage: Number(page)}
+  res.render("parties/index", { parties, pagination });
 });
 
 module.exports.searchPublicParties = catchAsync(async (req, res, next) => {
