@@ -14,7 +14,7 @@ const partySchema = new Schema(
       trim: true,
       required: true
     },
-		joinBy: {
+		selectionsOn: {
 			type: Date,
 			required: true,
 		},
@@ -37,9 +37,10 @@ const partySchema = new Schema(
 			required: true,
 			default: true,
 		},
-    joinStatus: {
+    status: {
       type: String,
-      enum: ['open', 'closed']
+      enum: ['open', 'in progress', 'closed'],
+      default: 'open'
     }
 	},
 	{ timestamps: true }

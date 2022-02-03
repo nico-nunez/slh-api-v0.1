@@ -14,13 +14,13 @@
           </h5>
           <div class="d-flex justify-content-around">
             <div>
-              <h6 class="mb-0">Join</h6>
-              <h6 class="mb-0">Before:</h6>
-              <h5 class="date-full mb-0"><%= party.joinBy %></h5>
+              <h6 class="mb-0">Draw</h6>
+              <h6 class="mb-0">Names:</h6>
+              <h5 class="date-full mb-0"><%= party.selectionsOn %></h5>
             </div>
             <div>
-              <h6 class="mb-0">Gift</h6>
-              <h6 class="mb-0">Exchange:</h6>
+              <h6 class="mb-0">Exchange</h6>
+              <h6 class="mb-0">Gifts:</h6>
               <h5 class="date-full mb-0"><%= party.exchangeOn %></h5>
             </p>
             </div>
@@ -57,7 +57,7 @@
             class="btn btn-primary ms-3"
             data-bs-toggle="modal"
             data-bs-target="#party-join"
-            <% if(party.disableJoin) { %> 
+            <% if(party.status !== 'open') { %> 
               disabled
             <% } %>
             >

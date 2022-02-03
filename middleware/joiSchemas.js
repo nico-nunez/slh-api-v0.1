@@ -116,7 +116,7 @@ function validParty(req, res, next) {
 		party: Joi.object({
 			title: partyTitleSchema,
       secret: partySecretSchema,
-			joinBy: Joi.date().required(),
+			selectionsOn: Joi.date().required(),
 			exchangeOn: Joi.date().required(),
 			public: Joi.string(),
 		})
