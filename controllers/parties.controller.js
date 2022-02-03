@@ -8,6 +8,7 @@ const Selection = require("../models/Selection");
 const { generateCode } = require('../helpers/utils');
 const { ObjectId } = require('mongoose').Types;
 const helpers = require('../helpers/parties.helpers');
+const { CronJob } = require('cron');
 
 
 module.exports.showPublicParties = catchAsync(async (req, res, next) => {
@@ -65,7 +66,7 @@ module.exports.showParty = catchAsync(async (req, res, next) => {
   if (foundParty.isMember) {
     userLists = await List.find({creator: req.user.id}, {title: 1}).lean();
   }
-  foundParty.disableJoin = foundParty.isMember || foundParty.status !== 'open' || isPastSelectionsDate(foundParty.selectionsOn);
+  foundParty.disableJoin = foundParty.isMember || foundParty.status !== 'open';
   if(String(foundParty._id) === examplePartyID) {
     selections = await Selection.find({party: foundParty._id}).populate('selector', 'displayName').populate('recipient', 'displayName').lean();
     await Selection.deleteMany({party: foundParty._id});
@@ -125,7 +126,6 @@ module.exports.deleteParty = catchAsync(async (req, res, next) => {
 });
 
 
-
 module.exports.removeMembersForm = catchAsync(async (req, res, next) => {
   const foundParty = await Party.findById(req.params.id).populate('members', 'displayName').lean();
   if (!foundParty) {
@@ -157,7 +157,6 @@ module.exports.editMembers = catchAsync(async (req, res, next) => {
 })
 
 
-
 module.exports.getMemberSelections = catchAsync(async (req, res, next) => {
   const foundParty = await Party.findById(req.params.id).populate("members");
   if(!foundParty) throw new ExpressError('Unable to find party.', 400, '/parties');
@@ -178,4 +177,7 @@ module.exports.getMemberSelections = catchAsync(async (req, res, next) => {
 
 
 
-
+const dailyPartyTasks = new CronJob('00 00 00 * * *', async function() {
+  await helpers.makePartySelections();
+})
+dailyPartyTasks.start();

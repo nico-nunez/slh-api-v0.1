@@ -1,4 +1,7 @@
 const Party = require('../models/Party');
+const crypto = require('crypto');
+const Selection = require('../models/Selection');
+
 
 module.exports.findParties = async (query, page, docLimit) => {
   const [results] = await Party.aggregate([
@@ -64,3 +67,60 @@ module.exports.checkEligiblity = async (party, secret) => {
   }
   return errMsg;
 }
+
+
+const randomRecipient = (selector, members, exceptions=[]) => {
+  const randIndex = Math.floor(crypto.randomInt(members.length));
+  let recipient = members[randIndex];
+  const isSameUser = recipient.id === selector.id;
+  if (members.length === 1 && isSameUser) {
+    return null;
+  }
+  if (isSameUser) {
+    recipient = randomRecipient(selector, members);
+  }
+	return recipient;
+}
+
+const getSelections = party => {
+	let availableMembers = [...party.members];
+	let results = [];
+	for (const selector of party.members) {
+		const recipient = randomRecipient(selector, availableMembers);
+		if (!recipient) {
+			results = getSelections(party);
+		} else {
+			const data = {
+				selector,
+				recipient,
+        party: party._id
+			};
+      const newSelection = new Selection(data);
+			results.push(newSelection);
+			availableMembers = availableMembers.filter(
+				member => member.id !== recipient.id
+			);
+		}
+	}
+	return results;
+}
+
+
+module.exports.makePartySelections = async () => {
+  const from = new Date();
+  from.setUTCHours(00,00,00,00);
+  const to = new Date(from);
+  to.setDate(to.getDate() + 1);
+  const parties = await Party.aggregate([
+    {$match: {selectionsOn: {$gte: from, $lt: to}}},
+    {$set: {status: 'in progess'}}
+  ]);
+  const selections = []
+  for (const party of parties) {
+    const partySelections = getSelections(party);
+    selections.push(...partySelections);
+  }
+  const inserted = await Selection.insertMany(selections);
+}
+
+

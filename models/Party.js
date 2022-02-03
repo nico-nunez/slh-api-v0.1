@@ -5,9 +5,8 @@ const partySchema = new Schema(
 	{
 		title: {
 			type: String,
-			required: true,
       trim: true,
-			unique: true,
+			required: true,
 		},
     secret: {
       type: String,
