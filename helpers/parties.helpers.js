@@ -54,13 +54,13 @@ module.exports.isPastSelectionsDate = selectionsDate => {
   return end - current <= 0;
 }
 
-module.exports.addMember = async (party, secret, userID) => {
-  if (isPastSelectionsDate(party.selectionsOn)) {
-    return new ExpressError('Deadline to join has passed.', 403, `/parties/${party._id}`);
+module.exports.checkEligiblity = async (party, secret) => {
+  let errMsg;
+  if (party.status !== 'open') {
+    errMsg = 'Deadline to join has passed.';
   }
   if (party.secret !== secret ) {
-    return new ExpressError('Join request denied. Invalid code.', 403, `/parties/${party._id}`);
+    errMsg = 'Join request denied. Invalid code.';
   }
-  party.members.addToSet(userID);
-  await party.save();
+  return errMsg;
 }

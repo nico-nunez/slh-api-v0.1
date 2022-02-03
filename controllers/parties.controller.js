@@ -125,23 +125,6 @@ module.exports.deleteParty = catchAsync(async (req, res, next) => {
 });
 
 
-module.exports.addMember = catchAsync(async (req, res, next) => {
-  const { id } = req.params
-  const foundParty = await Party.findById(id);
-  if (!foundParty) {
-    throw new ExpressError('Sorry, party could not be found.', 400, '/parties');
-  }
-  if (helpers.isPastSelectionsDate(foundParty.selectionsOn)) {
-    throw new ExpressError('Deadline to join has passed.', 403, `/parties/${id}`);
-  }
-  if (foundParty.secret !== req.body.secret ) {
-    throw new ExpressError('Join request denied. Invalid code.', 403, `/parties/${id}`);
-  }
-  foundParty.members.addToSet(req.user.id);
-  await foundParty.save();
-  req.flash('success', 'Sucessfully joined party.');
-  res.redirect(`/parties/${foundParty._id}`);
-});
 
 module.exports.removeMembersForm = catchAsync(async (req, res, next) => {
   const foundParty = await Party.findById(req.params.id).populate('members', 'displayName').lean();
@@ -153,18 +136,22 @@ module.exports.removeMembersForm = catchAsync(async (req, res, next) => {
 
 module.exports.editMembers = catchAsync(async (req, res, next) => {
   const { id } = req.params
-  const { secret=undefined, members=undefined } = req.body
+  const { secret, members } = req.body
   const foundParty = await Party.findById(id);
   if (!foundParty) {
     throw new ExpressError('Sorry, party could not be found.', 400, '/parties');
   }
   if (secret) {
-    const err = await addMember(foundParty, secret, req.user.id);
-    if (err) throw err;
+    const { errMsg } = helpers.checkEligiblity(foundParty, secret);
+    if (errMsg) {
+      throw new ExpressError(errMsg, 403, `/parties/${id}`);
+    }
+    await Party.updateOne({_id: id},{$addToSet: {members: req.user._id}});
     req.flash('success', 'Sucessfully joined party.');
   }
   if(members) {
     await Party.updateOne({_id: id},{$pull: {members: {$in: members}}});
+    req.flash('success', `Success! Removed from members.` );
   }
   res.redirect(`/parties/${foundParty._id}`);
 })

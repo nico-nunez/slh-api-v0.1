@@ -57,7 +57,7 @@
             class="btn btn-primary ms-3"
             data-bs-toggle="modal"
             data-bs-target="#party-join"
-            <% if(party.status !== 'open') { %> 
+            <% if(party.status !== 'open' || party.isMember) { %> 
               disabled
             <% } %>
             >
@@ -82,80 +82,59 @@
                     Remove
                   </a>
                 </div>
-              <% } %>
+              <% } else if (party.isMember) { %>
+                <div class="mb-2">
+                  <button
+                  type="button" 
+                  class="btn btn-danger"
+                  data-bs-toggle="modal"
+                  data-bs-target="#party-leave"
+                  >
+                  Leave
+                  </button>
+                </div>
+                <%- include('./modals/leave') %>
+              <% } %> 
             </div>
             <div class="col-sm-6">
               <h2>Lists</h2>
+              <% if (lists[loggedInUser.id]) { %> 
+                <div class="mb-2">
+                  <button
+                  type="button" 
+                  class="btn btn-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#add-list"
+                  >
+                  <%= lists[loggedInUser.id] ? 'Change' : 'Add' %>
+                  </button>
+                </div>
+                <!-- Modal Add List -->
+                <%- include('./modals/addList') %> 
+              <% } %> 
             </div>
           </div>
           <div class="card-body p-0">
             <ul class="list-group text-center">
-              <% if (party.isMember) { %>
+              <% for (const member of party.members) { %>
                 <li class="list-group-item p-2">
                   <div class="row">
                     <div class="col-6">
-                      <div class="mb-2">
-                        <button
-                        type="button" 
-                        class="btn btn-danger"
-                        data-bs-toggle="modal"
-                        data-bs-target="#add-list"
-                        >
-                        Leave
-                        </button>
-                      </div>
-                        <a href="/users/<%= loggedInUser.id %>">
-                          <%= loggedInUser.displayName %>
-                        </a>
+                      <a href="/users/<%= member._id %>/profile">
+                        <%= member.displayName %>
+                      </a>
                     </div>
                     <div class="col-6">
-                      <% if (lists[loggedInUser.id]) { %> 
-                        <div class="mb-2">
-                          <button
-                          type="button" 
-                          class="btn btn-primary"
-                          data-bs-toggle="modal"
-                          data-bs-target="#add-list"
-                          >
-                          <%= lists[loggedInUser.id] ? 'Change' : 'Add' %>
-                          </button>
-                        </div>
-                        <!-- Modal Add List -->
-                        <%- include('./modals/addList') %> 
-                        <a 
-                          href="/lists/<%= lists[loggedInUser.id]._id %>"
-                          class="text-ellipsis"
-                        >
-                          <%= lists[loggedInUser._id].title %>
+                      <% if (lists[String(member._id)]) { %> 
+                        <a href="/lists/<%= lists[String(member._id)]._id %>">
+                          <%= lists[member._id].title %>
                         </a>
                         <% } else { %>
-                          <span class="text-muted">n/a</span>    
-                        <% } %>                  
+                          <span class="text-muted">n/a</span>
+                        <% } %>
                     </div>
                   </div>
                 </li>
-              <% } %>
-              <% for (const member of party.members) { %>
-                <% if (String(member._id) !== loggedInUser.id) { %>
-                  <li class="list-group-item p-2">
-                    <div class="row">
-                      <div class="col-6">
-                        <a href="/users/<%= member._id %>/profile">
-                          <%= member.displayName %>
-                        </a>
-                      </div>
-                      <div class="col-6">
-                        <% if (lists[String(member._id)]) { %> 
-                          <a href="/lists/<%= lists[String(member._id)]._id %>">
-                            <%= lists[member._id].title %>
-                          </a>
-                          <% } else { %>
-                            <span class="text-muted">n/a</span>
-                          <% } %>
-                      </div>
-                    </div>
-                  </li>
-              <% } %>
             <% } %>
             </ul>
           </div>

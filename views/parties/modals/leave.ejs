@@ -1,0 +1,51 @@
+<div
+  class="modal fade"
+  id="party-leave"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="staticBackdropLabel">
+          Leave: <span class="text-ellipsis"><%= party.title %></span>
+        </h3>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <h6>Are you sure you want to leave this party?</h6>
+        <form 
+          action="/parties/<%= party._id %>/members?_method=PUT"
+          method="POST"
+          id="party-leave-form"
+        >
+          <input type="hidden" value="<%= loggedInUser.id %>" name="members">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button 
+          type="submit" 
+          class="btn btn-danger"
+          form="party-leave-form"
+        >
+          Leave
+        </button>
+        <button
+          type="button"
+          class="btn btn-warning"
+          data-bs-dismiss="modal"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
