@@ -158,20 +158,11 @@ module.exports.editMembers = catchAsync(async (req, res, next) => {
 
 
 module.exports.getMemberSelections = catchAsync(async (req, res, next) => {
-  const foundParty = await Party.findById(req.params.id).populate("members");
+  const foundParty = await Party.findById(req.params.id, {members: 1}).lean();
   if(!foundParty) throw new ExpressError('Unable to find party.', 400, '/parties');
-  const members = foundParty.members;
-  const selections = getSelections(members);
-  const formatted = []
-  for (const selection of selections) {
-    await new Selection({
-      selector: selection.selector._id,
-      recipient: selection.recipient._id,
-      party: foundParty._id
-    }).save();
-  }
-  const now = new Date().getTime
-  await Party.updateOne({_id: foundParty._id }, { status: 'in progress'});
+  const selections = helpers.getSelections(foundParty);
+  await Selection.insertMany(selections);
+  // await Party.updateOne({_id: foundParty._id }, {selectionsOn: new Date(), status: 'in progress'});
   res.redirect(`/parties/${foundParty._id}`);
 });
 

@@ -74,13 +74,13 @@ const randomRecipient = (selector, members, exceptions=[]) => {
 	return recipient;
 }
 
-const getSelections = party => {
+module.exports.getSelections = party => {
 	let availableMembers = [...party.members];
 	let results = [];
 	for (const selector of party.members) {
 		const recipient = randomRecipient(selector, availableMembers);
 		if (!recipient) {
-			results = getSelections(party);
+			results = this.getSelections(party);
 		} else {
 			const data = {
 				selector,
@@ -108,7 +108,7 @@ module.exports.makeSelectionsUpdateStatus = async () => {
   }, {members: 1}).lean();
   const selections = []
   for (const party of parties) {
-    const partySelections = getSelections(party);
+    const partySelections = this.getSelections(party);
     selections.push(...partySelections);
   }
   await Selection.insertMany(selections);
