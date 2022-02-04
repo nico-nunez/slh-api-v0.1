@@ -8,7 +8,7 @@ module.exports = () => {
   const googleOptions = {
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_SECRET,
-    callbackURL: "http://santaslilhelper.net/auth/google/callback"
+    callbackURL: "https://santaslilhelper.net/auth/google/callback"
   }
 
   const googleCallback = async (accessToken, refreshToken, profile, done) => {
