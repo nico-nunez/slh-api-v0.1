@@ -1,5 +1,6 @@
 (function() {
-  const emailOptions = document.querySelector('#email-options');
+  const emailUpdate = document.querySelector('#email-update');
+  const emailVerify = document.querySelector('#email-verify');
   const avatars = document.querySelectorAll('.avatar-label');
   const form = document.querySelector('.validate-form');
 
@@ -13,7 +14,7 @@
     }
     if (evt.target.id === 'email-update') {
       const emailInput = document.querySelector('#email-input')
-      emailOptions.classList.remove('form-control');
+      evt.target.parentElement.classList.remove('form-control');
       evt.target.classList.add('hidden');
       emailInput.classList.remove('email-text')
       emailInput.disabled = false;
@@ -33,7 +34,8 @@
     document.querySelector('.avatar-profile').src = srcValue
   }
 
-  emailOptions.addEventListener('click', handleOptionsClick);
+  emailUpdate.addEventListener('click', handleOptionsClick);
+  emailVerify.addEventListener('click', handleOptionsClick);
   form.addEventListener('submit', handleFormSubmit);
   Array.from(avatars).forEach(avatar => {
     avatar.addEventListener('click', handleAvatarClick)

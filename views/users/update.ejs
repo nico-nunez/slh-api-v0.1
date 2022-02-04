@@ -13,11 +13,10 @@
 	<h1 class="text-center">Update Profile</h1>
   <div class="text-center mb-3">
     <div id="avatar-box">
-      <% if (user.avatar) { %> 
-        <img class="avatar-profile" src="<%= user.avatar %>" alt="avatar">
-      <% } else { %> 
-        <img id="avatar-profile" src="/assets/snowman.png" alt="avatar">
-      <% } %> 
+      <img 
+        class="avatar-profile" 
+        src="<%= user.avatar ? user.avatar : '/assets/defaultAvatar.png' %>"
+      >
     </div>
   </div>
 	<div class="col-lg-6 col-md-8 ms-auto me-auto card py-4 px-4">
