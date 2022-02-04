@@ -106,21 +106,20 @@ const getSelections = party => {
 }
 
 
-module.exports.makePartySelections = async () => {
+module.exports.makeSelectionsUpdateStatus = async () => {
   const from = new Date();
   from.setUTCHours(00,00,00,00);
   const to = new Date(from);
   to.setDate(to.getDate() + 1);
-  const parties = await Party.aggregate([
-    {$match: {selectionsOn: {$gte: from, $lt: to}}},
-    {$set: {status: 'in progess'}}
-  ]);
+  const parties = await Party.find({selectionsOn: {$gte: from, $lt: to}});
   const selections = []
   for (const party of parties) {
     const partySelections = getSelections(party);
     selections.push(...partySelections);
   }
-  const inserted = await Selection.insertMany(selections);
-}
+  await Selection.insertMany(selections);
+  await Party.updateMany({selectionsOn: {$gte: from, $lt: to}}, {status: 'in progress'});
+  await Party.updateMany({exchangeOn: {$gte: from, $lt: to}}, {status: 'closed'});
+};
 
 

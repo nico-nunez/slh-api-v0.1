@@ -177,7 +177,7 @@ module.exports.getMemberSelections = catchAsync(async (req, res, next) => {
 
 
 
-const dailyPartyTasks = new CronJob('00 00 00 * * *', async function() {
-  await helpers.makePartySelections();
+const dailyTasks = new CronJob('00 00 06 * * *', async function() {
+  await helpers.makeSelectionsUpdateStatus();
 })
-dailyPartyTasks.start();
+dailyTasks.start();
