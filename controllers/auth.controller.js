@@ -118,7 +118,7 @@ module.exports.updatePassResult = catchAsync(async (req, res, next) => {
   await user.changePassword(currentPass, password);
   await user.save();
   req.flash("success", "Successfully updated password");
-  res.redirect(`/auth/${user.id}`);
+  res.redirect(`/users/${user.id}`);
 });
 
 
@@ -165,5 +165,6 @@ module.exports.resetPassUpdateResult = catchAsync(async (req, res, next) => {
   await user.save();
   await sendEmailLink(user, 'resetUpdated');
   req.flash("success", "Successfully updated password");
+  delete req.session.redirectedFrom;
   res.redirect("/auth/login");
 });
