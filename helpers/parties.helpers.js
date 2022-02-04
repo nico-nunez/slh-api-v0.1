@@ -2,7 +2,6 @@ const Party = require('../models/Party');
 const crypto = require('crypto');
 const Selection = require('../models/Selection');
 
-
 module.exports.findParties = async (query, page, docLimit) => {
   const [results] = await Party.aggregate([
     {$lookup: {
@@ -49,13 +48,6 @@ module.exports.isPartyMember = (party,userId) => {
   return isMember;
 }
 
-module.exports.isPastSelectionsDate = selectionsDate => {
-  const now = Date.now();
-  const offset = new Date().getTimezoneOffset() * 60 * 1000;
-  const current = now - offset;
-  const end = selectionsDate.getTime();
-  return end - current <= 0;
-}
 
 module.exports.checkEligiblity = async (party, secret) => {
   let errMsg;
@@ -107,19 +99,25 @@ const getSelections = party => {
 
 
 module.exports.makeSelectionsUpdateStatus = async () => {
-  const from = new Date();
-  from.setUTCHours(00,00,00,00);
-  const to = new Date(from);
-  to.setDate(to.getDate() + 1);
-  const parties = await Party.find({selectionsOn: {$gte: from, $lt: to}});
+  const tomorrow = new Date();
+  tomorrow.setUTCHours(00,00,00,00);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const parties = await Party.find({
+    selectionsOn: {$lt: tomorrow},
+    status: {$eq: 'open'}
+  }, {members: 1}).lean();
   const selections = []
   for (const party of parties) {
     const partySelections = getSelections(party);
     selections.push(...partySelections);
   }
   await Selection.insertMany(selections);
-  await Party.updateMany({selectionsOn: {$gte: from, $lt: to}}, {status: 'in progress'});
-  await Party.updateMany({exchangeOn: {$gte: from, $lt: to}}, {status: 'closed'});
+  await Party.updateMany(
+    {selectionsOn: {$lt: tomorrow}, status: 'open'},
+    {status: 'in progress'}
+  );
+  await Party.updateMany(
+    {exchangeOn: {$lt: tomorrow}, status: 'in progress'},
+    {status: 'closed'}
+  );
 };
-
-
