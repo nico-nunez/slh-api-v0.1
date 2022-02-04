@@ -1,46 +1,22 @@
 const List = require('../models/List');
 const User = require('../models/User');
 const { catchAsync } = require('../helpers/errors');
+const helpers = require('../helpers/lists.helpers');
 
 
 module.exports.showPublicLists = catchAsync( async (req, res, next) => {
-  const { page=0, searchBy='', searchString='' } = req.query;
+  const { searchBy='', searchString='' } = req.query;
+  const page = Number(req.query.page) || 0;
   const docLimit = 9;
   const searchQuery = {}
   if(searchBy) {
     searchQuery[searchBy] = {$regex: searchString, $options: 'i'};
   }
-  const [{lists, numFound}] = await List.aggregate([
-    {$lookup: {
-        from: 'users',
-        localField: 'creator',
-        foreignField: '_id',
-        as: 'creator'
-    }},
-    {$unwind: '$creator'},
-    {$match: {...searchQuery, public:true}},
-    {$facet: {
-      'lists': [
-        {$skip: Number(page) * docLimit},
-        {$limit: docLimit},
-        {$project: {
-          title: 1,
-          items: 1,
-          updatedAt: 1,
-          'creator.id': '$creator._id',
-          'creator.displayName': '$creator.displayName'
-        }}
-      ],
-      'numFound': [
-        {$count: 'total'}
-      ]
-    }},
-  ])
-  const totalFound = numFound.length ? numFound[0].total : 0;
-  const numPages = Math.ceil(totalFound / docLimit);
+  const { lists, totalMatches } = await helpers.findLists(searchQuery, page, docLimit);
+  const numPages = Math.ceil(totalMatches / docLimit);
   const pages = {
     numPages,
-    current: Number(page),
+    current: page,
     baseURL: '/lists?page='
   };
   res.render('lists/index', {lists, pages, searchBy, searchString});

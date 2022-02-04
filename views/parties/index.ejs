@@ -37,7 +37,7 @@
         name="searchBy"
         id="party-creator"
         value="creator"
-        <%= searchBy === 'creator.displayName' ? checked : '' %> 
+        <%= searchBy === 'creator.displayName' ? 'checked' : '' %> 
       >
       <label class="form-check-label" for="party-creator">
         Creator
@@ -62,20 +62,20 @@
       <div class="col-sm-6 col-lg-4">
           <div class="card mb-3">
               <div class="card-body text-center">
-                  <h2 class="card-title text-ellipsis"><%= party.title %></h2>
+                  <h2 class="card-title text-ellipsis mb-3"><%= party.title %></h2>
                   <div class="d-flex justify-content-around text-muted fst-italic">
-                    <p class="text-muted fs-6">
+                    <p class="mb-1">
                       Creator:                           
                       <a
                       href="/users/<%= party.creator._id %>/profile" 
-                      class="text-muted ms-1"
+                      class="text-muted ms-2"
                       >
                         <%= party.creator.displayName %> 
                       </a>
                     </p>
-                    <p>Members: <%= party.numMembers %></p>
+                    <p class="mb-2">Members: <%= party.numMembers %></p>
                   </div>
-                  <p class="text-muted">Status: <%= party.joinStatus %></p>
+                  <p class="text-muted fst-italic">Status: <%= party.status %></p>
                   <a href="/parties/<%= party._id %>" class="btn btn-danger">View</a>
               </div>
           </div>

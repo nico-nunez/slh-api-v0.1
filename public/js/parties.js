@@ -1,5 +1,5 @@
 (function() {
-  const joinDate = document.querySelector('#party-join');
+  const joinDate = document.querySelector('#party-selections');
   const exchangeDate = document.querySelector('#party-exchange');
   const showSecret = document.querySelector('#party-secret-show');
 

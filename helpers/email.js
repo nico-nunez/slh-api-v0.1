@@ -2,6 +2,7 @@ const nodemailer = require('nodemailer');
 const Link = require('../models/Link');
 const Email = require('./messages/Email');
 
+
 const dataEmailVerify = {
   codeLen: 150,
   type: 'emailVerify',

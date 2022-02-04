@@ -30,8 +30,9 @@ const isCreatorParty = catchAsync(async (req, res, next) => {
 
 const isUser = catchAsync( async(req, res, next) => {
 	const user = await User.findById(req.params.id);
+  const redirectURL = req.user._id ? `/users/${req.user._id}` : '/lists'
 	if (!user._id.equals(req.user._id)) {
-    throw new ExpressError('Permission denied', 403, '/auth/login');
+    throw new ExpressError('Permission denied', 403, redirectURL);
 	}
 	next();
 });
