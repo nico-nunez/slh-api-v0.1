@@ -11,15 +11,18 @@
         class="validate-form mb-2"
 		>
 			<div class="mb-3 form-group">
-				<label class="form-label" for="currentPass">Current Password:</label>
-				<input
-					class="form-control"
-					type="password"
-					name="currentPass"
-					id="current"
-					placeholder="current password"
-					required
-				/>
+        <label class="form-label" for="currentPass">Current Password:</label>
+        <div class="password-input-group">
+          <input
+            class="form-control password-input"
+            type="password"
+            name="currentPass"
+            id="current"
+            placeholder="current password"
+            required
+          />
+          <i class="far fa-eye password-eye-con text-muted"></i>
+        </div>
 			</div>
     <% } else { %>
       <form
@@ -30,29 +33,35 @@
 		  >
     <% } %> 
 			<div class="mb-3 form-group">
-				<label class="form-label" for="password">New Password:</label>
-				<input
-					class="form-control"
-					type="password"
-					name="password"
-					id="password"
-					placeholder="new password"
-					required
-				/>
+        <label class="form-label" for="password">New Password:</label>
+        <div class="password-input-group">
+          <input
+            class="form-control password-input"
+            type="password"
+            name="password"
+            id="password"
+            placeholder="new password"
+            required
+          />
+          <i class="far fa-eye password-eye-con text-muted"></i>
+        </div>
         <p class="text-muted text-xsmall mt-1 mb-0">Must be a minimum of 8 characters and contain at least:</p>
         <p class="text-muted text-xsmall mb-0">- an uppercase and a lowercase letter.</p>
         <p class="text-muted text-xsmall mb-0">- a number and a special charcter [!@$%&*?].</p>
 			</div>
 			<div class="mb-3 form-group">
 				<label class="form-label" for="confirm">Confirm New Password:</label>
-				<input
-					class="form-control"
-					type="password"
-					name="confirm"
-					id="password"
-					placeholder="re-type password"
-					required
-				/>
+        <div class="password-input-group">
+          <input
+            class="form-control password-input"
+            type="password"
+            name="confirm"
+            id="password"
+            placeholder="re-type password"
+            required
+          />
+          <i class="far fa-eye password-eye-con text-muted"></i>
+        </div>
 			</div>
       <% if(typeof(ulc) !== 'undefined') { %> 
         <input type="hidden" value="<%= ulc %>" name="ulc">
