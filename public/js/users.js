@@ -4,20 +4,16 @@
   const avatars = document.querySelectorAll('.avatar-label');
   const form = document.querySelector('.validate-form');
 
-  const handleFormSubmit = evt => {
-    evt.target.children[2].children[1].children[0].disabled = false;
-  }
-
   const handleOptionsClick = evt => {
     if (evt.target.id === 'email-verify') {
       document.querySelector('#verify').submit();
     }
     if (evt.target.id === 'email-update') {
       const emailInput = document.querySelector('#email-input')
-      evt.target.parentElement.classList.remove('form-control');
-      evt.target.classList.add('hidden');
-      emailInput.classList.remove('email-text')
-      emailInput.disabled = false;
+      document.querySelector('.email-text').classList.add('d-none');
+      // evt.target.parentElement.classList.remove('form-control');
+      evt.target.classList.add('d-none');
+      emailInput.type = 'text';
       emailInput.focus();
     }
   }
@@ -35,8 +31,11 @@
   }
 
   emailUpdate.addEventListener('click', handleOptionsClick);
-  emailVerify.addEventListener('click', handleOptionsClick);
-  form.addEventListener('submit', handleFormSubmit);
+
+  if(emailVerify) {
+    emailVerify.addEventListener('click', handleOptionsClick);
+  }
+
   Array.from(avatars).forEach(avatar => {
     avatar.addEventListener('click', handleAvatarClick)
   });

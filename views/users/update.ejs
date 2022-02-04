@@ -71,14 +71,14 @@
           <% } %> 
         </span>
         <span class="form-control edit-text" id="email-options">
+          <span class="form-control email-text"><%= user.email.address %></span>
           <input 
-            type="text"
+            type="hidden"
             id="email-input"
-            class="form-control email-text"
+            class="form-control"
             aria-label="email"
             name="profile[email]"
             value="<%= user.email.address %>"
-            disabled
             required
           >
           <span id="email-update" class="link">update</span>
