@@ -21,12 +21,15 @@
 		<link rel="stylesheet" href="/styles/index.css" />
 	</head>
 	<body class="d-flex flex-column vh-100">
+    <!-- <div class="bg-container">
+      <img class="bg-img" src="https://images.pexels.com/photos/1303098/pexels-photo-1303098.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260" alt="" srcset="">
+    </div> -->
 		<%- include('../partials/navbar') %>
     <div class="row m-0">
-      <main class="container mt-4 mb-4 m-auto">
+      <main class="container py-4 m-auto container-main">
         <%- include('../partials/flash') %>
         <%- body %>
-    </main>
+      </main>
     </div>
 		<%- include('../partials/footer') %>
 

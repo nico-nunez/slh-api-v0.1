@@ -17,15 +17,18 @@
 	<body class="text-center home">
 		<%- include('./partials/navbar') %>
 
-		<h1 class="title">Santa's Lil' Helper</h1>
+    <div class="title-content pt-5">
+      <h1 class="title">Santa's Lil' Helper</h1>
+    </div>
 
-		<div class="countdown-content">
-			<p class="countdown-text">Christmas is only</p>
-			<p id="countdown-clock"></p>
-			<p class="countdown-text">Away!</p>
-
+    <div class="countdown-content fw-bold">
+      <p class="countdown-text">Christmas is only</p>
+      <p id="countdown-clock" class="py-2"></p>
+      <p class="countdown-text">Away!</p>
+    </div>
+    <div class="enter">
       <a href="/lists" class="btn btn-login">Enter</a>
-		</div>
+    </div>
 
 		<script src="/js/countdown.js"></script>
 		<script

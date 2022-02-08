@@ -1,51 +1,55 @@
-@import url("https://fonts.googleapis.com/css2?family=Petemoss&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Courgette&display=swap");
+
+
 body {
-	font-family: "Petemoss", cursive;
+  font-family: "Courgette", cursive;
 	font-size: 32px;
+  height: 100vh;
+  background-image: linear-gradient(to bottom right, #0000008f, #000000ca), url('https://images.pexels.com/photos/1303098/pexels-photo-1303098.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260');
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: white;
+  overflow: hidden;
 }
 
+.title-content {
+  height: 30%;
+}
 .title {
-  position: absolute;
-  top: 25%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
+  margin-top: 80px;
 
-  font-size: 64px;
+  font-size: 58px;
   font-weight: bold;
-  letter-spacing: 4px;
+  letter-spacing: 5px;
 }
 
 .btn-login {
-  margin-top: 50px;
-	padding: 0 20px;
-	font-size: 38px;
+	padding: 10px 20px;
+	font-size: 32px;
 	letter-spacing: 8px;
 	font-weight: bold;
 	background-color: aliceblue;
 	border-radius: 25px;
-	box-shadow: inset 0px 0px 15px #146B3A;
+	box-shadow: inset 0px 0px 5px #146B3A;
 	border: 1px solid #146B3A;
 	color: darkslategrey;
   transition: .2s;
+  text-transform: uppercase;
 }
 
 .btn-login:hover {
-  box-shadow: inset 0px 0px 35px #146B3A;
+  box-shadow: inset 0px 0px 15px #146B3ACC;
   color: darkslategrey;
 }
 
 .countdown-content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  height: 30%;
 }
 
 .countdown-text {
   margin: 0;
   font-size: 38px;
-  letter-spacing: 3px;
+  letter-spacing: 4px;
 }
 
 #countdown-clock {
@@ -55,6 +59,10 @@ body {
   letter-spacing: 3px;
 }
 
+.enter {
+  height: 30%;
+}
+
 .footer {
   background-color: #146B3A;
   color: aliceblue;
@@ -62,11 +70,8 @@ body {
 
 @media screen and (max-width: 400px) {
   .title {
-    font-size: 48px;
-  }
-
-  .countdown-content {
-    transform: translate(-50%, -25%);
+    font-size: 42px;
+    margin: 0;
   }
 
   .countdown-text {
@@ -76,6 +81,10 @@ body {
 
   #countdown-clock {
     width: 100vw;
-    font-size: 38px;
+    font-size: 34px;
+  }
+
+  .btn-login {
+    font-size: 28px;
   }
 }

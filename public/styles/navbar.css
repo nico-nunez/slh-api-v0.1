@@ -1,12 +1,11 @@
+
 .navbar {
-	font-family: "Petemoss", cursive;
-	font-size: 32px;
+	font-size: 22px;
 	letter-spacing: 2px;
 	background-color: #165b33;
 }
 
 .navbar .navbar-nav a.nav-link{
-  line-height: 28px;
   padding-bottom: 4px;
   color: aliceblue;
   position: relative;
