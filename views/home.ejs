@@ -16,19 +16,23 @@
 	</head>
 	<body class="text-center home">
 		<%- include('./partials/navbar') %>
+    
+    <div class="bg"></div>
 
-    <div class="title-content pt-5">
-      <h1 class="title">Santa's Lil' Helper</h1>
-    </div>
-
-    <div class="countdown-content fw-bold">
-      <p class="countdown-text">Christmas is only</p>
-      <p id="countdown-clock" class="py-2"></p>
-      <p class="countdown-text">Away!</p>
-    </div>
-    <div class="enter">
-      <a href="/lists" class="btn btn-login">Enter</a>
-    </div>
+    <main class="container pb-5">
+      <div class="title-content pt-5">
+        <h1 class="title">Santa's Lil' Helper</h1>
+      </div>
+  
+      <div class="row countdown-content fw-bold">
+        <p class="col-12 countdown-text">Christmas is only</p>
+        <p id="countdown-clock" class="col-12 py-2"></p>
+        <p class="col-12 countdown-text">Away!</p>
+      </div>
+      <div class="enter">
+        <a href="/lists" class="btn btn-login">Enter</a>
+      </div>
+    </main>
 
 		<script src="/js/countdown.js"></script>
 		<script
