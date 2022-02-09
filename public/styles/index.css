@@ -27,9 +27,15 @@ body {
   background-color: rgba(240, 248, 255, 0.7);
 }
 
+.container-main {
+  position: relative;
+  min-height: 85vh;
+}
+
 
 .pagination-container {
-  width: 99%;
+  width: 100vw;
+  max-width: 100%;
   padding: 0;
   margin: 0;
   position: absolute;
