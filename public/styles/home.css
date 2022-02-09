@@ -4,20 +4,39 @@
 body {
   font-family: "Courgette", cursive;
 	font-size: 32px;
-  height: 100vh;
+  /* width: 100vw;
+  min-height: 100vh;
+  max-height: 100%;
+  min-width: 100vw;
   background-image: linear-gradient(to bottom right, #0000008f, #000000ca), url('https://images.pexels.com/photos/1303098/pexels-photo-1303098.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260');
+	background-attachment: fixed; 
+	background-size: cover; */
+  color: white;
+}
+
+.bg {
+  position: fixed;
+  height: 100vh;
+  max-height: 100vh;
+  width: 100vw;
+  z-index: -10;
+  background-image: url('https://images.pexels.com/photos/1303098/pexels-photo-1303098.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260');
   background-size: cover;
   background-repeat: no-repeat;
-  color: white;
-  overflow: hidden;
 }
 
-.title-content {
-  height: 30%;
+.bg::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(to bottom right, #0000008f, #000000cc);
 }
+
 .title {
   margin-top: 80px;
-
   font-size: 58px;
   font-weight: bold;
   letter-spacing: 5px;
@@ -43,7 +62,7 @@ body {
 }
 
 .countdown-content {
-  height: 30%;
+  margin-top: 100px;
 }
 
 .countdown-text {
@@ -60,7 +79,7 @@ body {
 }
 
 .enter {
-  height: 30%;
+  margin-top: 100px;
 }
 
 .footer {
@@ -74,13 +93,16 @@ body {
     margin: 0;
   }
 
+  .countdown-content {
+    margin-top: 70px;
+  }
+
   .countdown-text {
     margin-bottom: 0;
     font-size: 32px;
   }
 
   #countdown-clock {
-    width: 100vw;
     font-size: 34px;
   }
 
