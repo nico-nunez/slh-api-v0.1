@@ -4,6 +4,9 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const { sendEmailLink } = require("../helpers/email");
 const { ExpressError } = require("../helpers/errors");
 
+const List = require('./List');
+const Party = require('./Party');
+
 const userSchema = new Schema(
 	{
     googleID: {
@@ -47,6 +50,12 @@ userSchema.plugin(passportLocalMongoose, {
   maxAttempts: 5,
   errorMessages: { UserExistsError: 'Email is already registered.  You can attempt to login, or recover your password if necessary.'}
   });
+
+userSchema.post('findOneAndDelete', async function(doc) {
+  await List.deleteMany({creator: doc._id});
+  await Party.deleteMany({creator: doc._id});
+  await Party.updateMany({}, {$pull: {members: doc._id}});
+});
 
 userSchema.pre('save', function(next){
   if(this.isNew) {
