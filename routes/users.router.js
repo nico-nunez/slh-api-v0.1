@@ -13,6 +13,8 @@ const { validProfile } = require('../middleware/joiSchemas');
 const users = require('../controllers/users.controller');
 
 router.get('/:id', isLoggedIn, isUser, users.showDashboard);
+router.put('/:id', isLoggedIn, isUser, validProfile, users.updateUser);
+router.delete('/:id', isLoggedIn, isUser, users.deleteUser);
 
 router.get('/:id/profile', isLoggedIn, users.showProfile);
 
@@ -20,6 +22,5 @@ router.get('/:id/lists', isLoggedIn, isUser, users.showUserLists);
 router.get('/:id/parties', isLoggedIn, isUser, users.showUserParties);
 
 router.get('/:id/update', isLoggedIn, isUser, users.updateUserForm)
-router.put('/:id/update', isLoggedIn, isUser, validProfile, users.updateUser);
 
 module.exports = router;
