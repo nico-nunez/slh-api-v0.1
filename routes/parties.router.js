@@ -6,6 +6,8 @@ const parties = require('../controllers/parties.controller');
 
 router.get("/", parties.showPublicParties);
 router.get("/new", isLoggedIn, parties.createPartyForm);
+router.get("/example", parties.showExample);
+router.post("/example", parties.getExampleSelections);
 
 router.post("/", isLoggedIn, validParty, parties.createParty);
 
@@ -17,6 +19,5 @@ router.get("/:id/members/edit", isLoggedIn, isCreatorParty, parties.removeMember
 router.put("/:id/members",	isLoggedIn, parties.editMembers);
 
 router.delete("/:id", isLoggedIn, isCreatorParty, parties.deleteParty);
-router.post("/:id/selections/example",isLoggedIn, parties.getMemberSelections);
 
 module.exports = router;
