@@ -24,7 +24,7 @@ module.exports.showPublicParties = catchAsync(async (req, res, next) => {
   const pages = {
     numPages,
     current: page,
-    baseURL: '/paries?page='
+    baseURL: '/parties?page='
   };
   res.render("parties/index", { parties, pages, searchBy, searchString });
 });
