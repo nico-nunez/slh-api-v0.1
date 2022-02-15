@@ -1,0 +1,88 @@
+<% layout('layouts/boilerplate') %>
+
+<h1 class="text-center">Example</h1>
+<div class="col-md-12">
+	<div class="row">
+		<div class="col-md-6 m-auto">
+			<div class="card mb-3">
+				<div class="card-body text-center pb-0">
+					<h6 class="mb-0">Started By:</h6>
+          <h5>
+            Someone
+          </h5>
+          <div class="d-flex justify-content-around">
+            <div>
+              <h6 class="mb-0">Draw</h6>
+              <h6 class="mb-0">Names:</h6>
+              <h5 class="mb-0">Specified Date</h5>
+            </div>
+            <div>
+              <h6 class="mb-0">Exchange</h6>
+              <h6 class="mb-0">Gifts:</h6>
+              <h5 class="mb-0">Specified Date</h5>
+            </p>
+            </div>
+          </div>
+				</div>
+        <div class="text-center mb-3">
+          <button
+          type="button"
+          class="btn btn-primary ms-3"
+          data-bs-toggle="modal"
+          data-bs-target="#party-join"
+          <% if(party.status !== 'open' || party.isMember) { %> 
+            disabled
+          <% } %>
+          >
+            Join
+          </button>
+        </div>
+        <%- include('./modals/join') %> 
+			</div>
+		</div>
+	</div>
+	<div class="row">
+    <div class="col-12">
+      <div class="col-lg-8 col-md-10 m-auto mb-3">
+        <div class="card p-4">
+          <div class="card-title row text-center">
+            <div class="col-sm-6">
+              <h2>Members</h2>
+            </div>
+            <div class="col-sm-6">
+              <h2>Lists</h2>
+            </div>
+          </div>
+          <div class="card-body p-0">
+            <ul class="list-group text-center">
+              <% for (const member of party.members) { %>
+                <li class="list-group-item p-2">
+                  <div class="row">
+                    <div class="col-6">
+                      <a href="/users/<%= member._id %>/profile">
+                        <%= member.displayName %>
+                      </a>
+                    </div>
+                    <div class="col-6">
+                      <% if (lists[String(member._id)]) { %> 
+                        <a href="/lists/<%= lists[String(member._id)]._id %>">
+                          <%= lists[member._id].title %>
+                        </a>
+                        <% } else { %>
+                          <span class="text-muted">n/a</span>
+                        <% } %>
+                    </div>
+                  </div>
+                </li>
+            <% } %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+	</div>
+  <%- include('./partials/selectionsExample') %>  
+</div>
+
+
+<script src="/js/parties.js"></script>

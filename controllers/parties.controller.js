@@ -24,10 +24,23 @@ module.exports.showPublicParties = catchAsync(async (req, res, next) => {
   const pages = {
     numPages,
     current: page,
-    baseURL: '/paries?page='
+    baseURL: '/parties?page='
   };
   res.render("parties/index", { parties, pages, searchBy, searchString });
 });
+
+module.exports.showExample = catchAsync(async (req, res, next) => {
+  const exampleID = process.env.EXAMPLE_PARTY_ID;
+  const party = await Party.findById(exampleID)
+  .populate('members', 'displayName')
+  .populate('lists', 'title creator')
+  .lean();
+  const lists = {}
+  party.lists.forEach(list => lists[String(list.creator._id)] = list);
+  const selections = await Selection.find({party: exampleID}).populate('selector', 'displayName').populate('recipient', 'displayName').lean();
+  await Selection.deleteMany({party: exampleID});
+  res.render('parties/example', { party, lists, selections});
+})
 
 
 module.exports.createPartyForm = (req, res) => {
@@ -49,7 +62,6 @@ module.exports.createParty = catchAsync(async (req, res, next) => {
 
 
 module.exports.showParty = catchAsync(async (req, res, next) => {
-  const examplePartyID = "61f17ad6cac18a2ca6cb75f9";
   const foundParty = await Party.findById(req.params.id)
     .populate('creator', 'displayName')
     .populate('members', 'displayName')
@@ -60,18 +72,13 @@ module.exports.showParty = catchAsync(async (req, res, next) => {
   }
   let userLists = [];
   const lists = {}
-  let selections;
   foundParty.lists.forEach(list => lists[String(list.creator._id)] = list);
   foundParty.isMember = helpers.isPartyMember(foundParty, req.user.id);
   if (foundParty.isMember) {
     userLists = await List.find({creator: req.user.id}, {title: 1}).lean();
   }
   foundParty.disableJoin = foundParty.isMember || foundParty.status !== 'open';
-  if(String(foundParty._id) === examplePartyID) {
-    selections = await Selection.find({party: foundParty._id}).populate('selector', 'displayName').populate('recipient', 'displayName').lean();
-    await Selection.deleteMany({party: foundParty._id});
-  }
-  res.render("parties/show", { party: foundParty, lists, userLists, selections });
+  res.render("parties/show", { party: foundParty, lists, userLists });
 });
 
 
@@ -157,13 +164,11 @@ module.exports.editMembers = catchAsync(async (req, res, next) => {
 })
 
 
-module.exports.getMemberSelections = catchAsync(async (req, res, next) => {
-  const foundParty = await Party.findById(req.params.id, {members: 1}).lean();
-  if(!foundParty) throw new ExpressError('Unable to find party.', 400, '/parties');
-  const selections = helpers.getSelections(foundParty);
+module.exports.getExampleSelections = catchAsync(async (req, res, next) => {
+  const example = await Party.findById(process.env.EXAMPLE_PARTY_ID, {members: 1}).lean();
+  const selections = helpers.getSelections(example);
   await Selection.insertMany(selections);
-  // await Party.updateOne({_id: foundParty._id }, {selectionsOn: new Date(), status: 'in progress'});
-  res.redirect(`/parties/${foundParty._id}`);
+  res.redirect(`/parties/example`);
 });
 
 
