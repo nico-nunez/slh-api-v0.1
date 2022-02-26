@@ -37,7 +37,7 @@ const sessionConfig = {
   saveUninitialized: true,
   cookie: {
     secure: process.env.NODE_ENV === 'production',
-    expires: Date.now() + 1000 * 60 * 60 * 24 * 7 * 2,
+    expires: 1000 * 60 * 60 * 24 * 7 * 2,
   }
 }
 
