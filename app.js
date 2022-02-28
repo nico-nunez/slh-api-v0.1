@@ -29,6 +29,7 @@ if (process.env.NODE_ENV === 'production'){
   app.set('trust proxy', 1)
 }
 
+app.use(helmet({contentSecurityPolicy: false}));
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
@@ -39,7 +40,6 @@ app.use(session(sessionConfig));
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(mongoSanitize())
 app.use(flash());
-app.use(helmet({contentSecurityPolicy: false}));
 
 app.use(passport.initialize());
 app.use(passport.session());
