@@ -62,3 +62,10 @@ module.exports.updateUser = catchAsync( async (req, res, next) => {
   
   res.redirect(`/users/${user.id}`);
 });
+
+module.exports.deleteUser = catchAsync( async (req, res, next) => {
+  const { id } =  req.params;
+  await User.findOneAndDelete({_id: id});
+  req.flash('success', 'Profile removed.');
+  res.redirect('/lists');
+})
