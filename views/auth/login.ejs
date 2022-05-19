@@ -25,32 +25,34 @@
 			</div>
 			<div class="mb-3 form-group">
 				<label class="form-label" for="password">Password:</label>
-        <div class="password-input-group">
-          <input
-					class="form-control password-input"
-					type="password"
-					name="password"
-					id="password"
-					placeholder="password"
-					required
-				/>
-        <i class="far fa-eye password-eye-con text-muted"></i>
-        </div>
+				<div class="password-input-group">
+					<input
+						class="form-control password-input"
+						type="password"
+						name="password"
+						id="password"
+						placeholder="password"
+						required
+					/>
+					<i class="far fa-eye password-eye-con text-muted"></i>
+				</div>
 			</div>
 			<div class="login-local">
-        <div class="login-options">
-          <button class="btn btn-primary me-2">Login</button>
-          <a href="/auth/password/reset/request" class="password-recovery">Forgot password?</a>
-        </div>
-        <a href="/auth/register" class="btn btn-danger">Register</a>
+				<div class="login-options">
+					<button class="btn btn-primary me-2">Login</button>
+					<a href="/auth/password/reset/request" class="password-recovery"
+						>Forgot password?</a
+					>
+				</div>
+				<a href="/auth/register" class="btn btn-danger">Register</a>
 			</div>
 		</form>
-		<div class="login-oauth">
+		<!-- <div class="login-oauth">
       <div class="login-divider"></div>
 			<div class="mt-2 mb-2">
         <a href="/auth/google" class="btn btn-google"></a>
       </div>
-		</div>
+		</div> -->
 		<% } %>
 	</div>
 </div>
