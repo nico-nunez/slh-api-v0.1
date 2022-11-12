@@ -1,3 +1,6 @@
 node_modules
 seeds
 .env
+
+Dockerfile
+.dockerignore
