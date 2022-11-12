@@ -69,7 +69,7 @@
 		copyInviteLink.addEventListener('click', (evt) => {
 			const btn = evt.target;
 			const { partyId, partySecret } = btn.dataset;
-			const link = `http://${window.location.host}/parties/${partyId}?join_code=${partySecret}`;
+			const link = `${window.location.protocol}//${window.location.host}/parties/${partyId}?join_code=${partySecret}`;
 
 			// COPY TO CLIPBOARD
 			navigator.clipboard.writeText(link);
