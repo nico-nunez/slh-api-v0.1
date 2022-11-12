@@ -211,3 +211,17 @@ form :invalid {
 .alert p {
   margin: 0;
 }
+
+.alert-message {
+  font-size: .95rem;
+  color: red;
+  margin: 0;
+}
+
+#copy-invite-link {
+  padding: 0;
+    background: none;
+    border: none;
+    color: #069;
+    text-decoration: underline;
+}

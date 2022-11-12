@@ -14,13 +14,13 @@
           </h5>
           <div class="d-flex justify-content-around">
             <div>
-              <h6 class="mb-0">Draw</h6>
-              <h6 class="mb-0">Names:</h6>
+              <h6 class="mb-0">Names</h6>
+              <h6 class="mb-0">Drawn:</h6>
               <h5 class="date-full mb-0"><%= party.selectionsOn %></h5>
             </div>
             <div>
-              <h6 class="mb-0">Exchange</h6>
-              <h6 class="mb-0">Gifts:</h6>
+              <h6 class="mb-0">Gifts</h6>
+              <h6 class="mb-0">Exchanged:</h6>
               <h5 class="date-full mb-0"><%= party.exchangeOn %></h5>
             </p>
             </div>
@@ -33,7 +33,16 @@
               <span class="link text-small" id="party-secret-show">show</span>
             </h5>
             <h3 class="hidden" id="party-secret"><%= party.secret %></h3>
+            <button 
+              id="copy-invite-link"
+              data-party-id = "<%= party._id %>""
+              data-party-secret= "<%= party.secret%>"
+              title="Copy link to clipboard"
+            >
+              Copy invite link
+            </button>
           </div>
+
           <div class="text-center mb-3 d-flex justify-content-center">
             <a href="/parties/<%= party._id %>/edit" class="btn btn-warning">
               Edit
