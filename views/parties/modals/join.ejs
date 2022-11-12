@@ -1,52 +1,47 @@
 <div
-  class="modal fade"
-  id="party-join"
-  data-bs-backdrop="static"
-  data-bs-keyboard="false"
-  tabindex="-1"
-  aria-labelledby="staticBackdropLabel"
-  aria-hidden="true"
+	class="modal fade"
+	id="party-join"
+	data-bs-backdrop="static"
+	data-bs-keyboard="false"
+	tabindex="-1"
+	aria-labelledby="staticBackdropLabel"
+	aria-hidden="true"
 >
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title" id="staticBackdropLabel">
-          Join Party
-        </h3>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <h5><%= party.title %></h5>
-        <p>Enter party code:</p>
-        <form 
-          action="/parties/<%= party._id %>/members?_method=PUT"
-          method="POST"
-          id="party-join-form"
-        >
-          <input type="text" class="form-control" name="secret">
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button 
-          type="submit" 
-          class="btn btn-primary"
-          form="party-join-form"
-        >
-          Join
-        </button>
-        <button
-          type="button"
-          class="btn btn-warning"
-          data-bs-dismiss="modal"
-        >
-          Cancel
-        </button>
-      </div>
-    </div>
-  </div>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h3 class="modal-title" id="staticBackdropLabel">Join Party</h3>
+				<button
+					type="button"
+					class="btn-close"
+					data-bs-dismiss="modal"
+					aria-label="Close"
+				></button>
+			</div>
+			<div class="modal-body">
+				<h5><%= party.title %></h5>
+				<p>Enter party code:</p>
+				<form
+					action="/parties/<%= party._id %>/members?_method=PUT"
+					method="POST"
+					id="party-join-form"
+				>
+					<input
+						type="text"
+						class="form-control"
+						name="secret"
+						value="<%=joinCode%>"
+					/>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-primary" form="party-join-form">
+					Join
+				</button>
+				<button type="button" class="btn btn-warning" data-bs-dismiss="modal">
+					Cancel
+				</button>
+			</div>
+		</div>
+	</div>
 </div>
