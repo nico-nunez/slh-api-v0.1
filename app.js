@@ -53,7 +53,11 @@ app.use((req, res, next) => {
 });
 
 app.get('/', (req, res) => {
-	res.render('home');
+	if (req.user) {
+		res.redirect('/users/dashboard');
+	} else {
+		res.render('home');
+	}
 });
 
 app.use('/lists', listsRoutes);

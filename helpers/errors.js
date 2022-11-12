@@ -14,7 +14,7 @@ const catchAsync = (func) => {
 };
 
 const errorHandler = (err, req, res, next) => {
-	const defaultURL = '/lists';
+	const defaultURL = '/';
 	const { status = 500, redirectURL = defaultURL } = err;
 	if (!err.message) err.message = 'Oops! Something went wrong with the server.';
 	if (err.name === 'CastError')
