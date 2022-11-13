@@ -46,3 +46,23 @@
 .dropdown-divider {
   color: aliceblue;
 }
+
+.new-notifications-alert {
+  display: inline-block;
+  height: .5rem;
+  width: .5rem;
+  padding: .2rem;
+  background-color: orangered;
+  border-radius: 50%;
+}
+
+.new-notifications-number {
+  display: inline-block;
+  min-height: 1.5rem;
+  min-width: 1.5rem;
+  text-align: center;
+  margin-left: .5rem;
+  background-color: orangered;
+  font-weight: bold;
+  border-radius: 100%;
+}

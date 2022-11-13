@@ -26,13 +26,13 @@
                   <a class="nav-link dropdown-toggle" href="/users/<%= loggedInUser._id %>" data-bs-toggle="dropdown"
                     aria-expanded="false" role="button">
                     Hi, <%= loggedInUser.displayName %>
+                    <% if (loggedInUser.notifications.length) { %>
+                      <span class="new-notifications-alert"></span>
+                    <% } %>  
                   </a>
                   <ul class="dropdown-menu">
                     <li>
-                      <a class="dropdown-item" href="/">Dashboard</a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="/">Messages</a>
+                      <a class="dropdown-item" href="/">Dashboard<span class="new-notifications-number"><%= loggedInUser.notifications.length%></span></a>
                     </li>
                     <li>
                       <hr class="dropdown-divider">
