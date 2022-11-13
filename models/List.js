@@ -5,31 +5,39 @@ const dayjs = require('dayjs');
 const itemSchema = new Schema({
   description: {
     type: String,
-    required: true
+    required: true,
   },
   link: String,
-  purchased: Boolean
+  purchased: Boolean,
 });
-  
 
-const listSchema = new Schema({
-  title: {
-    type: String,
-    required: true
+const listSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    items: [itemSchema],
+    creator: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    public: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    subscribers: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
   },
-  items: [itemSchema],
-  creator: {
-    type: Schema.Types.ObjectId, 
-    ref: 'User'
-  },
-  public: {
-    type: Boolean,
-    required: true,
-    default: false
-  }
-},{timestamps: true});
+  { timestamps: true }
+);
 
-listSchema.index({title: 'text', creator: 'text', items: 'text'});
-itemSchema.index({description: 'text'});
+listSchema.index({ title: 'text', creator: 'text', items: 'text' });
+itemSchema.index({ description: 'text' });
 
 module.exports = mongoose.model('List', listSchema);
