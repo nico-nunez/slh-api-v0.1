@@ -1,40 +1,26 @@
-
 .navbar {
-	font-size: 22px;
-	letter-spacing: 2px;
-	background-color: #165b33;
+  font-size: 22px;
+  letter-spacing: 2px;
+  background-color: #165b33;
+  align-items: center;
 }
 
-.navbar .navbar-nav a.nav-link{
+.navbar .navbar-nav a.nav-link {
   padding-bottom: 4px;
+  padding-right: 1rem;
   color: aliceblue;
   position: relative;
 }
-.navbar .navbar-nav a.nav-link:hover{
-  color: aliceblue;
-}
-.navbar .navbar-nav a.nav-link::before{
-  content: '';
-  position: absolute;
-  width: 70%;
-  transform: scaleX(0);
-  height: 2px;
-  bottom: 0;
-  left: 15%;
-  opacity: .7;
-  background-color: aliceblue;
-  transform-origin: center;
-  transition: transform 0.22s ease-in-out;
-}
-.navbar .navbar-nav a.nav-link:hover::before{
-  transform: scaleX(1);
+.navbar .navbar-nav a.nav-link:hover {
   color: aliceblue;
 }
 
 .avatar-nav {
+  margin-left: 0.5rem;
   height: 50px;
   border-radius: 50%;
   background-color: cyan;
+  align-self: flex-start;
 }
 
 .nav-item.dropdown .dropdown-menu a.nav-link {
@@ -42,5 +28,21 @@
 }
 
 .dropdown-menu {
-  transform: translateX(-25%);
+  text-align: center;
+  background-color: #165b33;
+  border: none;
+}
+
+.dropdown-menu li a {
+  color: aliceblue;
+}
+
+.dropdown-menu li a:hover {
+  background-color: transparent;
+  color: aliceblue;
+  opacity: 0.8;
+}
+
+.dropdown-divider {
+  color: aliceblue;
 }

@@ -2,48 +2,55 @@
 
 <nav class="navbar sticky-top navbar-expand-sm navbar-dark">
   <div class="container-fluid">
-    <% if(loggedInUser) { %> 
+    <% if(loggedInUser) { %>
       <a class="navbar-brand" href="/users/<%= loggedInUser._id %>">
-      <% } else { %> 
-      <a class="navbar-brand" href="/">
-      <% } %> 
-      <img
-        src="/assets/santa-hat.png"
-        alt="santa hat"
-        height="42"
-      />
-    </a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNavAltMarkup"
-      aria-controls="navbarNavAltMarkup"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse text-center" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <% if (loggedInUser) { %>
-          <a class="nav-link" href="/">Dashboard</a>
-        <% } %>  
-        <a class="nav-link" href="/lists">Lists</a>
-        <a class="nav-link" href="/parties">Parties</a>
-      </div>
-      <div class="navbar-nav ms-auto">
-        <% if (loggedInUser) { %>
-          <!-- <img src="<%= loggedInUser.avatar %>" class="avatar-nav me-2" alt="avatar"> -->
-          <a class="nav-link" href="/users/<%= loggedInUser._id %>">
-            <%= loggedInUser.displayName %> 
+        <% } else { %>
+          <a class="navbar-brand" href="/">
+            <% } %>
+              <img src="/assets/santa-hat.png" alt="santa hat" height="42" />
           </a>
-          <a class="nav-link" href="/auth/logout">Logout</a>
-        <%} else { %> 
-          <a class="nav-link" href="/auth/login">Login</a>
-          <a class="nav-link" href="/auth/register">Register</a>
-        <% } %> 
-      </div>
-    </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse text-center" id="navbarNavDropdown">
+            <div class="navbar-nav ms-auto">
+              <li>
+                <a class="nav-link" href="/lists">Lists</a>
+              </li>
+              <li>
+                <a class="nav-link" href="/parties">Parties</a>
+              </li>
+              <% if (loggedInUser) { %>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="/users/<%= loggedInUser._id %>" data-bs-toggle="dropdown"
+                    aria-expanded="false" role="button">
+                    Hi, <%= loggedInUser.displayName %>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a class="dropdown-item" href="/">Dashboard</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="/">Messages</a>
+                    </li>
+                    <li>
+                      <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="/auth/logout">Logout</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="d-none d-md-block">
+                  <a href="/">
+                    <img src="<%= loggedInUser.avatar %>" class="avatar-nav me-2" alt="avatar">
+                  </a>
+                </li>
+                <%} else { %>
+                  <a class="nav-link" href="/auth/login">Login</a>
+                  <% } %>
+            </div>
+          </div>
   </div>
 </nav>
