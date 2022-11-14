@@ -16,8 +16,8 @@ module.exports.showDashboard = catchAsync(async (req, res, next) => {
 		recipients: { $in: [currentUser._id] },
 	});
 	currentUser.notifications = notifications;
-	await currentUser.save();
-	res.render('users/index', { user: currentUser, lists, parties });
+	const user = await currentUser.save();
+	res.render('users/index', { user, lists, parties });
 });
 
 // USER PUBLIC PROFILE

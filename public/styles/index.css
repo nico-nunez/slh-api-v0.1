@@ -228,10 +228,6 @@ form :invalid {
     text-decoration: underline;
 }
 
-/* .notification-message {
-  display: flex;
-} */
-
 .dismiss-notification {
   display: block;
   width: 100%;
@@ -239,8 +235,5 @@ form :invalid {
   background: none;
   border: none;
   outline: none;
+  color: black;
 }
-
-/* .dismiss-notification:hover {
-  cursor: pointer;
-} */

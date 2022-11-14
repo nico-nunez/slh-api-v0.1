@@ -1,7 +1,7 @@
 const Notification = require('../models/Notification');
 
 module.exports.createNotification = async (
-	generator,
+	model,
 	user_id,
 	message = { title: '', content: '' }
 ) => {

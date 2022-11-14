@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const dayjs = require('dayjs');
 
+const Party = require('./Party');
+const { createNotification } = require('../helpers/notifications.helpers');
+
 const itemSchema = new Schema({
 	description: {
 		type: String,
@@ -47,12 +50,18 @@ listSchema.post('findOneAndDelete', async function (doc) {
 	});
 });
 
-listSchema.post('findOneAndUpdate', async function (err, doc, next) {
-	await createNotification(doc, doc.creator, {
-		title: '',
-		content: `${doc.title} has been updated`,
-	});
-	next();
+listSchema.post('findOneAndUpdate', async function (doc) {
+	const parties = await Party.find({ lists: { $in: doc._id } });
+	if (parties) {
+		Promise.all(
+			parties.map(async (party) => {
+				await createNotification(party, doc.creator, {
+					title: '',
+					content: `The list "${doc.title}" has been updated`,
+				});
+			})
+		);
+	}
 });
 
 module.exports = mongoose.model('List', listSchema);

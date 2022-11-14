@@ -52,17 +52,17 @@
       <h2 class="card-title m-0 text-center">Notifications</h2>
       <div class="card-body p-0">
         <ul class="list-group pt-2">
-          <% for (let i=0; i<loggedInUser.notifications.length; i++) { %>
+          <% for (let i=0; i<user.notifications.length; i++) { %>
             <li class="notification-message fst-italic list-group-item">
               <form
-              action="/users/<%=loggedInUser.id%>/notifications/<%=loggedInUser.notifications[i]._id%>?_method=PUT"
+              action="/users/<%=user.id%>/notifications/<%=user.notifications[i]._id%>?_method=PUT"
               method="POST"
               class="hidden"
               id="dismiss-notification-<%= i %>"
             >
             </form>
             <button type="submit" form="dismiss-notification-<%= i %>" class="dismiss-notification">X</button>
-                <p><%= loggedInUser.notifications[i].content %></p>
+                <p><%= user.notifications[i].content %></p>
             </li>
           <% } %> 
 				</ul>
