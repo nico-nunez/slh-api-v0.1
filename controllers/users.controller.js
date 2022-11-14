@@ -82,3 +82,13 @@ module.exports.deleteUser = catchAsync(async (req, res, next) => {
 	req.flash('success', 'Profile removed.');
 	res.redirect('/lists');
 });
+
+// REMOVE NOTIFICATION
+module.exports.dismissNotification = catchAsync(async (req, res, next) => {
+	const { id, notification_id } = req.params;
+	const result = await Notification.updateOne(
+		{ _id: notification_id },
+		{ $pull: { recipients: req.user._id } }
+	);
+	res.redirect('/users/dashboard');
+});

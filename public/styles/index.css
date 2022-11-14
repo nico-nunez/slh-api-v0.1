@@ -227,3 +227,20 @@ form :invalid {
     color: #069;
     text-decoration: underline;
 }
+
+/* .notification-message {
+  display: flex;
+} */
+
+.dismiss-notification {
+  display: block;
+  width: 100%;
+  text-align: center;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+/* .dismiss-notification:hover {
+  cursor: pointer;
+} */

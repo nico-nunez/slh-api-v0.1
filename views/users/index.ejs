@@ -49,12 +49,22 @@
 	</div>
   <div class="col-md-4 col-sm-6 mt-3">
 		<div class="card py-2 px-4">
-      <h2 class="card-title m-0 text-center">Coming Soon...</h2>
+      <h2 class="card-title m-0 text-center">Notifications</h2>
       <div class="card-body p-0">
         <ul class="list-group pt-2">
-          <li class="fst-italic list-group-item text-small">- Show liked/favorited lists & users</li>
-          <li class="fst-italic list-group-item text-small">- Show messages from users</li>
-          <li class="fst-italic list-group-item text-small">- Show notifications of updates to parties & lists</li>
+          <% for (let i=0; i<loggedInUser.notifications.length; i++) { %>
+            <li class="notification-message fst-italic list-group-item">
+              <form
+              action="/users/<%=loggedInUser.id%>/notifications/<%=loggedInUser.notifications[i]._id%>?_method=PUT"
+              method="POST"
+              class="hidden"
+              id="dismiss-notification-<%= i %>"
+            >
+            </form>
+            <button type="submit" form="dismiss-notification-<%= i %>" class="dismiss-notification">X</button>
+                <p><%= loggedInUser.notifications[i].content %></p>
+            </li>
+          <% } %> 
 				</ul>
 			</div>
 		</div>

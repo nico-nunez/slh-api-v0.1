@@ -21,4 +21,11 @@ router.get('/:id/parties', isLoggedIn, isUser, users.showUserParties);
 
 router.get('/:id/update', isLoggedIn, isUser, users.updateUserForm);
 
+router.put(
+	'/:id/notifications/:notification_id',
+	isLoggedIn,
+	isUser,
+	users.dismissNotification
+);
+
 module.exports = router;

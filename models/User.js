@@ -5,8 +5,36 @@ const { sendEmailLink } = require('../helpers/email');
 const { ExpressError } = require('../helpers/errors');
 
 const List = require('./List');
-const { userNotificationSchema } = require('./Notification');
 const Party = require('./Party');
+
+const userNotificationSchema = new Schema(
+	{
+		title: {
+			type: String,
+		},
+		content: {
+			type: String,
+			required: true,
+		},
+		generatorModel: {
+			type: String,
+			enum: ['Party', 'List', 'User'],
+		},
+		generator: {
+			type: Schema.Types.ObjectId,
+			refPath: 'generatorModel',
+		},
+		recipients: [{ type: Schema.Types.ObjectId, ref: 'User', default: [] }],
+		readBy: [
+			{
+				type: Schema.Types.ObjectId,
+				ref: 'User',
+				default: [],
+			},
+		],
+	},
+	{ timestamps: true }
+);
 
 const userSchema = new Schema(
 	{
@@ -40,13 +68,7 @@ const userSchema = new Schema(
 			type: String,
 			trim: true,
 		},
-		notifications: [
-			{
-				type: Schema.Types.ObjectId,
-				ref: 'Notification',
-				default: [],
-			},
-		],
+		notifications: [userNotificationSchema],
 	},
 	{ timestamps: true }
 );
