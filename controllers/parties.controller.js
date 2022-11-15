@@ -2,7 +2,6 @@ const { CronJob } = require('cron');
 const dayjs = require('dayjs');
 
 const Party = require('../models/Party');
-const User = require('../models/User');
 const List = require('../models/List');
 const Selection = require('../models/Selection');
 const Notification = require('../models/Notification');
@@ -218,7 +217,14 @@ module.exports.getExampleSelections = catchAsync(async (req, res, next) => {
 	res.redirect(`/parties/example`);
 });
 
+// MAKE SELECTIONS ATOMAICALLY FOR PARTIES STARTING EACH DAY
 const dailyTasks = new CronJob('00 00 06 * * *', async function () {
 	await helpers.makeSelectionsUpdateStatus();
 });
 dailyTasks.start();
+
+// DELETE NOTIFICATIONS WITH NO RECIPIENTS EACH DAY
+const deleteNotifications = new CronJob('00 00 06 * * *', async function () {
+	await Notification.deleteMany({ recipients: { $size: 0 } });
+});
+deleteNotifications.start();
