@@ -90,6 +90,11 @@ module.exports.showParty = catchAsync(async (req, res, next) => {
 	if (foundParty.isMember) {
 		userLists = await List.find({ creator: req.user.id }, { title: 1 }).lean();
 	}
+	foundParty.members.sort((a, b) => {
+		if (a.displayName < b.displayName) return -1;
+		if (a.displayName > b.displayName) return 1;
+		return 0;
+	});
 	foundParty.disableJoin = foundParty.isMember || foundParty.status !== 'open';
 	res.render('parties/show', { party: foundParty, lists, userLists, joinCode });
 });

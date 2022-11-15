@@ -132,6 +132,7 @@
                       <a href="/users/<%= member._id %>/profile">
                         <%= member.displayName %>
                       </a>
+                      <span class="text-muted"><%= member._id.toString() === party.creator._id.toString() ? '*' : '' %></span>
                     </div>
                     <div class="col-6">
                       <% if (lists[String(member._id)]) { %> 
@@ -147,6 +148,7 @@
             <% } %>
             </ul>
           </div>
+          <p class="text-small text-muted mt-2 mb-0 ms-auto">* party creator</p>
         </div>
       </div>
     </div>
