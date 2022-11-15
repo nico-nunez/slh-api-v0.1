@@ -3,10 +3,9 @@
 <div class="row">
 	<div class="text-center">
 		<h1><%= list.title %></h1>
+		<p class="mb-0"><%= list.public ? 'Public': 'Private' %></p>
 		<div>
-			<% if (loggedInUser) { %>
-
-			<% } else { %>
+			<% if (loggedInUser) { %> <% } else { %>
 			<p class="text-muted">
 				<a href="/users/<%= list.creator._id %>/profile" class="link-secondary">
 					- <%= list.creator.displayName %>
@@ -41,22 +40,24 @@
 			</div>
 		</div>
 		<div class="d-flex justify-content-between mb-3">
-      <a href="/lists" class="btn btn-primary">All Lists</a>
-      <% if (loggedInUser && list.creator.equals(loggedInUser._id)) { %>
-      <div class="d-flex">
-        <a href="/lists/<%= list._id %>/edit" class="btn btn-warning me-2">Edit</a>
-        <button
-        type="button"
-        class="btn btn-danger ms-3"
-        data-bs-toggle="modal"
-        data-bs-target="#delete-list"
-      >
-        Delete
-      </button>
+			<a href="/lists" class="btn btn-primary">All Lists</a>
+			<% if (loggedInUser && list.creator.equals(loggedInUser._id)) { %>
+			<div class="d-flex">
+				<a href="/lists/<%= list._id %>/edit" class="btn btn-warning me-2"
+					>Edit</a
+				>
+				<button
+					type="button"
+					class="btn btn-danger ms-3"
+					data-bs-toggle="modal"
+					data-bs-target="#delete-list"
+				>
+					Delete
+				</button>
 
-      <!-- Modal Confirm Delete -->
-      <%- include('./modals/delete') %> 
-      </div>
+				<!-- Modal Confirm Delete -->
+				<%- include('./modals/delete') %>
+			</div>
 		</div>
 		<% } %>
 	</div>
