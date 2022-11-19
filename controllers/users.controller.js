@@ -5,6 +5,7 @@ const { catchAsync, ExpressError } = require('../helpers/errors');
 const List = require('../models/List');
 const User = require('../models/User');
 const Party = require('../models/Party');
+const Selection = require('../models/Selection');
 const Notification = require('../models/Notification');
 
 // USER DASHBOARD
@@ -16,8 +17,14 @@ module.exports.showDashboard = catchAsync(async (req, res, next) => {
 		recipients: { $in: [currentUser._id] },
 	});
 	currentUser.notifications = notifications;
+	const selections = await Selection.find({
+		selector: req.user._id,
+	})
+		.populate('recipient', 'displayName')
+		.populate('party', 'title')
+		.lean();
 	const user = await currentUser.save();
-	res.render('users/index', { user, lists, parties });
+	res.render('users/index', { user, lists, parties, selections });
 });
 
 // USER PUBLIC PROFILE

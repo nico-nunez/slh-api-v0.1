@@ -62,17 +62,22 @@ module.exports.checkEligiblity = async (party, secret) => {
 	return errMsg;
 };
 
-const randomRecipient = (selector, members, exceptions = []) => {
-	const randIndex = Math.floor(crypto.randomInt(members.length));
+const randomRecipient = (selector, members, exclusions = []) => {
+	const randIndex = Math.floor(Math.random() * members.length);
 	let recipient = members[randIndex];
-	const isSameUser = recipient.id === selector.id;
+	const isSameUser = recipient.toString() === selector.toString();
 	const isExcluded =
-		exceptions.findIndex((member) => member.id === recipient.id) > -1;
-	if ((members.length === 1 && isSameUser) || isExcluded) {
-		return null;
-	}
-	if (isSameUser) {
-		recipient = randomRecipient(selector, members);
+		exclusions.findIndex(({ member_id, excluded_id }) => {
+			return (
+				(member_id.toString() === recipient.toString() &&
+					excluded_id.toString() === selector.toString()) ||
+				(member_id.toString() === selector.toString() &&
+					excluded_id.toString() === recipient.toString())
+			);
+		}) > -1;
+	if (isSameUser && members.length === 1) return null;
+	if (isSameUser || isExcluded) {
+		recipient = randomRecipient(selector, members, exclusions);
 	}
 	return recipient;
 };
@@ -81,10 +86,12 @@ module.exports.getSelections = (party) => {
 	let availableMembers = [...party.members];
 	let results = [];
 	for (const selector of party.members) {
-		const recipient = randomRecipient(selector, availableMembers);
-		if (!recipient) {
-			results = this.getSelections(party);
-		} else {
+		const recipient = randomRecipient(
+			selector,
+			availableMembers,
+			party.exclusions
+		);
+		if (recipient) {
 			const data = {
 				selector,
 				recipient,
@@ -92,9 +99,11 @@ module.exports.getSelections = (party) => {
 			};
 			const newSelection = new Selection(data);
 			results.push(newSelection);
-			availableMembers = availableMembers.filter(
-				(member) => member.id !== recipient.id
-			);
+			availableMembers = availableMembers.filter((member) => {
+				return member.toString() !== recipient.toString();
+			});
+		} else {
+			results = this.getSelections(party);
 		}
 	}
 	return results;

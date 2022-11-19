@@ -28,6 +28,15 @@ const partySchema = new Schema(
 		},
 		lists: [{ type: Schema.Types.ObjectId, ref: 'List' }],
 		members: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+		exclusions: [
+			{
+				member_id: {
+					type: Schema.Types.ObjectId,
+					ref: 'User',
+				},
+				excluded_id: { type: Schema.Types.ObjectId, ref: 'User' },
+			},
+		],
 		public: {
 			type: Boolean,
 			required: true,
@@ -55,14 +64,6 @@ partySchema.post('findOneAndDelete', async function (doc) {
 		title: '',
 		content: `${doc.title} has been cancelled`,
 	});
-});
-
-partySchema.post('findOneAndUpdate', async function (err, doc, next) {
-	await createNotification(doc, doc.creator, {
-		title: '',
-		content: `${doc.title} has been cancelled`,
-	});
-	next();
 });
 
 module.exports = mongoose.model('Party', partySchema);

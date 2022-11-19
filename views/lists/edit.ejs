@@ -5,7 +5,12 @@
 <div class="row">
 	<h1 class="text-center">Update list</h1>
 	<div class="col-lg-5 col-md-6 ms-auto me-auto">
-		<form action="/lists/<%= list._id %>?_method=PUT" method="POST" novalidate class="validate-form">
+		<form
+			action="/lists/<%= list._id %>?_method=PUT"
+			method="POST"
+			novalidate
+			class="validate-form"
+		>
 			<div class="mb-3 form-group">
 				<label class="form-label" for="name">
 					Title:
@@ -17,68 +22,71 @@
 					name="list[title]"
 					id="title"
 					placeholder="List Title"
-          value="<%= list.title %>"
+					value="<%= list.title %>"
 					required
 				/>
 			</div>
 			<p class="mb-1">Items:</p>
-      <div class="card mb-3">
-        <div class="card-body" id="list-items-added">
-          <p 
-            class="text-muted mb-0 <%= list.items.length ? 'd-none' : '' %>"
-            id="list-items-none"
-          >
-            -- no items added --
-          </p>
-          <% for (const [i,item] of list.items.entries()) { %>
-            <div class="list-item">
-              <div class="d-flex justify-content-between">
-                <div class="w-75">
-                  <% if (item.link) { %>
-                    <a href="<%= item.link %>" target="_blank" class="mb-0 text-ellipsis">
-                      <%= item.description %>
-                    </a>
-                  <% } else { %>
-                    <p class="mb-0 text-ellipsis"><%= item.description %></p>
-                  <% } %>   
-                </div>
-                <div class="item-icons">
-                  <i class="fas fa-pen pe-2 pointer" id="item-edit"></i>
-                  <i class="fas fa-trash-alt pointer" id="item-delete"></i>
-                </div>
-              </div>
-              <div class="d-none mt-2">
-                <label class="form-label" for="list-item-description">
-                  Description:
-                  <span class="text-muted text-xsmall ms-2"> required </span>
-                </label>
-                <input 
-                  type="text" 
-                  name="list[items][<%= i %>][description]"
-                  id="list-item-description"
-                  class="form-control"
-                  placeholder="enter description"
-                  value="<%= item.description %>"
-                  required
-                >
-                <label class="form-label mt-3" for="list-item-link">
-                  Link:
-                  <span class="text-muted text-xsmall ms-2"> optional </span>
-                </label>
-                <input 
-                  type="text" 
-                  name="list[items][<%= i %>][link]" 
-                  id="list-item-link" 
-                  class="form-control" 
-                  placeholder="enter link"
-                  value="<%= item.link %>"
-                >
-              </div>
-            </div>
-          <% } %>  
-
-        </div>
-      </div>
+			<div class="card mb-3">
+				<div class="card-body" id="list-items-added">
+					<p
+						class="text-muted mb-0 <%= list.items.length ? 'd-none' : '' %>"
+						id="list-items-none"
+					>
+						-- no items added --
+					</p>
+					<% for (const [i,item] of list.items.entries()) { %>
+					<div class="list-item">
+						<div class="d-flex justify-content-between">
+							<div class="w-75">
+								<% if (item.link) { %>
+								<a
+									href="<%= item.link %>"
+									target="_blank"
+									class="mb-0 text-ellipsis"
+								>
+									<%= item.description %>
+								</a>
+								<% } else { %>
+								<p class="mb-0 text-ellipsis"><%= item.description %></p>
+								<% } %>
+							</div>
+							<div class="item-icons">
+								<i class="fas fa-pen pe-2 pointer" id="item-edit"></i>
+								<i class="fas fa-trash-alt pointer" id="item-delete"></i>
+							</div>
+						</div>
+						<div class="d-none mt-2">
+							<label class="form-label" for="list-item-description">
+								Description:
+								<span class="text-muted text-xsmall ms-2"> required </span>
+							</label>
+							<input
+								type="text"
+								name="list[items][<%= i %>][description]"
+								id="list-item-description"
+								class="form-control"
+								placeholder="enter description"
+								value="<%= item.description %>"
+								required
+							/>
+							<label class="form-label mt-3" for="list-item-link">
+								Link:
+								<span class="text-muted text-xsmall ms-2"> optional </span>
+							</label>
+							<input
+								type="text"
+								name="list[items][<%= i %>][link]"
+								id="list-item-link"
+								class="form-control"
+								placeholder="enter link"
+								value="<%= item.link %>"
+							/>
+						</div>
+					</div>
+					<% } %>
+				</div>
+			</div>
 			<div class="card mb-3">
 				<div class="card-body items-input-content">
 					<div id="list-item-add">
@@ -118,14 +126,9 @@
 				</div>
 			</div>
 			<div class="form-check form-switch mb-3">
-				<input
-					class="form-check-input"
-					type="checkbox"
-					role="switch"
-					id="flexSwitchCheckDefault"
-					name="list[public]"
-					<%= list.public ? 'checked' : '' %> 
-				/>
+				<input class="form-check-input" type="checkbox" role="switch"
+				id="flexSwitchCheckDefault" name="list[public]" <%= list.public ?
+				'checked' : '' %> />
 				<label class="form-check-label" for="private">
 					Public <span class="text-muted">*</span>
 				</label>
@@ -144,8 +147,3 @@
 </div>
 
 <script src="/js/lists.js"></script>
-
-
-
-
-

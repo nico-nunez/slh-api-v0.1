@@ -24,7 +24,11 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(240, 248, 255, 0.75);
+  background-color: #ffffff55;
+}
+
+.color-white {
+  color: white;
 }
 
 .container-main {
@@ -236,4 +240,15 @@ form :invalid {
   border: none;
   outline: none;
   color: black;
+}
+
+.excluded-members-content {
+  text-align: center;
+}
+
+.excluded-members p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
 }

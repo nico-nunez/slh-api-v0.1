@@ -44,6 +44,7 @@
           </div>
 
           <div class="text-center mb-3 d-flex justify-content-center">
+            <form id="make-selections" action="/parties/<%= party._id %>/selections" method="POST"/>
             <a href="/parties/<%= party._id %>/edit" class="btn btn-warning">
               Edit
             </a>
@@ -55,7 +56,7 @@
             >
               Delete
             </button>
-
+            <button type="submit" form="make-selections" class="btn btn-primary ms-3">Make Selections</button>
             <!-- Modal Confirm Delete -->
             <%- include('./modals/delete') %> 
           </div>
@@ -78,6 +79,55 @@
 			</div>
 		</div>
 	</div>
+  <% if (party.exclusions.length || exclusionRequests.length) {%>  
+    <div class="row">
+      <div class="col-12">
+        <div class="col-md-6 m-auto">
+          <div class="card mb-3">
+            <div class="card-header">
+              <h4 class="text-center m-0">Excluded members:</h4>
+            </div>
+            <div class="card-body excluded-members-content">
+              <%if (exclusionRequests.length) { %>
+              <div class="pending-exclusions">
+                <h6>Pending:</h6>
+                <ul class="excluded-members p-0">
+                  <% for (const request of exclusionRequests) {%>
+                      <% if (request.member_id._id.toString() !== loggedInUser._id.toString()) { %>
+                        <form id="exclusion-confirm" action="/parties/<%=party._id%>/exclusions/resolve?_method=PUT&exclusion_id=<%= request._id %>&resolve=confirm" method="POST"></form>
+                        <form id="exclusion-reject" action="/parties/<%=party._id%>/exclusions/resolve?_method=PUT&exclusion_id=<%= request._id %>&resolve=reject" method="POST"></form>
+                        <p><%= request.member_id.displayName %>:
+                          <button type="submit" form="exclusion-confirm" class="btn btn-success btn-sm">Confirm</button> <button type="submit" form="exclusion-reject" class="btn btn-danger btn-sm">Reject</button></span> 
+                        </p>
+                        <% } else { %> 
+                          <p><%= request.excluded_id.displayName %>:
+                            <span class="text-muted">pending</span> 
+                          </p>
+                      <% } %>
+                  <% } %>
+                </ul>
+              </div>
+              <%}%>
+              <% if (party.exclusions.length) { %> 
+              <div class="confirmed-exclusions excluded-members">
+                <h6>Confirmed:</h6>
+                <ul class="p-0">
+                  <% for (const excluded of party.exclusions) {%>
+                      <% if (excluded.excluded_id._id.toString() === loggedInUser._id.toString()) {%>
+                        <p><%= excluded.member_id.displayName %></p>
+                        <% } else { %>
+                          <p><%= excluded.excluded_id.displayName %></p>
+                        <% } %>
+                  <% } %>
+                </ul>
+              </div>
+              <%}%>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <%}%>
 	<div class="row">
     <div class="col-12">
       <div class="col-lg-8 col-md-10 m-auto mb-3">
@@ -90,6 +140,14 @@
                   <a href="/parties/<%= party._id %>/members/edit" class="btn btn-secondary">
                     Remove
                   </a>
+                  <button
+                  type="button" 
+                  class="btn btn-danger"
+                  data-bs-toggle="modal"
+                  data-bs-target="#party-exclude"
+                  >
+                  Exclude
+                  </button>
                 </div>
               <% } else if (party.isMember) { %>
                 <div class="mb-2">
@@ -101,9 +159,18 @@
                   >
                   Leave
                   </button>
+                  <button
+                  type="button" 
+                  class="btn btn-danger"
+                  data-bs-toggle="modal"
+                  data-bs-target="#party-exclude"
+                  >
+                  Exclude
+                  </button>
                 </div>
                 <%- include('./modals/leave') %>
               <% } %> 
+              <%- include('./modals/exclude') %>
             </div>
             <div class="col-sm-6">
               <h2>Lists</h2>

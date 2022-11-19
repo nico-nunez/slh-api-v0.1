@@ -14,6 +14,13 @@ router.get('/new', isLoggedIn, parties.createPartyForm);
 router.get('/example', parties.showExample);
 router.post('/example', parties.getExampleSelections);
 
+router.post(
+	'/:id/selections',
+	isLoggedIn,
+	isCreatorParty,
+	parties.makeSelections
+);
+
 router.post('/', isLoggedIn, validParty, parties.createParty);
 
 router.get('/:id', isLoggedIn, isPartyPrivate, parties.showParty);
@@ -26,6 +33,7 @@ router.put(
 	validParty,
 	parties.updatePartyDetails
 );
+
 router.get(
 	'/:id/members/edit',
 	isLoggedIn,
@@ -33,6 +41,19 @@ router.get(
 	parties.removeMembersForm
 );
 router.put('/:id/members', isLoggedIn, parties.editMembers);
+
+router.put(
+	'/:id/exclusions/request',
+	isLoggedIn,
+	isPartyMember,
+	parties.requestExclusion
+);
+router.put(
+	'/:id/exclusions/resolve',
+	isLoggedIn,
+	isPartyMember,
+	parties.resolveExclusion
+);
 
 router.delete('/:id', isLoggedIn, isCreatorParty, parties.deleteParty);
 

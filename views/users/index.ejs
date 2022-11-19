@@ -11,7 +11,30 @@
 	<h1 class="mb-0"><%= user.displayName %></h1>
 	<p><a href="/users/<%= user._id %>/update">Update profile</a></p>
 </div>
-
+<div class="row">
+  <div class="col-md-4 col-sm-6 m-auto">
+        <div class="card py-2 px-4">
+          <h2 class="card-title m-0 text-center">Notifications</h2>
+          <div class="card-body p-0">
+            <ul class="list-group pt-2">
+              <% for (let i=0; i<user.notifications.length; i++) { %>
+                <li class="notification-message fst-italic list-group-item">
+                  <form
+                  action="/users/<%=user.id%>/notifications/<%=user.notifications[i]._id%>?_method=PUT"
+                  method="POST"
+                  class="hidden"
+                  id="dismiss-notification-<%= i %>"
+                >
+                </form>
+                <button type="submit" form="dismiss-notification-<%= i %>" class="dismiss-notification">X</button>
+                    <p><%= user.notifications[i].content %></p>
+                </li>
+              <% } %> 
+            </ul>
+          </div>
+      </div>
+  </div>
+</div>
 <div class="row">
 	<div class="col-md-4 col-sm-6 mt-3">
 		<div class="card py-2 px-4 text-center">
@@ -49,20 +72,12 @@
 	</div>
   <div class="col-md-4 col-sm-6 mt-3">
 		<div class="card py-2 px-4">
-      <h2 class="card-title m-0 text-center">Notifications</h2>
+      <h2 class="card-title m-0 text-center">Selections</h2>
       <div class="card-body p-0">
         <ul class="list-group pt-2">
-          <% for (let i=0; i<user.notifications.length; i++) { %>
-            <li class="notification-message fst-italic list-group-item">
-              <form
-              action="/users/<%=user.id%>/notifications/<%=user.notifications[i]._id%>?_method=PUT"
-              method="POST"
-              class="hidden"
-              id="dismiss-notification-<%= i %>"
-            >
-            </form>
-            <button type="submit" form="dismiss-notification-<%= i %>" class="dismiss-notification">X</button>
-                <p><%= user.notifications[i].content %></p>
+          <% for (const selection of selections) { %>
+            <li class="list-group-item text-center border-0 text-ellipsis">
+              <a href="/users/<%=selection.recipient._id%>/profile" class="me-1"><%=selection.recipient.displayName%></a> - <a href="/parties/<%=selection.party._id%>" class="ms-1"><%=selection.party.title%></a></a></a>
             </li>
           <% } %> 
 				</ul>

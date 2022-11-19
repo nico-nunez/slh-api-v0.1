@@ -1,0 +1,57 @@
+<div
+	class="modal fade"
+	id="party-exclude"
+	data-bs-backdrop="static"
+	data-bs-keyboard="false"
+	tabindex="-1"
+	aria-labelledby="staticBackdropLabel"
+	aria-hidden="true"
+>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="staticBackdropLabel">Add a List</h5>
+				<button
+					type="button"
+					class="btn-close"
+					data-bs-dismiss="modal"
+					aria-label="Close"
+				></button>
+			</div>
+			<div class="modal-body">
+				<h6 class="mb-3">Choose a member to exclude as a recipient:</h6>
+				<form
+					action="/parties/<%= party._id %>/exclusions/request?_method=PUT"
+					method="POST"
+					id="party-exclude-member"
+				>
+					<div class="form-group row">
+						<div class="col-sm-6 m-auto">
+							<select class="form-select text-center" name="excluded_id">
+								<option selected value="">-- Select List --</option>
+								<% for (const member of party.members.filter(member =>
+								member._id.toString() !== loggedInUser._id.toString())) { %>
+								<option value="<%= member._id %>">
+									<%= member.displayName %>
+								</option>
+								<%}%>
+							</select>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button
+					type="submit"
+					class="btn btn-primary"
+					form="party-exclude-member"
+				>
+					Submit
+				</button>
+				<button type="button" class="btn btn-warning" data-bs-dismiss="modal">
+					Cancel
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
