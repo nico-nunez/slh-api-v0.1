@@ -29,8 +29,7 @@
 						<div class="col-sm-6 m-auto">
 							<select class="form-select text-center" name="excluded_id">
 								<option selected value="">-- Select List --</option>
-								<% for (const member of party.members.filter(member =>
-								member._id.toString() !== loggedInUser._id.toString())) { %>
+								<% for (const member of excludeUserList) { %>
 								<option value="<%= member._id %>">
 									<%= member.displayName %>
 								</option>

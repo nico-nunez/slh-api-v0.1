@@ -106,12 +106,26 @@ module.exports.showParty = catchAsync(async (req, res, next) => {
 		.populate('member_id', 'displayName')
 		.populate('excluded_id', 'displayName')
 		.lean();
+	const excludeUserList = foundParty.members.filter((member) => {
+		return (
+			member._id.toString() !== req.user._id.toString() &&
+			foundParty.exclusions.findIndex((exclude) => {
+				return (
+					(exclude.member_id._id.toString() === member._id.toString() &&
+						exclude.excluded_id._id.toString() === req.user._id.toString()) ||
+					(exclude.member_id._id.toString() === req.user._id.toString() &&
+						exclude.excluded_id._id.toString() === member._id.toString())
+				);
+			}) < 0
+		);
+	});
 	res.render('parties/show', {
 		party: foundParty,
 		lists,
 		userLists,
 		joinCode,
 		exclusionRequests,
+		excludeUserList,
 	});
 });
 
@@ -266,12 +280,27 @@ module.exports.makeSelections = catchAsync(async (req, res, next) => {
 module.exports.requestExclusion = catchAsync(async (req, res, next) => {
 	const { id } = req.params;
 	const { excluded_id } = req.body;
-	const exclusion = new Exclusion({
-		member_id: req.user._id,
-		excluded_id,
-		party_id: id,
-	});
-	await exclusion.save();
+	const member_id = req.user._id.toString();
+	const foundParty = await Party.findById(id);
+	if (!foundParty) throw new ExpressError('Unable to find party.', 400).lean();
+	console.log(foundParty.exclusions);
+	const existingExclusion =
+		foundParty.exclusions &&
+		foundParty.exclusions.findIndex(
+			(exclude) =>
+				(exclude.member_id.toString() === excluded_id &&
+					exclude.excluded_id.toString() === member_id) ||
+				(exclude.member_id.toString() === member_id &&
+					exclude.excluded_id.toString() === excluded_id)
+		) > -1;
+	if (!existingExclusion) {
+		const exclusion = new Exclusion({
+			member_id: req.user._id,
+			excluded_id,
+			party_id: id,
+		});
+		await exclusion.save();
+	}
 	req.flash(
 		'success',
 		'A request has been sent to the member and will remain pending until accepted or rejected.'
