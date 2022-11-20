@@ -93,13 +93,14 @@
                 <h6>Pending:</h6>
                 <ul class="excluded-members p-0">
                   <% for (const request of exclusionRequests) {%>
-                      <% if (request.member_id._id.toString() !== loggedInUser._id.toString()) { %>
+                      <% if (request.excluded_id._id.toString() === loggedInUser._id.toString()) { %>
                         <form id="exclusion-confirm" action="/parties/<%=party._id%>/exclusions/resolve?_method=PUT&exclusion_id=<%= request._id %>&resolve=confirm" method="POST"></form>
                         <form id="exclusion-reject" action="/parties/<%=party._id%>/exclusions/resolve?_method=PUT&exclusion_id=<%= request._id %>&resolve=reject" method="POST"></form>
                         <p><%= request.member_id.displayName %>:
                           <button type="submit" form="exclusion-confirm" class="btn btn-success btn-sm">Confirm</button> <button type="submit" form="exclusion-reject" class="btn btn-danger btn-sm">Reject</button></span> 
                         </p>
-                        <% } else { %> 
+                        <% } %>
+                        <% if (request.member_id._id.toString() === loggedInUser._id.toString()){ %> 
                           <p><%= request.excluded_id.displayName %>:
                             <span class="text-muted">pending</span> 
                           </p>
@@ -115,9 +116,10 @@
                   <% for (const excluded of party.exclusions) {%>
                       <% if (excluded.excluded_id._id.toString() === loggedInUser._id.toString()) {%>
                         <p><%= excluded.member_id.displayName %></p>
-                        <% } else { %>
-                          <p><%= excluded.excluded_id.displayName %></p>
-                        <% } %>
+                      <% } %>
+                      <% if (excluded.member_id._id.toString() === loggedInUser._id.toString()) { %>
+                        <p><%= excluded.excluded_id.displayName %></p>
+                      <% } %>
                   <% } %>
                 </ul>
               </div>
