@@ -79,7 +79,22 @@
 			</div>
 		</div>
 	</div>
-  <% if (party.exclusions.length || exclusionRequests.length) {%>  
+  <% if (selection) { %>
+        <div class="row">
+          <div class="col-12">
+            <div class="col-md-6 m-auto">
+              <div class="card mb-3">
+                <div class="card-header">
+                  <h4 class="text-center m-0">Selection:</h4>
+                  <div class="card-body">
+                    <h5 class="text-center"><%=selection.recipient.displayName %></h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>        
+    <% } else if(party.exclusions.length || exclusionRequests.length) {%>  
     <div class="row">
       <div class="col-12">
         <div class="col-md-6 m-auto">

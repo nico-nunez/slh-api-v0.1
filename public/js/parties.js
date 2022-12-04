@@ -37,7 +37,6 @@
 		}
 
 		const handleDateChange = (evt) => {
-			console.log('ran');
 			const dateArr = evt.target.value.split('-');
 			const dateStr = dateArr.join('/');
 			const newMinExchange = new Date(dateStr);

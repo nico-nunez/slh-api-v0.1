@@ -76,6 +76,7 @@ module.exports.createParty = catchAsync(async (req, res, next) => {
 // RENDER PARTY BY ID
 module.exports.showParty = catchAsync(async (req, res, next) => {
 	const joinCode = req.query.join_code || '';
+	// FIND PARTY BY ID
 	const foundParty = await Party.findById(req.params.id)
 		.populate('creator', 'displayName')
 		.populate('members', 'displayName')
@@ -88,17 +89,22 @@ module.exports.showParty = catchAsync(async (req, res, next) => {
 	}
 	let userLists = [];
 	const lists = {};
+	// FORMAT MEMEMBERS LIST WITH ID AS KEY AND LIST AS VALUE
 	foundParty.lists.forEach((list) => (lists[String(list.creator._id)] = list));
+	// CHECK IF USER IS MEMBER OF PARTY
 	foundParty.isMember = helpers.isPartyMember(foundParty, req.user.id);
 	if (foundParty.isMember) {
 		userLists = await List.find({ creator: req.user.id }, { title: 1 }).lean();
 	}
+	// SORTY MEMBERS NAMES ASCENDING
 	foundParty.members.sort((a, b) => {
 		if (a.displayName < b.displayName) return -1;
 		if (a.displayName > b.displayName) return 1;
 		return 0;
 	});
+	// DISABLE JOIN BUTTON IF PARTY IS IN PROGRESS OR USER IS ALREADY A MEMBER
 	foundParty.disableJoin = foundParty.isMember || foundParty.status !== 'open';
+	// GET CONFIRMED & REQUESTED EXCLUSIONS FOR USER
 	const exclusionRequests = await Exclusion.find({
 		party_id: foundParty._id,
 		$or: [{ member_id: req.user._id }, { excluded_id: req.user._id }],
@@ -106,6 +112,7 @@ module.exports.showParty = catchAsync(async (req, res, next) => {
 		.populate('member_id', 'displayName')
 		.populate('excluded_id', 'displayName')
 		.lean();
+	// FILTER EXCLUSIONS THAT ARE APPLICABLE TO THE CURRENT USER
 	const excludeUserList = foundParty.members.filter((member) => {
 		return (
 			member._id.toString() !== req.user._id.toString() &&
@@ -119,6 +126,14 @@ module.exports.showParty = catchAsync(async (req, res, next) => {
 			}) < 0
 		);
 	});
+	// FIND SELECTION FOR USER
+	const selection = await Selection.findOne({
+		party: foundParty._id,
+		selector: req.user._id,
+	})
+		.populate('recipient', 'displayName')
+		.lean();
+
 	res.render('parties/show', {
 		party: foundParty,
 		lists,
@@ -126,6 +141,7 @@ module.exports.showParty = catchAsync(async (req, res, next) => {
 		joinCode,
 		exclusionRequests,
 		excludeUserList,
+		selection,
 	});
 });
 
@@ -283,7 +299,6 @@ module.exports.requestExclusion = catchAsync(async (req, res, next) => {
 	const member_id = req.user._id.toString();
 	const foundParty = await Party.findById(id);
 	if (!foundParty) throw new ExpressError('Unable to find party.', 400).lean();
-	console.log(foundParty.exclusions);
 	const existingExclusion =
 		foundParty.exclusions &&
 		foundParty.exclusions.findIndex(
