@@ -4,6 +4,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 const path = require('path');
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override');
@@ -29,6 +30,7 @@ const authRoutes = require('./routes/auth.router');
 //   app.set('trust proxy', 1)
 // }
 
+app.use(cors());
 app.use(helmet({ contentSecurityPolicy: false }));
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
