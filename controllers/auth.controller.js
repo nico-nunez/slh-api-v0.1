@@ -36,12 +36,20 @@ module.exports.registerUser = catchAsync(async (req, res, next) => {
 // --- LOGIN LOCAL ---
 module.exports.loginLocal = (req, res) => {
 	delete req.session.redirectedFrom;
-	const user = req.user || null;
+	const user = req.user
+		? {
+				id: req.user._id,
+				avatar: req.user.avatar,
+				displayName: req.user.displayName,
+				email: req.user.email,
+				notifications: req.user.notifications,
+				verified: req.user.verified,
+		  }
+		: null;
 
-	res.json({
-		status: user ? 'success' : 'failure',
-		user,
-	});
+	const errorMessge = !user ? 'User not found' : undefined;
+
+	res.status(errorMessge ? 404 : 200).json({ user, errorMessge });
 };
 
 // --- LOGIN GOOGLE ---
