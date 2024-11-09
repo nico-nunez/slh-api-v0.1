@@ -36,7 +36,13 @@ const sessionConfig = {
 	cookie: {
 		// secure: process.env.NODE_ENV === 'production',
 		expires: 1000 * 60 * 60 * 24 * 7 * 2,
+		sameSite: 'none',
 	},
 };
 
-module.exports = { connectDB, sessionConfig };
+const corsConfig = {
+	credentials: true,
+	origin: process.env.BASE_URL,
+};
+
+module.exports = { connectDB, sessionConfig, corsConfig };

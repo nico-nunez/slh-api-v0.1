@@ -15,7 +15,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
 const favicon = require('serve-favicon');
 const passportConfig = require('./middleware/passport');
-const { connectDB, sessionConfig } = require('./helpers/configs');
+const { connectDB, sessionConfig, corsConfig } = require('./helpers/configs');
 const { ExpressError, errorHandler } = require('./helpers/errors');
 
 connectDB();
@@ -30,7 +30,7 @@ const authRoutes = require('./routes/auth.router');
 //   app.set('trust proxy', 1)
 // }
 
-app.use(cors());
+app.use(cors(corsConfig));
 app.use(helmet({ contentSecurityPolicy: false }));
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
