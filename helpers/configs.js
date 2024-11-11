@@ -32,11 +32,11 @@ const sessionConfig = {
 	secret,
 	name: 'appSession',
 	resave: false,
-	saveUninitialized: true,
+	saveUninitialized: false,
 	cookie: {
-		// secure: process.env.NODE_ENV === 'production',
+		secure: process.env.NODE_ENV === 'production',
 		expires: 1000 * 60 * 60 * 24 * 7 * 2,
-		sameSite: 'none',
+		sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
 	},
 };
 

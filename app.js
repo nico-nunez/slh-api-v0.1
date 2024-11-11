@@ -13,7 +13,6 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
-const favicon = require('serve-favicon');
 const passportConfig = require('./middleware/passport');
 const { connectDB, sessionConfig, corsConfig } = require('./helpers/configs');
 const { ExpressError, errorHandler } = require('./helpers/errors');
@@ -58,15 +57,14 @@ app.get('/', (req, res) => {
 	if (req.user) {
 		res.redirect('/users/dashboard');
 	} else {
-		res.render('home');
+		res.status(403).json({ errorMessage: 'Unauthorized user.' });
 	}
 });
 
-app.use('/lists', listsRoutes);
-app.use('/parties', partiesRoutes);
-app.use('/users', usersRoutes);
-app.use('/auth', authRoutes);
-app.use(favicon(path.join(__dirname, '/public/assets/santa-hat.png')));
+app.use('/api/lists', listsRoutes);
+app.use('/api/parties', partiesRoutes);
+app.use('/api/users', usersRoutes);
+app.use('/api/auth', authRoutes);
 
 app.all('*', (req, res, next) => {
 	next(new ExpressError('Page Not Found', 404));
