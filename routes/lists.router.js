@@ -1,12 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const List = require('../models/List');
-const { catchAsync } = require('../helpers/errors');
+const lists = require('../controllers/lists.controller');
 const { validList } = require('../middleware/joiSchemas');
 const { isLoggedIn, isCreatorList } = require('../middleware/validators');
-const lists = require('../controllers/lists.controller');
 
-router.get('/', lists.showPublicLists);
+router.get('/public', lists.showPublicLists);
 router.get('/new', isLoggedIn, lists.createListForm);
 router.post('/', isLoggedIn, validList, lists.createList);
 
@@ -17,4 +15,3 @@ router.put('/:id', isLoggedIn, isCreatorList, validList, lists.updateList);
 router.delete('/:id', isLoggedIn, isCreatorList, lists.deleteList);
 
 module.exports = router;
-

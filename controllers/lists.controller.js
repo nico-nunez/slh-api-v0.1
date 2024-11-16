@@ -9,6 +9,7 @@ module.exports.showPublicLists = catchAsync(async (req, res, next) => {
 	const page = Number(req.query.page) || 0;
 	const docLimit = 9;
 	const searchQuery = {};
+
 	if (searchBy) {
 		searchQuery[searchBy] = { $regex: searchString, $options: 'i' };
 	}
@@ -23,7 +24,7 @@ module.exports.showPublicLists = catchAsync(async (req, res, next) => {
 		current: page,
 		baseURL: '/lists?page=',
 	};
-	res.render('lists/index', { lists, pages, searchBy, searchString });
+	res.json({ lists, pages, searchBy, searchString });
 });
 
 // RENDER NEW LIST FORM

@@ -61,10 +61,10 @@ app.get('/', (req, res) => {
 	}
 });
 
-app.use('/api/lists', listsRoutes);
-app.use('/api/parties', partiesRoutes);
-app.use('/api/users', usersRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/lists', listsRoutes);
+app.use('/api/users', usersRoutes);
+app.use('/api/parties', partiesRoutes);
 
 app.all('*', (req, res, next) => {
 	next(new ExpressError('Page Not Found', 404));
