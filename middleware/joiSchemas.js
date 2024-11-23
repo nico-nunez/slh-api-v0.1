@@ -93,19 +93,15 @@ function validRegistration(req, res, next) {
 }
 
 function validList(req, res, next) {
-	console.log('got here!');
-	console.log('body', req.body);
 	const itemSchema = Joi.object({
 		description: Joi.string().max(50).allow(''),
 		link: Joi.string().allow(''),
 	});
 
 	const listSchema = Joi.object({
-		list: Joi.object({
-			title: Joi.string().min(3).max(50).required(),
-			items: Joi.array().items(itemSchema),
-			public: Joi.string().allow(''),
-		}).required(),
+		title: Joi.string().min(3).max(50).required(),
+		items: Joi.array().items(itemSchema),
+		public: Joi.string().allow(''),
 	});
 
 	validateInput(listSchema, req);
