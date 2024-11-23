@@ -1,6 +1,6 @@
 const List = require('../models/List');
 const User = require('../models/User');
-const { catchAsync } = require('../helpers/errors');
+const { catchAsync, ExpressError } = require('../helpers/errors');
 const helpers = require('../helpers/lists.helpers');
 
 // RENDER ALL PUBLIC LISTS
@@ -42,9 +42,11 @@ module.exports.createList = catchAsync(async (req, res, next) => {
 		public: Boolean(list.public),
 	});
 	newList.creator = req.user.id;
-	await newList.save();
-	req.flash('success', 'Success! New List created.');
-	res.redirect(`lists/${newList._id}`);
+	const savedList = await newList.save();
+	res.json({
+		message: 'Success! New List created.',
+		data: savedList,
+	});
 });
 
 // RENDER LIST BY ID
@@ -54,8 +56,7 @@ module.exports.showList = catchAsync(async (req, res, next) => {
 		'displayName'
 	);
 	if (!list) {
-		req.flash('error', 'Sorry, coud not find that list');
-		return res.redirect('/parties');
+		throw new ExpressError('Sorry, coud not find that list', 404);
 	}
 	res.render('lists/show', { list });
 });
@@ -64,8 +65,7 @@ module.exports.showList = catchAsync(async (req, res, next) => {
 module.exports.updateListForm = catchAsync(async (req, res, next) => {
 	const list = await List.findById(req.params.id);
 	if (!list) {
-		req.flash('error', 'Sorry, coud not find that list');
-		return res.redirect('/parties');
+		throw new ExpressError('Sorry, coud not find that list', 404);
 	}
 	res.render('lists/edit', { list });
 });
@@ -85,17 +85,20 @@ module.exports.updateList = catchAsync(async (req, res, next) => {
 		{ runValidators: true }
 	).lean();
 	if (!foundList) {
-		req.flash('error', 'Sorry, coud not find that list');
-		return res.redirect('/parties');
+		throw new ExpressError('Sorry, coud not find that list', 404);
 	}
-	req.flash('success', 'Success! List has been updated.');
-	res.redirect(`/lists/${id}`);
+	res.redirect({
+		status: 'success',
+		message: 'Success! List has been updated',
+	});
 });
 
 // DELETE LIST BY ID
 module.exports.deleteList = catchAsync(async (req, res, next) => {
 	const { id } = req.params;
 	await List.findByIdAndDelete(id);
-	req.flash('success', 'Success! List has been deleted.');
-	res.redirect(`/users/${req.user.id}`);
+	res.json({
+		status: 'success',
+		message: 'Success! List has been deleted.',
+	});
 });

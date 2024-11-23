@@ -50,7 +50,6 @@ router.get('/verification/email', isLoggedIn, auth.verifyEmailVerification);
 router.post('/verification/email', isLoggedIn, auth.verifyEmailSend);
 
 // ---- UPDATE PASSWORD ----
-router.get('/password/update', isLoggedIn, auth.updatePassForm);
 router.put(
 	'/password/update',
 	isLoggedIn,
@@ -59,13 +58,7 @@ router.put(
 );
 
 // ----- RESET PASSWORD ------
-router.get('/password/reset/request', auth.resetPassRequestForm);
 router.post('/password/reset', validEmail, auth.resetPassRequestResult);
-router.get(
-	'/password/reset/update',
-	isValidLinkReset,
-	auth.resetPassUpdateForm
-);
 router.put(
 	'/password/reset/update',
 	isValidLinkReset,

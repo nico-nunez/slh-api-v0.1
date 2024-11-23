@@ -70,12 +70,13 @@ module.exports.updateUser = catchAsync(async (req, res, next) => {
 		user.verified = false;
 		await sendEmailLink(user, 'emailUpdated');
 		await sendEmailLink(user, 'emailVerify', email);
-		req.flash(
-			'success',
-			'Profile update! A verification email has been sent to the updated email address. Please check your inbox, and verify your email address.'
-		);
+		res.json({
+			status: 'success',
+			message:
+				'Profile update! A verification email has been sent to the updated email address. Please check your inbox, and verify your email address.',
+		});
 	} else {
-		req.flash('success', 'Profile updated!');
+		res.json({ status: 'success', message: 'Profile updated!' });
 	}
 	user.displayName = displayName;
 	user.email.address = email;
@@ -89,8 +90,7 @@ module.exports.updateUser = catchAsync(async (req, res, next) => {
 module.exports.deleteUser = catchAsync(async (req, res, next) => {
 	const { id } = req.params;
 	await User.findOneAndDelete({ _id: id });
-	req.flash('success', 'Profile removed.');
-	res.redirect('/lists');
+	res.json({ status: 'success', message: 'Profile removed.' });
 });
 
 // REMOVE NOTIFICATION
@@ -100,5 +100,5 @@ module.exports.dismissNotification = catchAsync(async (req, res, next) => {
 		{ _id: notification_id },
 		{ $pull: { recipients: req.user._id } }
 	);
-	res.redirect('/users/dashboard');
+	res.json({ status: 'success' });
 });

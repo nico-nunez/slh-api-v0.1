@@ -16,11 +16,11 @@ const catchAsync = (func) => {
 const errorHandler = (err, req, res, next) => {
 	const defaultURL = '/';
 	const { status = 500, redirectURL = defaultURL } = err;
-	if (!err.message) err.message = 'Oops! Something went wrong with the server.';
+	if (!err.message)
+		err.message = 'Oops! Something went wrong with the server.';
 	if (err.name === 'CastError')
 		err.message = 'Sorry, unable to find what you were looking for.';
-	req.flash('error', err.message);
-	return res.status(status).redirect(redirectURL);
+	return res.status(status).json({ errorMessage: err.message });
 };
 
 const formatDate = (dateObj) => {

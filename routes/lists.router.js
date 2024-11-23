@@ -4,9 +4,9 @@ const lists = require('../controllers/lists.controller');
 const { validList } = require('../middleware/joiSchemas');
 const { isLoggedIn, isCreatorList } = require('../middleware/validators');
 
-router.get('/public', lists.showPublicLists);
-router.get('/new', isLoggedIn, lists.createListForm);
-router.post('/', isLoggedIn, validList, lists.createList);
+router.get('/', isLoggedIn, lists.createListForm);
+router.get('/public', isLoggedIn, lists.showPublicLists);
+router.post('/publish', isLoggedIn, validList, lists.createList);
 
 router.get('/:id', isLoggedIn, lists.showList);
 router.get('/:id/edit', isLoggedIn, isCreatorList, lists.updateListForm);

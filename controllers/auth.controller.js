@@ -56,18 +56,16 @@ module.exports.loginLocal = (req, res) => {
 module.exports.loginGoogle = (req, res) => {
 	const redirection = req.session.redirectedFrom || `/users/${req.user.id}`;
 	delete req.session.redirectedFrom;
+	let message = '';
 	if (req.user.email && !req.user.verified) {
-		req.flash(
-			'success',
-			'Welcome! Please check your inbox and verify your email address.'
-		);
+		message =
+			'Welcome! Please check your inbox and verify your email address.';
 	} else {
-		req.flash('success', 'Welcome back!');
+		message = 'Welcome back!';
 	}
-	res.redirect(redirection);
+	res.json({ message });
 };
 
-// --- LOGOUT ALL ---
 module.exports.logout = (req, res) => {
 	req.logout();
 	res.json({
@@ -92,8 +90,8 @@ module.exports.verifyEmailVerification = catchAsync(async (req, res, next) => {
 		{ _id: req.user.id },
 		{ verified: true, 'email.verified': true }
 	);
-	req.flash('success', 'Thank you! Email has been verified.');
-	res.redirect(`/users/${req.user.id}`);
+	const message = 'Thank you! Email has been verified.';
+	res.json({ statue: 'success', message });
 });
 
 module.exports.verifyEmailSend = catchAsync(async (req, res, next) => {
@@ -106,34 +104,23 @@ module.exports.verifyEmailSend = catchAsync(async (req, res, next) => {
 		);
 	}
 	sendEmailLink(user, 'emailVerify');
-	req.flash(
-		'success',
-		'A verification email has been sent.  Please check your spam folder if you do not see it in your inbox.'
-	);
-	res.redirect(`/users/${id}`);
+	res.json({
+		status: 'success',
+		message:
+			'A verification email has been sent.  Please check your spam folder if you do not see it in your inbox.',
+	});
 });
-
-module.exports.updatePassForm = (req, res) => {
-	res.render('auth/update');
-};
 
 module.exports.updatePassResult = catchAsync(async (req, res, next) => {
 	const { currentPass, password } = req.body;
 	const user = await User.findById(req.user.id);
 	await user.changePassword(currentPass, password);
 	await user.save();
-	req.flash('success', 'Successfully updated password');
-	res.redirect(`/users/${user.id}`);
+	res.json({
+		status: 'success',
+		message: 'Successfully updated password',
+	});
 });
-
-module.exports.resetPassRequestForm = (req, res) => {
-	res.render('auth/reset');
-};
-
-module.exports.resetPassUpdateForm = (req, res) => {
-	const { ulc } = req.query;
-	res.render('auth/update', { ulc });
-};
 
 module.exports.resetPassRequestResult = catchAsync(async (req, res, next) => {
 	const user = await User.findOne({ 'email.address': req.body.email });
@@ -142,13 +129,13 @@ module.exports.resetPassRequestResult = catchAsync(async (req, res, next) => {
 			'Email is either not regitered, verified, or is associated with an alternative login method.';
 		throw new ExpressError(msg, 400, '/auth/login');
 	}
-	req.flash(
-		'success',
-		'A message has been sent to the email address.  Please check your spam folder if you do not see it in your inbox.'
-	);
 	await sendEmailLink(user, 'resetRequest');
 
-	res.redirect('/auth/login');
+	res.json({
+		status: 'success',
+		message:
+			'A message has been sent to the email address.  Please check your spam folder if you do not see it in your inbox.',
+	});
 });
 
 module.exports.resetPassUpdateResult = catchAsync(async (req, res, next) => {
@@ -165,7 +152,6 @@ module.exports.resetPassUpdateResult = catchAsync(async (req, res, next) => {
 	await user.setPassword(req.body.password);
 	await user.save();
 	await sendEmailLink(user, 'resetUpdated');
-	req.flash('success', 'Successfully updated password');
 	delete req.session.redirectedFrom;
-	res.redirect('/auth/login');
+	res.json({ status: 'success', message: 'Successfully updated password' });
 });

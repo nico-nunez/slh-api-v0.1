@@ -69,8 +69,10 @@ module.exports.createParty = catchAsync(async (req, res, next) => {
 	newParty.members.addToSet(req.user._id);
 	newParty.subscribers.addToSet(req.user._id);
 	const savedParty = await newParty.save();
-	req.flash('success', 'Success! Your party has been created.');
-	res.redirect(`/parties/${savedParty.id}`);
+	res.json({
+		status: 'success',
+		message: 'Success! Your party has been created.',
+	});
 });
 
 // RENDER PARTY BY ID
@@ -85,16 +87,25 @@ module.exports.showParty = catchAsync(async (req, res, next) => {
 		.populate('exclusions.excluded_id', 'displayName')
 		.lean();
 	if (!foundParty) {
-		throw new ExpressError('Sorry, party could not be found.', 400, '/parties');
+		throw new ExpressError(
+			'Sorry, party could not be found.',
+			400,
+			'/parties'
+		);
 	}
 	let userLists = [];
 	const lists = {};
 	// FORMAT MEMEMBERS LIST WITH ID AS KEY AND LIST AS VALUE
-	foundParty.lists.forEach((list) => (lists[String(list.creator._id)] = list));
+	foundParty.lists.forEach(
+		(list) => (lists[String(list.creator._id)] = list)
+	);
 	// CHECK IF USER IS MEMBER OF PARTY
 	foundParty.isMember = helpers.isPartyMember(foundParty, req.user.id);
 	if (foundParty.isMember) {
-		userLists = await List.find({ creator: req.user.id }, { title: 1 }).lean();
+		userLists = await List.find(
+			{ creator: req.user.id },
+			{ title: 1 }
+		).lean();
 	}
 	// SORTY MEMBERS NAMES ASCENDING
 	foundParty.members.sort((a, b) => {
@@ -103,7 +114,8 @@ module.exports.showParty = catchAsync(async (req, res, next) => {
 		return 0;
 	});
 	// DISABLE JOIN BUTTON IF PARTY IS IN PROGRESS OR USER IS ALREADY A MEMBER
-	foundParty.disableJoin = foundParty.isMember || foundParty.status !== 'open';
+	foundParty.disableJoin =
+		foundParty.isMember || foundParty.status !== 'open';
 	// GET CONFIRMED & REQUESTED EXCLUSIONS FOR USER
 	const exclusionRequests = await Exclusion.find({
 		party_id: foundParty._id,
@@ -118,10 +130,14 @@ module.exports.showParty = catchAsync(async (req, res, next) => {
 			member._id.toString() !== req.user._id.toString() &&
 			foundParty.exclusions.findIndex((exclude) => {
 				return (
-					(exclude.member_id._id.toString() === member._id.toString() &&
-						exclude.excluded_id._id.toString() === req.user._id.toString()) ||
-					(exclude.member_id._id.toString() === req.user._id.toString() &&
-						exclude.excluded_id._id.toString() === member._id.toString())
+					(exclude.member_id._id.toString() ===
+						member._id.toString() &&
+						exclude.excluded_id._id.toString() ===
+							req.user._id.toString()) ||
+					(exclude.member_id._id.toString() ===
+						req.user._id.toString() &&
+						exclude.excluded_id._id.toString() ===
+							member._id.toString())
 				);
 			}) < 0
 		);
@@ -143,18 +159,6 @@ module.exports.showParty = catchAsync(async (req, res, next) => {
 		excludeUserList,
 		selection,
 	});
-});
-
-// RENDER UPDATE PARTY FORM
-module.exports.updatePartyForm = catchAsync(async (req, res, next) => {
-	const { id } = req.params;
-	const party = await Party.findById(id).lean();
-	if (!party) {
-		throw new ExpressError('Sorry, party could not be found.', 400, '/parties');
-	}
-	party.selectionsOn = formatDate(party.selectionsOn);
-	party.exchangeOn = formatDate(party.exchangeOn);
-	res.render('parties/edit', { party });
 });
 
 // ADD LIST TO PARTY
@@ -183,8 +187,10 @@ module.exports.addListToParty = catchAsync(async (req, res, next) => {
 		title: '',
 		content: `${req.user.displayName} has added a list to ${foundParty.title}`,
 	});
-	req.flash('success', 'Listed successfully added to party.');
-	res.redirect(`/parties/${req.params.id}`);
+	res.json({
+		status: 'success',
+		message: 'Listed successfully added to party.',
+	});
 });
 
 module.exports.updatePartyDetails = catchAsync(async (req, res, next) => {
@@ -194,11 +200,9 @@ module.exports.updatePartyDetails = catchAsync(async (req, res, next) => {
 	party.public = Boolean(party.public);
 	const updatedParty = await Party.findByIdAndUpdate(id, party).lean();
 	if (!updatedParty) {
-		req.flash('error', 'Party not found.');
-		return res.redirect('/parties');
+		throw new ExpressError('Party not found.', 404);
 	}
-	req.flash('success', 'Party updated successfully.');
-	res.redirect(`/parties/${updatedParty._id}`);
+	res.json({ status: 'success', message: 'Party updated successfully.' });
 });
 
 module.exports.deleteParty = catchAsync(async (req, res, next) => {
@@ -208,18 +212,10 @@ module.exports.deleteParty = catchAsync(async (req, res, next) => {
 		title: '',
 		content: `${req.user.displayName} has canceled ${foundParty.title}`,
 	};
-	req.flash('success', 'Success! Party has been deleted.');
-	res.redirect('/parties');
-});
-
-module.exports.removeMembersForm = catchAsync(async (req, res, next) => {
-	const foundParty = await Party.findById(req.params.id)
-		.populate('members', 'displayName')
-		.lean();
-	if (!foundParty) {
-		throw new ExpressError('Sorry, party could not be found.', 400, '/parties');
-	}
-	res.render('parties/editMembers', { party: foundParty });
+	res.json({
+		status: 'success',
+		message: 'Success! Party has been deleted.',
+	});
 });
 
 module.exports.editMembers = catchAsync(async (req, res, next) => {
@@ -227,7 +223,7 @@ module.exports.editMembers = catchAsync(async (req, res, next) => {
 	const { secret, members } = req.body;
 	const foundParty = await Party.findById(id);
 	if (!foundParty) {
-		throw new ExpressError('Sorry, party could not be found.', 400, '/parties');
+		throw new ExpressError('Sorry, party could not be found.', 400);
 	}
 	if (secret) {
 		const { errMsg } = helpers.checkEligiblity(foundParty, secret);
@@ -247,16 +243,18 @@ module.exports.editMembers = catchAsync(async (req, res, next) => {
 			title: '',
 			content: `${req.user.displayName} has joined party - ${foundParty.title}`,
 		});
-		req.flash('success', 'Sucessfully joined party.');
+		res.json({ status: 'success', message: 'Sucessfully joined party.' });
 	}
 	if (members) {
 		await Party.updateOne(
 			{ _id: id },
 			{ $pull: { members: { $in: members } } }
 		);
-		req.flash('success', `Success! Removed from members.`);
+		res.json({
+			status: 'success',
+			message: `Success! Removed from members.`,
+		});
 	}
-	res.redirect(`/parties/${foundParty._id}`);
 });
 
 module.exports.getExampleSelections = catchAsync(async (req, res, next) => {
@@ -265,7 +263,7 @@ module.exports.getExampleSelections = catchAsync(async (req, res, next) => {
 	}).lean();
 	const selections = helpers.getSelections(example);
 	await Selection.insertMany(selections);
-	res.redirect(`/parties/example`);
+	res.json({ selections });
 });
 
 module.exports.makeSelections = catchAsync(async (req, res, next) => {
@@ -288,9 +286,7 @@ module.exports.makeSelections = catchAsync(async (req, res, next) => {
 	// // save party
 	await foundParty.save();
 	// // TODO: generate notifications that selections were made
-	req.flash('success', 'Selections made!');
-	// // redirect to party
-	res.redirect(`/parties/${id}`);
+	res.json({ status: 'success', message: 'Selections made!' });
 });
 
 module.exports.requestExclusion = catchAsync(async (req, res, next) => {
@@ -298,7 +294,8 @@ module.exports.requestExclusion = catchAsync(async (req, res, next) => {
 	const { excluded_id } = req.body;
 	const member_id = req.user._id.toString();
 	const foundParty = await Party.findById(id);
-	if (!foundParty) throw new ExpressError('Unable to find party.', 400).lean();
+	if (!foundParty)
+		throw new ExpressError('Unable to find party.', 400).lean();
 	const existingExclusion =
 		foundParty.exclusions &&
 		foundParty.exclusions.findIndex(
@@ -316,11 +313,11 @@ module.exports.requestExclusion = catchAsync(async (req, res, next) => {
 		});
 		await exclusion.save();
 	}
-	req.flash(
-		'success',
-		'A request has been sent to the member and will remain pending until accepted or rejected.'
-	);
-	res.redirect(`/parties/${id}`);
+	res.json({
+		status: 'success',
+		message:
+			'A request has been sent to the member and will remain pending until accepted or rejected.',
+	});
 });
 
 module.exports.resolveExclusion = catchAsync(async (req, res, next) => {
@@ -337,7 +334,7 @@ module.exports.resolveExclusion = catchAsync(async (req, res, next) => {
 		});
 	}
 	await Exclusion.findByIdAndDelete(exclusion_id);
-	res.redirect(`/parties/${id}`);
+	res.json({ status: 'success' });
 });
 
 // MAKE SELECTIONS ATOMAICALLY FOR PARTIES STARTING EACH DAY
