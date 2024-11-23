@@ -7,7 +7,7 @@ const helpers = require('../helpers/lists.helpers');
 module.exports.showPublicLists = catchAsync(async (req, res, next) => {
 	const { searchBy = '', searchString = '' } = req.query;
 	const page = Number(req.query.page) || 0;
-	const docLimit = 9;
+	const docLimit = 50;
 	const searchQuery = {};
 
 	if (searchBy) {
@@ -34,12 +34,12 @@ module.exports.createListForm = (req, res) => {
 
 // CREATE NEW LIST
 module.exports.createList = catchAsync(async (req, res, next) => {
-	const { list } = req.body;
-	const items = list.items.filter((item) => item.description);
+	const { body } = req;
+	const items = body.items.filter((item) => item.description);
 	const newList = new List({
-		title: list.title,
+		title: body.title,
 		items,
-		public: Boolean(list.public),
+		public: body.public,
 	});
 	newList.creator = req.user.id;
 	const savedList = await newList.save();

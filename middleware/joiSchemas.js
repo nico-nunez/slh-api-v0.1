@@ -101,7 +101,7 @@ function validList(req, res, next) {
 	const listSchema = Joi.object({
 		title: Joi.string().min(3).max(50).required(),
 		items: Joi.array().items(itemSchema),
-		public: Joi.string().allow(''),
+		public: Joi.boolean(),
 	});
 
 	validateInput(listSchema, req);
