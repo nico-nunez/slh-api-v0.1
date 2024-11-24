@@ -94,5 +94,6 @@ module.exports.deleteList = catchAsync(async (req, res, next) => {
 	res.json({
 		status: 'success',
 		message: 'Success! List has been deleted.',
+		id,
 	});
 });
