@@ -9,7 +9,6 @@ router.get('/public', isLoggedIn, lists.showPublicLists);
 router.post('/publish', isLoggedIn, validList, lists.createList);
 
 router.get('/:id', isLoggedIn, lists.showList);
-router.get('/:id/edit', isLoggedIn, isCreatorList, lists.updateListForm);
 router.put('/:id', isLoggedIn, isCreatorList, validList, lists.updateList);
 
 router.delete('/:id', isLoggedIn, isCreatorList, lists.deleteList);

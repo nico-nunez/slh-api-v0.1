@@ -58,24 +58,18 @@ module.exports.showList = catchAsync(async (req, res, next) => {
 	if (!list) {
 		throw new ExpressError('Sorry, coud not find that list', 404);
 	}
-	res.render('lists/show', { list });
-});
-
-// RENDER UPDATE LIST FORM
-module.exports.updateListForm = catchAsync(async (req, res, next) => {
-	const list = await List.findById(req.params.id);
-	if (!list) {
-		throw new ExpressError('Sorry, coud not find that list', 404);
-	}
-	res.render('lists/edit', { list });
+	res.json(list);
 });
 
 // UPDATE LIST
 module.exports.updateList = catchAsync(async (req, res, next) => {
 	const { id } = req.params;
-	const { list } = req.body;
-	const items = list.items.filter((item) => item.description);
-	const foundList = await List.findByIdAndUpdate(
+	const list = req.body;
+	const items = list.items.map(({ description, link }) => ({
+		description,
+		link,
+	}));
+	const updatedList = await List.findByIdAndUpdate(
 		id,
 		{
 			title: list.title,
@@ -84,12 +78,14 @@ module.exports.updateList = catchAsync(async (req, res, next) => {
 		},
 		{ runValidators: true }
 	).lean();
-	if (!foundList) {
+
+	console.log('updated:', updatedList);
+	if (!updatedList) {
 		throw new ExpressError('Sorry, coud not find that list', 404);
 	}
-	res.redirect({
-		status: 'success',
+	res.json({
 		message: 'Success! List has been updated',
+		data: updatedList,
 	});
 });
 

@@ -96,6 +96,7 @@ function validList(req, res, next) {
 	const itemSchema = Joi.object({
 		description: Joi.string().max(50).allow(''),
 		link: Joi.string().allow(''),
+		_id: Joi.string().optional(),
 	});
 
 	const listSchema = Joi.object({
