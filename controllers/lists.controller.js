@@ -78,8 +78,6 @@ module.exports.updateList = catchAsync(async (req, res, next) => {
 		},
 		{ runValidators: true }
 	).lean();
-
-	console.log('updated:', updatedList);
 	if (!updatedList) {
 		throw new ExpressError('Sorry, coud not find that list', 404);
 	}
