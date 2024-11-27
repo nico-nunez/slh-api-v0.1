@@ -18,7 +18,7 @@ const { catchAsync, formatDate, ExpressError } = require('../helpers/errors');
 module.exports.showPublicParties = catchAsync(async (req, res, next) => {
 	const { searchBy = '', searchString = '' } = req.query;
 	const page = Number(req.query.page) || 0;
-	const docLimit = 9;
+	const docLimit = 50;
 	const searchQuery = {};
 	if (searchBy) {
 		searchQuery[searchBy] = { $regex: searchString, $options: 'i' };
@@ -34,7 +34,7 @@ module.exports.showPublicParties = catchAsync(async (req, res, next) => {
 		current: page,
 		baseURL: '/parties?page=',
 	};
-	res.render('parties/index', { parties, pages, searchBy, searchString });
+	res.json(parties);
 });
 
 // RENDER EXAMPLE PARTY PAGE
@@ -51,13 +51,8 @@ module.exports.showExample = catchAsync(async (req, res, next) => {
 		.populate('recipient', 'displayName')
 		.lean();
 	await Selection.deleteMany({ party: exampleID });
-	res.render('parties/example', { party, lists, selections });
+	res.json({ party, lists, selections });
 });
-
-// RENDER NEW PARTY FORM
-module.exports.createPartyForm = (req, res) => {
-	res.render('parties/new');
-};
 
 // CREATE NEW PARTY
 module.exports.createParty = catchAsync(async (req, res, next) => {
@@ -77,7 +72,6 @@ module.exports.createParty = catchAsync(async (req, res, next) => {
 
 // RENDER PARTY BY ID
 module.exports.showParty = catchAsync(async (req, res, next) => {
-	const joinCode = req.query.join_code || '';
 	// FIND PARTY BY ID
 	const foundParty = await Party.findById(req.params.id)
 		.populate('creator', 'displayName')
@@ -116,6 +110,7 @@ module.exports.showParty = catchAsync(async (req, res, next) => {
 	// DISABLE JOIN BUTTON IF PARTY IS IN PROGRESS OR USER IS ALREADY A MEMBER
 	foundParty.disableJoin =
 		foundParty.isMember || foundParty.status !== 'open';
+
 	// GET CONFIRMED & REQUESTED EXCLUSIONS FOR USER
 	const exclusionRequests = await Exclusion.find({
 		party_id: foundParty._id,
@@ -124,24 +119,28 @@ module.exports.showParty = catchAsync(async (req, res, next) => {
 		.populate('member_id', 'displayName')
 		.populate('excluded_id', 'displayName')
 		.lean();
+
 	// FILTER EXCLUSIONS THAT ARE APPLICABLE TO THE CURRENT USER
-	const excludeUserList = foundParty.members.filter((member) => {
-		return (
-			member._id.toString() !== req.user._id.toString() &&
-			foundParty.exclusions.findIndex((exclude) => {
+	const excludeUserList = foundParty.isMember
+		? foundParty.members.filter((member) => {
 				return (
-					(exclude.member_id._id.toString() ===
-						member._id.toString() &&
-						exclude.excluded_id._id.toString() ===
-							req.user._id.toString()) ||
-					(exclude.member_id._id.toString() ===
-						req.user._id.toString() &&
-						exclude.excluded_id._id.toString() ===
-							member._id.toString())
+					member._id.toString() !== req.user._id.toString() &&
+					foundParty.exclusions.findIndex((exclude) => {
+						return (
+							(exclude.member_id._id.toString() ===
+								member._id.toString() &&
+								exclude.excluded_id._id.toString() ===
+									req.user._id.toString()) ||
+							(exclude.member_id._id.toString() ===
+								req.user._id.toString() &&
+								exclude.excluded_id._id.toString() ===
+									member._id.toString())
+						);
+					}) < 0
 				);
-			}) < 0
-		);
-	});
+		  })
+		: [];
+
 	// FIND SELECTION FOR USER
 	const selection = await Selection.findOne({
 		party: foundParty._id,
@@ -150,11 +149,9 @@ module.exports.showParty = catchAsync(async (req, res, next) => {
 		.populate('recipient', 'displayName')
 		.lean();
 
-	res.render('parties/show', {
+	res.json({
 		party: foundParty,
 		lists,
-		userLists,
-		joinCode,
 		exclusionRequests,
 		excludeUserList,
 		selection,
